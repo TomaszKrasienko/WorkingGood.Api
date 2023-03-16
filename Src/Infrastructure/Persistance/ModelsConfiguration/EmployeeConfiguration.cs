@@ -13,7 +13,11 @@ namespace Infrastructure.Persistance.ModelsConfiguration
                 .Property(x => x.Id)
                 .IsRequired();
             builder
-                .Property(x => x.UserName)
+                .Property(x => x.FirstName)
+                .IsRequired()
+                .HasMaxLength(60);
+            builder
+                .Property(x => x.LastName)
                 .IsRequired()
                 .HasMaxLength(60);
             builder
