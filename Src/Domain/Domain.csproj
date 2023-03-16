@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Models\" />
+    <None Remove="Models\Company\" />
+    <None Remove="Interfaces\" />
+    <None Remove="ValueObjects\" />
+    <None Remove="ValueObjects\Employee\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\" />
+    <Folder Include="Models\Company\" />
+    <Folder Include="Interfaces\" />
+    <Folder Include="ValueObjects\" />
+    <Folder Include="ValueObjects\Employee\" />
+  </ItemGroup>
+</Project>
