@@ -15,15 +15,28 @@
     <None Remove="DTOs\EmployeesAuth\" />
     <None Remove="CQRS\" />
     <None Remove="CQRS\EmployeesAuth\" />
+    <None Remove="CQRS\Companies\" />
+    <None Remove="DTOs\Companies\" />
+    <None Remove="CQRS\Companies\Commands\" />
+    <None Remove="Extensions\" />
+    <None Remove="Extensions\Configuration\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DTOs\" />
     <Folder Include="DTOs\EmployeesAuth\" />
     <Folder Include="CQRS\" />
     <Folder Include="CQRS\EmployeesAuth\" />
+    <Folder Include="CQRS\Companies\" />
+    <Folder Include="DTOs\Companies\" />
+    <Folder Include="CQRS\Companies\Commands\" />
+    <Folder Include="Extensions\" />
+    <Folder Include="Extensions\Configuration\" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.5.1" />
     <PackageReference Include="MediatR" Version="12.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+    <PackageReference Include="FluentValidation" Version="11.5.1" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.1.0" />
   </ItemGroup>
 </Project>

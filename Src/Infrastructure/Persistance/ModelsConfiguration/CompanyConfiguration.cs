@@ -16,8 +16,6 @@ namespace Infrastructure.Persistance.ModelsConfiguration
                 .Property(x => x.Name)
                 .IsRequired();
             builder
-                .HasMany(x => x.Employees);
-            builder
                 .HasKey(x => x.Id);
         }
     }

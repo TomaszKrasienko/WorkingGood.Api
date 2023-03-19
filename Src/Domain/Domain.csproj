@@ -12,6 +12,8 @@
     <None Remove="Interfaces\" />
     <None Remove="ValueObjects\" />
     <None Remove="ValueObjects\Employee\" />
+    <None Remove="Interfaces\Repositories\" />
+    <None Remove="Interfaces\Validation\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
@@ -19,5 +21,11 @@
     <Folder Include="Interfaces\" />
     <Folder Include="ValueObjects\" />
     <Folder Include="ValueObjects\Employee\" />
+    <Folder Include="Interfaces\Repositories\" />
+    <Folder Include="Interfaces\Validation\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.8.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.8.0" />
   </ItemGroup>
 </Project>

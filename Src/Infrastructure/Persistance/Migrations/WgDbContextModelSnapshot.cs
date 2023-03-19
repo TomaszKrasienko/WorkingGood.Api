@@ -43,7 +43,7 @@ namespace Infrastructure.Persistance.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CompanyId")
+                    b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Email")
@@ -74,8 +74,10 @@ namespace Infrastructure.Persistance.Migrations
             modelBuilder.Entity("Domain.Models.Company.Employee", b =>
                 {
                     b.HasOne("Domain.Models.Company.Company", null)
-                        .WithMany("Employees")
-                        .HasForeignKey("CompanyId");
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.OwnsOne("Domain.ValueObjects.Password", "Password", b1 =>
                         {
@@ -129,7 +131,6 @@ namespace Infrastructure.Persistance.Migrations
                                 .HasColumnType("datetime2");
 
                             b1.Property<string>("Token")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.HasKey("EmployeeId");
@@ -166,16 +167,10 @@ namespace Infrastructure.Persistance.Migrations
                     b.Navigation("RefreshToken")
                         .IsRequired();
 
-                    b.Navigation("ResetToken")
-                        .IsRequired();
+                    b.Navigation("ResetToken");
 
                     b.Navigation("VerificationToken")
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Domain.Models.Company.Company", b =>
-                {
-                    b.Navigation("Employees");
                 });
 #pragma warning restore 612, 618
         }

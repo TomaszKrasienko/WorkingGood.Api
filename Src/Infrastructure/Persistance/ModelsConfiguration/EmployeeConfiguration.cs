@@ -1,5 +1,6 @@
 ﻿using System;
 using Domain.Models.Company;
+using Domain.Models.Employee;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -65,9 +66,16 @@ namespace Infrastructure.Persistance.ModelsConfiguration
                             .Property(x => x.Token);
                         options
                             .Property(x => x.ExpirationDate);
-                    }); 
+                    });
+            builder
+                .Property(x => x.CompanyId)
+                .IsRequired();
             builder
                 .HasKey(x => x.Id);
+            builder
+                .HasOne<Company>()
+                .WithMany()
+                .HasForeignKey(x => x.CompanyId);
         }
     }
 }

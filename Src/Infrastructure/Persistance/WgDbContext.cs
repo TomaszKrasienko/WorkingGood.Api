@@ -1,5 +1,6 @@
 ﻿using System;
 using Domain.Models.Company;
+using Domain.Models.Employee;
 using Infrastructure.Persistance.ModelsConfiguration;
 using Microsoft.EntityFrameworkCore;
 

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -10,10 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
-    public class BasicController : Controller
+    public class BaseController : Controller
     {
         protected readonly IMediator _mediator;
-        public BasicController(IMediator mediator)
+        protected const string EMPLOYEE_ID_KEY = "EmployeeId";
+        public BaseController(IMediator mediator)
         {
             _mediator = mediator;
         }

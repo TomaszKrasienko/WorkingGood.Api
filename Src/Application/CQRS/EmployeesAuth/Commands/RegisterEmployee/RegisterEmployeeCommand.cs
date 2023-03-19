@@ -7,7 +7,8 @@ namespace Application.EmployeesAuth.Commands
 {
 	public record RegisterEmployeeCommand : IRequest<IActionResult>
 	{
-		public RegisterEmployeeDto registerEmployeeDto { get; init; } = new();
+		public Guid? CompanyId { get; init; }
+		public RegisterEmployeeDto RegisterEmployeeDto { get; init; } = new();
 	}
 }
 

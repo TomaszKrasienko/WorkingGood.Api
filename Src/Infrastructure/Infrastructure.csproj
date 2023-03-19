@@ -14,12 +14,14 @@
     <None Remove="Persistance\ModelsConfiguration\" />
     <None Remove="Extensions\" />
     <None Remove="Extensions\Configuration\" />
+    <None Remove="Persistance\Repositories\" />
+    <None Remove="Validation\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Persistance\" />
     <Folder Include="Persistance\ModelsConfiguration\" />
-    <Folder Include="Extensions\" />
-    <Folder Include="Extensions\Configuration\" />
+    <Folder Include="Persistance\Repositories\" />
+    <Folder Include="Validation\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.15" />
@@ -28,5 +30,8 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="7.0.4" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="RabbitMQ.Client" Version="6.4.0" />
   </ItemGroup>
 </Project>

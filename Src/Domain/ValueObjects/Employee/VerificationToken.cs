@@ -11,9 +11,13 @@ namespace Domain.ValueObjects
         {
             Generate();
         }
-        private string Generate()
+        private void Generate()
         {
-            return Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)).Replace("/", "");
+            Token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)).Replace("/", "");
+        }
+        internal void ConfirmToken()
+        {
+            ConfirmDate = DateTime.Now;
         }
     }
 }

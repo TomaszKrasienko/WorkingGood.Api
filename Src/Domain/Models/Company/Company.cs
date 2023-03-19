@@ -7,11 +7,11 @@ namespace Domain.Models.Company
 	{
 		public Guid Id { get; private set; }
 		public string Name { get; private set; }
-		public IReadOnlyCollection<Employee> Employees => _employees;
-		private List<Employee> _employees;
-		public Company()
+		public Company() { }
+		public Company(string name)
 		{
-
+			Id = Guid.NewGuid();
+			Name = name;
 		}
 	}
 }

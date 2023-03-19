@@ -18,6 +18,10 @@ namespace Domain.ValueObjects
             CreatedAt = DateTime.Now;
             Expiration = DateTime.Now.AddDays(1);
         }
+        internal bool IsValid()
+        {
+            return Expiration >= DateTime.Now;
+        }
     }
 }
 
