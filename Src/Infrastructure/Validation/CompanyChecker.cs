@@ -1,5 +1,6 @@
 using Domain.Interfaces.Validation;
 using Infrastructure.Persistance;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Validation;
 
@@ -13,5 +14,10 @@ public class CompanyChecker : ICompanyChecker
     public bool IsCompanyExists(Guid companyId)
     {
         return _context.Companies.Any(x => x.Id == companyId);
+    }
+
+    public bool IsCompanyExists(string name)
+    {
+        return _context.Companies.Any(x => x.Name == name);
     }
 }
