@@ -9,7 +9,6 @@ namespace Application.Tests.CQRS.Companies.Commands;
 public class AddCompanyValidatorTests
 {
     private IValidator<AddCompanyCommand> _validator;
-
     [Fact]
     public async Task AddCompanyValidator_ForNotEmptyCompanyName_ShouldHaveNotErrorsForCompany()
     {
