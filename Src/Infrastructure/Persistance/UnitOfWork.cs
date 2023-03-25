@@ -19,7 +19,14 @@ namespace Infrastructure.Persistance
             }
         }
         private CompanyRepository _companyRepository;
-        public IEmployeeRepository EmployeeRepository => (_employeeRepository = new EmployeeRepository(_context));
+        public IEmployeeRepository EmployeeRepository         {
+            get
+            {
+                if (_employeeRepository is null)
+                    _employeeRepository = new EmployeeRepository(_context);
+                return _employeeRepository;
+            }
+        }
         private EmployeeRepository _employeeRepository;
         public UnitOfWork(WgDbContext context)
         {

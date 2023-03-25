@@ -23,7 +23,7 @@ public class ChangePasswordCommandHandler : IRequestHandler<ChangePasswordComman
     }
     public async Task<BaseMessageDto> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
     {
-        var validationResult = await _validator.ValidateAsync(request);
+        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
         if (!validationResult.IsValid)
             return new()
             {

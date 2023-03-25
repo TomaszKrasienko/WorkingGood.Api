@@ -8,23 +8,29 @@ public class ChangePasswordValidator : AbstractValidator<ChangePasswordCommand>
 {
     public ChangePasswordValidator(IEmployeeChecker employeeChecker)
     {
-        RuleFor(x => x.ChangePasswordDto.NewPassword)
-            .NotEmpty()
-            .NotNull()
-            .Must(x => IsPasswordValid(x))
-            .WithMessage("Password must contains uppercase, lowercase and number");
-        RuleFor(x => x.ChangePasswordDto.OldPassword)
-            .NotEmpty()
+        RuleFor(x => x.ChangePasswordDto)
             .NotNull();
+        RuleFor(x => x.ChangePasswordDto.NewPassword)
+            .NotNull()
+            .NotEmpty();
+        RuleFor(x => x.ChangePasswordDto.NewPassword)
+            .Must(x => IsPasswordValid(x))
+            .WithMessage("Password must contains uppercase, lowercase and number")
+            .When(x => x.ChangePasswordDto.NewPassword != null);
+        RuleFor(x => x.ChangePasswordDto.OldPassword)
+            .NotNull()
+            .NotEmpty();
         RuleFor(x => x.ChangePasswordDto.ConfirmNewPassword)
             .NotNull()
             .NotEmpty();
-        RuleFor(x => new {x.ChangePasswordDto.NewPassword, x.ChangePasswordDto.ConfirmNewPassword})
-            .Must(x => IsConfirmMatched(x.NewPassword!, x.ConfirmNewPassword!))
-            .WithMessage("Password not match to confirmation");
+        When(x => IsConfirmNull(x.ChangePasswordDto) == false, () => {
+            RuleFor(x => new {x.ChangePasswordDto.NewPassword, x.ChangePasswordDto.ConfirmNewPassword})
+                .Must(x => IsConfirmMatched(x.NewPassword!, x.ConfirmNewPassword!))
+                .WithMessage("Password not match to confirmation");
+        });
         RuleFor(x => x.EmployeeId)
-            .NotEmpty()
-            .NotNull();
+            .NotNull()
+            .NotEmpty();
         RuleFor(x => x.EmployeeId)
             .Must(x => employeeChecker.IsEmployeeExists(x))
             .WithMessage("Employee is not exists");
@@ -38,5 +44,10 @@ public class ChangePasswordValidator : AbstractValidator<ChangePasswordCommand>
     private bool IsConfirmMatched(string password, string confirmation)
     {
         return password.Equals(confirmation);
+    }
+
+    private bool IsConfirmNull(ChangePasswordDto changePasswordDto)
+    {
+        return changePasswordDto.NewPassword == null || changePasswordDto.ConfirmNewPassword == null;
     }
 }
