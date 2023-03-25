@@ -13,7 +13,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.CQRS.EmployeesAuth.Commands.Refresh;
 
-public class RefreshCommandHandler : IRequestHandler<RefreshCommand, IActionResult>
+public class RefreshCommandHandler : IRequestHandler<RefreshCommand, BaseMessageDto>
 {
     private readonly ILogger<RefreshCommandHandler> _logger;
     private readonly JwtConfig _jwtConfig;
@@ -26,25 +26,25 @@ public class RefreshCommandHandler : IRequestHandler<RefreshCommand, IActionResu
         _unitOfWork = unitOfWork;
         _validator = validator;
     }
-    public async Task<IActionResult> Handle(RefreshCommand request, CancellationToken cancellationToken)
+    public async Task<BaseMessageDto> Handle(RefreshCommand request, CancellationToken cancellationToken)
     {
         var validationResult = await _validator.ValidateAsync(request);
         if (!validationResult.IsValid)
-            return new BadRequestObjectResult(new BaseMessageDto
+            return new ()
             {
                 Errors = validationResult.Errors.GetErrorsStringList()
-            });
+            };
         Employee employee = await _unitOfWork
             .EmployeeRepository
-            .GetByRefreshToken(request.RefreshDto.RefreshToken);
+            .GetByRefreshToken(request.RefreshDto.RefreshToken!);
         if (employee == null)
-            return new BadRequestObjectResult(new BaseMessageDto
+            return new ()
             {
                 Message = "Refresh token is invalid"
-            });
+            };
         LoginToken loginToken = employee.Refresh(_jwtConfig.TokenKey, _jwtConfig.Audience, _jwtConfig.Issuer);
         await _unitOfWork.CompleteAsync();
-        return new OkObjectResult(new BaseMessageDto
+        return new ()
         {
             Message = "Login successfully",
             Object = new LoginVM
@@ -54,6 +54,6 @@ public class RefreshCommandHandler : IRequestHandler<RefreshCommand, IActionResu
                 RefreshToken = employee.RefreshToken.Token!,
                 RefreshTokenExpiration = (DateTime)employee.RefreshToken.Expiration!
             }
-        });
+        };
     }
 }

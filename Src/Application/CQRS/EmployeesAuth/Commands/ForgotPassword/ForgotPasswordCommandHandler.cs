@@ -12,7 +12,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.CQRS.EmployeesAuth.Commands.ForgotPassword;
 
-public class ForgotPasswordCommandHandler : IRequestHandler<ForgotPasswordCommand, IActionResult>
+public class ForgotPasswordCommandHandler : IRequestHandler<ForgotPasswordCommand, BaseMessageDto>
 {
     private readonly ILogger<ForgotPasswordCommandHandler> _logger;
     private readonly IUnitOfWork _unitOfWork;
@@ -25,14 +25,14 @@ public class ForgotPasswordCommandHandler : IRequestHandler<ForgotPasswordComman
         _validator = validator;
         _brokerSender = brokerSender;
     }
-    public async Task<IActionResult> Handle(ForgotPasswordCommand request, CancellationToken cancellationToken)
+    public async Task<BaseMessageDto> Handle(ForgotPasswordCommand request, CancellationToken cancellationToken)
     {
         var validationResult = await _validator.ValidateAsync(request);
         if (!validationResult.IsValid)
-            return new BadRequestObjectResult(new BaseMessageDto
+            return new ()
             {
                 Errors = validationResult.Errors.GetErrorsStringList()
-            });
+            };
         Employee employee = await _unitOfWork.EmployeeRepository.GetByEmail(request.ForgotPasswordDto.EmployeeEmail!);
         employee.SetResetToken();
         await _unitOfWork.CompleteAsync();
@@ -43,9 +43,9 @@ public class ForgotPasswordCommandHandler : IRequestHandler<ForgotPasswordComman
             LastName = employee.LastName,
             ForgotPasswordToken = employee!.ResetToken!.Token!
         });
-        return new OkObjectResult(new BaseMessageDto
+        return new ()
         {
             Message = "Message sent to employee email"
-        });
+        };
     }
 }

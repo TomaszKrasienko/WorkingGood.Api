@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Application.CQRS.EmployeesAuth.Commands.RegisterEmployee
 {
-	public class RegisterEmployeeCommandHandler : IRequestHandler<RegisterEmployeeCommand, IActionResult>
+	public class RegisterEmployeeCommandHandler : IRequestHandler<RegisterEmployeeCommand, BaseMessageDto>
 	{
         private readonly IUnitOfWork _unitOfWork;
         private readonly IValidator<RegisterEmployeeCommand> _validator;
@@ -25,14 +25,14 @@ namespace Application.CQRS.EmployeesAuth.Commands.RegisterEmployee
             _validator = validator;
             _brokerSender = brokerSender;
         }
-        public async Task<IActionResult> Handle(RegisterEmployeeCommand request, CancellationToken cancellationToken)
+        public async Task<BaseMessageDto> Handle(RegisterEmployeeCommand request, CancellationToken cancellationToken)
         {
             var validationResult = await _validator.ValidateAsync(request);
             if(!validationResult.IsValid)
-                return new BadRequestObjectResult(new BaseMessageDto
+                return new()
                 {
                     Errors = validationResult.Errors.GetErrorsStringList()
-                });
+                };
             Employee employee = new Employee(
                 request.RegisterEmployeeDto.FirstName!,
                 request.RegisterEmployeeDto.LastName!,
@@ -49,11 +49,11 @@ namespace Application.CQRS.EmployeesAuth.Commands.RegisterEmployee
                 LastName = employee.LastName,
                 RegistrationToken = employee.VerificationToken.Token
             });
-            return new OkObjectResult(new BaseMessageDto
+            return new ()
             {
                 Message = "Added employee successfully",
                 Object = employee.Id
-            });
+            };
         }
     }
 }

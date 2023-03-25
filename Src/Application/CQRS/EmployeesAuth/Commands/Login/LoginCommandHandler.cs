@@ -13,7 +13,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Application.CQRS.EmployeesAuth.Commands.Login;
 
-public class LoginCommandHandler : IRequestHandler<LoginCommand, IActionResult>
+public class LoginCommandHandler : IRequestHandler<LoginCommand, BaseMessageDto>
 {
     private readonly ILogger<LoginCommandHandler> _logger;
     private readonly JwtConfig _jwtConfig;
@@ -26,14 +26,14 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, IActionResult>
         _unitOfWork = unitOfWork;
         _validator = validator;
     }
-    public async Task<IActionResult> Handle(LoginCommand request, CancellationToken cancellationToken)
+    public async Task<BaseMessageDto> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
         var validationResult = await _validator.ValidateAsync(request);
         if (!validationResult.IsValid)
-            return new BadRequestObjectResult(new BaseMessageDto
+            return new ()
             {
                 Errors = validationResult.Errors.GetErrorsStringList()
-            });
+            };
         Employee employee = await _unitOfWork
             .EmployeeRepository
             .GetByEmail(request.CredentialsDto.Email!);
@@ -44,7 +44,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, IActionResult>
             _jwtConfig.Issuer
         );
         await _unitOfWork.CompleteAsync();
-        return new OkObjectResult(new BaseMessageDto
+        return new ()
         {
             Message = "Login successfully",
             Object = new LoginVM
@@ -54,6 +54,6 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, IActionResult>
                 RefreshToken = employee.RefreshToken.Token!,
                 RefreshTokenExpiration = (DateTime)employee.RefreshToken.Expiration!
             }
-        });
+        };
     }
 }

@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.CQRS.EmployeesAuth.Commands.ChangePassword;
 
-public class ChangePasswordCommandHandler : IRequestHandler<ChangePasswordCommand, IActionResult>
+public class ChangePasswordCommandHandler : IRequestHandler<ChangePasswordCommand, BaseMessageDto>
 {
     private readonly ILogger<ChangePasswordCommandHandler> _logger;
     private readonly IUnitOfWork _unitOfWork;
@@ -21,25 +21,25 @@ public class ChangePasswordCommandHandler : IRequestHandler<ChangePasswordComman
         _unitOfWork = unitOfWork;
         _validator = validator;
     }
-    public async Task<IActionResult> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
+    public async Task<BaseMessageDto> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
     {
         var validationResult = await _validator.ValidateAsync(request);
         if (!validationResult.IsValid)
-            return new BadRequestObjectResult(new BaseMessageDto
+            return new()
             {
                 Errors = validationResult.Errors.GetErrorsStringList()
-            });
+            };
         Employee employee = await _unitOfWork.EmployeeRepository.GetByIdAsync(request.EmployeeId);
         if (!(employee.IsPasswordMatch(request.ChangePasswordDto.OldPassword!)))
-            return new BadRequestObjectResult(new BaseMessageDto
+            return new ()
             {
                 Errors = "Password is incorrect"
-            });
+            };
         employee.SetNewPassword(request.ChangePasswordDto.NewPassword!);
         await _unitOfWork.CompleteAsync();
-        return new OkObjectResult(new BaseMessageDto
+        return new ()
         {
             Message = "Password changed"
-        });
+        };
     }
 }
