@@ -9,7 +9,15 @@ namespace Infrastructure.Persistance
 	{
         private readonly WgDbContext _context;
         private bool _disposed;
-        public ICompanyRepository CompanyRepository => (_companyRepository = new CompanyRepository(_context));
+        public ICompanyRepository CompanyRepository 
+        {
+            get
+            {
+                if (_companyRepository is null)
+                    _companyRepository = new CompanyRepository(_context);
+                return _companyRepository;
+            }
+        }
         private CompanyRepository _companyRepository;
         public IEmployeeRepository EmployeeRepository => (_employeeRepository = new EmployeeRepository(_context));
         private EmployeeRepository _employeeRepository;

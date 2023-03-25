@@ -23,7 +23,7 @@ namespace Application.CQRS.Companies.Commands
         }
         public async Task<BaseMessageDto> Handle(AddCompanyCommand request, CancellationToken cancellationToken)
         {
-            var validationResult = _validator.Validate(request);
+            var validationResult = await _validator.ValidateAsync(request, cancellationToken);
             if (!validationResult.IsValid)
             {
                 _logger.LogWarning(validationResult.Errors.GetErrorString());

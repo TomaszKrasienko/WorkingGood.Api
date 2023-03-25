@@ -12,7 +12,7 @@ namespace Application.CQRS.Companies.Commands
 				.NotNull()
 				.NotEmpty();
 			RuleFor(x => x.CompanyDto!.Name)
-				.Must(x => companyChecker.IsCompanyExists(x))
+				.Must(x => !companyChecker.IsCompanyExists(x))
 				.WithMessage("Company with this name already exists");
 		}
 	}
