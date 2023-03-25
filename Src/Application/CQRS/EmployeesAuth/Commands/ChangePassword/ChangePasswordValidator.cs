@@ -1,11 +1,12 @@
 using Application.DTOs.EmployeesAuth;
+using Domain.Interfaces.Validation;
 using FluentValidation;
 
 namespace Application.CQRS.EmployeesAuth.Commands.ChangePassword;
 
 public class ChangePasswordValidator : AbstractValidator<ChangePasswordCommand>
 {
-    public ChangePasswordValidator()
+    public ChangePasswordValidator(IEmployeeChecker employeeChecker)
     {
         RuleFor(x => x.ChangePasswordDto.NewPassword)
             .NotEmpty()
@@ -24,6 +25,9 @@ public class ChangePasswordValidator : AbstractValidator<ChangePasswordCommand>
         RuleFor(x => x.EmployeeId)
             .NotEmpty()
             .NotNull();
+        RuleFor(x => x.EmployeeId)
+            .Must(x => employeeChecker.IsEmployeeExists(x))
+            .WithMessage("Employee is not exists");
     }
     private bool IsPasswordValid(string password)
     {

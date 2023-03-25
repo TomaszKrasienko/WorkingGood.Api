@@ -17,7 +17,12 @@ namespace Infrastructure.Validation
                 .Employees
                 .Any(x => x.Email == email);
         }
-
+        public bool IsEmployeeExists(Guid employeeId)
+        {
+	        return _context
+		        .Employees
+		        .Any(x => x.Id == employeeId);
+        }
         public bool IsVerificationTokenExists(string verificationToken)
         {
 	        return _context

@@ -13,60 +13,60 @@ public class AddCompanyValidatorTests
     public async Task AddCompanyValidator_ForNotEmptyCompanyName_ShouldHaveNotErrorsForCompany()
     {
         //Arrange
-        AddCompanyCommand addCompanyCommand = new()
-        {
-            CompanyDto = new()
+            AddCompanyCommand addCompanyCommand = new()
             {
-                Name = "TestName"
-            }
-        };
-        Mock<ICompanyChecker> mockCompanyChecker = new Mock<ICompanyChecker>();
-        mockCompanyChecker.Setup(x => x.IsCompanyExists(It.IsAny<string>()))
-            .Returns(false);
-        _validator = new AddCompanyValidator(mockCompanyChecker.Object);
+                CompanyDto = new()
+                {
+                    Name = "TestName"
+                }
+            };
+            Mock<ICompanyChecker> mockCompanyChecker = new Mock<ICompanyChecker>();
+            mockCompanyChecker.Setup(x => x.IsCompanyExists(It.IsAny<string>()))
+                .Returns(false);
+            _validator = new AddCompanyValidator(mockCompanyChecker.Object);
         //Act
-        var result = await _validator.TestValidateAsync(addCompanyCommand);
+            var result = await _validator.TestValidateAsync(addCompanyCommand);
         //Assert
-        result.ShouldNotHaveValidationErrorFor(acc => acc.CompanyDto.Name);
+            result.ShouldNotHaveValidationErrorFor(acc => acc.CompanyDto.Name);
     }    
     [Fact]
     public async Task AddCompanyValidator_ForEmptyCompanyName_ShouldHaveErrorsForCompany()
     {
         //Arrange
-        AddCompanyCommand addCompanyCommand = new()
-        {
-            CompanyDto = new()
+            AddCompanyCommand addCompanyCommand = new()
             {
-                Name = ""
-            }
-        };
-        Mock<ICompanyChecker> mockCompanyChecker = new Mock<ICompanyChecker>();
-        mockCompanyChecker.Setup(x => x.IsCompanyExists(It.IsAny<string>()))
-            .Returns(false);
-        _validator = new AddCompanyValidator(mockCompanyChecker.Object);
+                CompanyDto = new()
+                {
+                    Name = ""
+                }
+            };
+            Mock<ICompanyChecker> mockCompanyChecker = new Mock<ICompanyChecker>();
+            mockCompanyChecker.Setup(x => x.IsCompanyExists(It.IsAny<string>()))
+                .Returns(false);
+            _validator = new AddCompanyValidator(mockCompanyChecker.Object);
         //Act
-        var result = await _validator.TestValidateAsync(addCompanyCommand);
+            var result = await _validator.TestValidateAsync(addCompanyCommand);
         //Assert
-        result.ShouldHaveValidationErrorFor(acc => acc.CompanyDto.Name);
+            result.ShouldHaveValidationErrorFor(acc => acc.CompanyDto.Name);
     }    
     [Fact]
     public async Task AddCompanyValidator_ForExistingCompanyName_ShouldHaveErrorsForCompany()
     {
         //Arrange
-        AddCompanyCommand addCompanyCommand = new()
-        {
-            CompanyDto = new()
+            AddCompanyCommand addCompanyCommand = new()
             {
-                Name = "CompanyName"
-            }
-        };
-        Mock<ICompanyChecker> mockCompanyChecker = new Mock<ICompanyChecker>();
-        mockCompanyChecker.Setup(x => x.IsCompanyExists(It.IsAny<string>()))
-            .Returns(true);
-        _validator = new AddCompanyValidator(mockCompanyChecker.Object);
+                CompanyDto = new()
+                {
+                    Name = "CompanyName"
+                }
+            };
+            Mock<ICompanyChecker> mockCompanyChecker = new Mock<ICompanyChecker>();
+            mockCompanyChecker.Setup(x => x.IsCompanyExists(It.IsAny<string>()))
+                .Returns(true);
+            _validator = new AddCompanyValidator(mockCompanyChecker.Object);
         //Act
-        var result = await _validator.TestValidateAsync(addCompanyCommand);
+            var result = await _validator.TestValidateAsync(addCompanyCommand);
         //Assert
-        result.ShouldHaveValidationErrorFor(acc => acc.CompanyDto.Name);
+            result.ShouldHaveValidationErrorFor(acc => acc.CompanyDto.Name);
     }
 }
