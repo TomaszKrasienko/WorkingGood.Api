@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Security.Cryptography;
+
 namespace Domain.ValueObjects
 {
 	public class ResetToken
@@ -8,7 +10,8 @@ namespace Domain.ValueObjects
 
         public ResetToken()
         {
-	        
+	        Token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)).Replace("/", "");
+	        ExpirationDate = DateTime.Now.AddDays(1);
         }
     }
 }

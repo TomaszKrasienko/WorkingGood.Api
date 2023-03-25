@@ -29,7 +29,7 @@ public class ForgotPasswordCommandHandler : IRequestHandler<ForgotPasswordComman
     {
         var validationResult = await _validator.ValidateAsync(request);
         if (!validationResult.IsValid)
-            return new BadRequestObjectResult(new BaseMessage
+            return new BadRequestObjectResult(new BaseMessageDto
             {
                 Errors = validationResult.Errors.GetErrorsStringList()
             });
@@ -43,7 +43,7 @@ public class ForgotPasswordCommandHandler : IRequestHandler<ForgotPasswordComman
             LastName = employee.LastName,
             ForgotPasswordToken = employee!.ResetToken!.Token!
         });
-        return new OkObjectResult(new BaseMessage
+        return new OkObjectResult(new BaseMessageDto
         {
             Message = "Message sent to employee email"
         });

@@ -30,7 +30,7 @@ public class RefreshCommandHandler : IRequestHandler<RefreshCommand, IActionResu
     {
         var validationResult = await _validator.ValidateAsync(request);
         if (!validationResult.IsValid)
-            return new BadRequestObjectResult(new BaseMessage
+            return new BadRequestObjectResult(new BaseMessageDto
             {
                 Errors = validationResult.Errors.GetErrorsStringList()
             });
@@ -38,13 +38,13 @@ public class RefreshCommandHandler : IRequestHandler<RefreshCommand, IActionResu
             .EmployeeRepository
             .GetByRefreshToken(request.RefreshDto.RefreshToken);
         if (employee == null)
-            return new BadRequestObjectResult(new BaseMessage
+            return new BadRequestObjectResult(new BaseMessageDto
             {
                 Message = "Refresh token is invalid"
             });
         LoginToken loginToken = employee.Refresh(_jwtConfig.TokenKey, _jwtConfig.Audience, _jwtConfig.Issuer);
         await _unitOfWork.CompleteAsync();
-        return new OkObjectResult(new BaseMessage
+        return new OkObjectResult(new BaseMessageDto
         {
             Message = "Login successfully",
             Object = new LoginVM

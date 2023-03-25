@@ -25,7 +25,7 @@ public class VerifyEmployeeCommandHandler : IRequestHandler<VerifyEmployeeComman
     {
         var validationResult = await _validator.ValidateAsync(request);
         if (!validationResult.IsValid)
-            return new BadRequestObjectResult(new BaseMessage
+            return new BadRequestObjectResult(new BaseMessageDto
             {
                 Errors = validationResult.Errors.GetErrorsStringList()
             });
@@ -34,7 +34,7 @@ public class VerifyEmployeeCommandHandler : IRequestHandler<VerifyEmployeeComman
             .GetByVerificationToken(request.VerificationToken!);
         employee.Activate();
         await _unitOfWork.CompleteAsync();
-        return new OkObjectResult(new BaseMessage
+        return new OkObjectResult(new BaseMessageDto
         {
             Message = "Account activated successfully"
         });

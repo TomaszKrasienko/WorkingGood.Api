@@ -55,8 +55,6 @@ namespace Domain.Models.Employee
         }
         public LoginToken Refresh(string tokenKey, string audience, string issuer)
         {
-	        if (!RefreshToken.IsValid())
-		        throw new LoginException("Refresh token is invalid");
 	        GenerateRefreshToken();
 	        return GetToken(tokenKey, audience, issuer);
         }

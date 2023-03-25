@@ -25,19 +25,19 @@ public class ChangePasswordCommandHandler : IRequestHandler<ChangePasswordComman
     {
         var validationResult = await _validator.ValidateAsync(request);
         if (!validationResult.IsValid)
-            return new BadRequestObjectResult(new BaseMessage
+            return new BadRequestObjectResult(new BaseMessageDto
             {
                 Errors = validationResult.Errors.GetErrorsStringList()
             });
         Employee employee = await _unitOfWork.EmployeeRepository.GetByIdAsync(request.EmployeeId);
         if (!(employee.IsPasswordMatch(request.ChangePasswordDto.OldPassword!)))
-            return new BadRequestObjectResult(new BaseMessage
+            return new BadRequestObjectResult(new BaseMessageDto
             {
                 Errors = "Password is incorrect"
             });
         employee.SetNewPassword(request.ChangePasswordDto.NewPassword!);
         await _unitOfWork.CompleteAsync();
-        return new OkObjectResult(new BaseMessage
+        return new OkObjectResult(new BaseMessageDto
         {
             Message = "Password changed"
         });

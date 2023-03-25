@@ -29,7 +29,7 @@ namespace Application.CQRS.EmployeesAuth.Commands.RegisterEmployee
         {
             var validationResult = await _validator.ValidateAsync(request);
             if(!validationResult.IsValid)
-                return new BadRequestObjectResult(new BaseMessage
+                return new BadRequestObjectResult(new BaseMessageDto
                 {
                     Errors = validationResult.Errors.GetErrorsStringList()
                 });
@@ -49,7 +49,7 @@ namespace Application.CQRS.EmployeesAuth.Commands.RegisterEmployee
                 LastName = employee.LastName,
                 RegistrationToken = employee.VerificationToken.Token
             });
-            return new OkObjectResult(new BaseMessage
+            return new OkObjectResult(new BaseMessageDto
             {
                 Message = "Added employee successfully",
                 Object = employee.Id
