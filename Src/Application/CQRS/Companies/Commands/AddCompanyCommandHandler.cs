@@ -29,7 +29,8 @@ namespace Application.CQRS.Companies.Commands
                 _logger.LogWarning(validationResult.Errors.GetErrorString());
                 return new ()
                 {
-                    Errors = validationResult.Errors
+                    Message = "Bad Request",
+                    Errors = validationResult.Errors.GetErrorsStringList()
                 };
             }
             Company company = new Company(request.CompanyDto!.Name!);
