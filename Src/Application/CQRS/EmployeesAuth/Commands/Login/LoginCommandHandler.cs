@@ -28,7 +28,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, BaseMessageDto>
     }
     public async Task<BaseMessageDto> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
-        var validationResult = await _validator.ValidateAsync(request);
+        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
         if (!validationResult.IsValid)
             return new ()
             {

@@ -7,8 +7,12 @@ public class RefreshValidator : AbstractValidator<RefreshCommand>
 {
     public RefreshValidator()
     {
-        RuleFor(x => x.RefreshDto.RefreshToken)
-            .NotNull()
-            .NotEmpty();
+        RuleFor(x => x.RefreshDto)
+            .NotNull();
+        When(x => x.RefreshDto != null, ()=> {
+            RuleFor(x => x.RefreshDto.RefreshToken)
+                .NotNull()
+                .NotEmpty();
+        });
     }
 }
