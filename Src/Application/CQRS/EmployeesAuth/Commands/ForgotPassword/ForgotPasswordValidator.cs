@@ -10,6 +10,7 @@ public class ForgotPasswordValidator : AbstractValidator<ForgotPasswordCommand>
         RuleFor(x => x.ForgotPasswordDto.EmployeeEmail)
             .NotNull()
             .NotEmpty()
+            .EmailAddress()
             .Must(x => employeeChecker.IsEmployeeExists(x))
             .WithMessage("Employee does not exists");
     }
