@@ -33,7 +33,7 @@ public class ForgotPasswordCommandHandler : IRequestHandler<ForgotPasswordComman
             {
                 Errors = validationResult.Errors.GetErrorsStringList()
             };
-        Employee employee = await _unitOfWork.EmployeeRepository.GetByEmail(request.ForgotPasswordDto.EmployeeEmail!);
+        Employee employee = await _unitOfWork.EmployeeRepository.GetByEmailAsync(request.ForgotPasswordDto.EmployeeEmail!);
         employee.SetResetToken();
         await _unitOfWork.CompleteAsync();
         _brokerSender.Send<ForgotPasswordMessage>(MessageDestinations.ForgotPasswordEmail, new ForgotPasswordMessage

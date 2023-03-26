@@ -36,7 +36,7 @@ public class RefreshCommandHandler : IRequestHandler<RefreshCommand, BaseMessage
             };
         Employee employee = await _unitOfWork
             .EmployeeRepository
-            .GetByRefreshToken(request.RefreshDto.RefreshToken!);
+            .GetByRefreshTokenAsync(request.RefreshDto.RefreshToken!);
         if (employee == null)
             return new ()
             {

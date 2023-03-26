@@ -4,7 +4,7 @@ namespace Domain.Interfaces.Repositories;
 
 public interface IEmployeeRepository : IRepository<Employee>
 {
-    Task<Employee> GetByVerificationToken(string token);
-    Task<Employee> GetByEmail(string email);
-    Task<Employee> GetByRefreshToken(string refreshToken);
+    Task<Employee> GetByVerificationTokenAsync(string token);
+    Task<Employee> GetByEmailAsync(string email);
+    Task<Employee> GetByRefreshTokenAsync(string refreshToken);
 }

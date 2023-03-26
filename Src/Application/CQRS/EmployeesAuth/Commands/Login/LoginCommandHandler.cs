@@ -36,7 +36,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, BaseMessageDto>
             };
         Employee employee = await _unitOfWork
             .EmployeeRepository
-            .GetByEmail(request.CredentialsDto.Email!);
+            .GetByEmailAsync(request.CredentialsDto.Email!);
         LoginToken loginToken = employee.Login(
             request.CredentialsDto.Password!,
             _jwtConfig.TokenKey,

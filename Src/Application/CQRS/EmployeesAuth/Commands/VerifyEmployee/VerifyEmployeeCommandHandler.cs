@@ -31,7 +31,7 @@ public class VerifyEmployeeCommandHandler : IRequestHandler<VerifyEmployeeComman
             };
         Employee employee = await _unitOfWork
             .EmployeeRepository
-            .GetByVerificationToken(request.VerificationToken!);
+            .GetByVerificationTokenAsync(request.VerificationToken!);
         employee.Activate();
         await _unitOfWork.CompleteAsync();
         return new()
