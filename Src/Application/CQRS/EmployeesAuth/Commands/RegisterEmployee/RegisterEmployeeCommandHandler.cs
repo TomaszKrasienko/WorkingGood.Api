@@ -11,16 +11,19 @@ using FluentValidation;
 using Infrastructure.Communication.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace Application.CQRS.EmployeesAuth.Commands.RegisterEmployee
 {
 	public class RegisterEmployeeCommandHandler : IRequestHandler<RegisterEmployeeCommand, BaseMessageDto>
-	{
+    {
+        private readonly ILogger<RegisterEmployeeCommandHandler> _logger;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IValidator<RegisterEmployeeCommand> _validator;
         private readonly IBrokerSender _brokerSender;
-		public RegisterEmployeeCommandHandler(IUnitOfWork unitOfWork, IValidator<RegisterEmployeeCommand> validator, IBrokerSender brokerSender)
-		{
+		public RegisterEmployeeCommandHandler(ILogger<RegisterEmployeeCommandHandler> logger, IUnitOfWork unitOfWork, IValidator<RegisterEmployeeCommand> validator, IBrokerSender brokerSender)
+        {
+            _logger = logger;
             _unitOfWork = unitOfWork;
             _validator = validator;
             _brokerSender = brokerSender;

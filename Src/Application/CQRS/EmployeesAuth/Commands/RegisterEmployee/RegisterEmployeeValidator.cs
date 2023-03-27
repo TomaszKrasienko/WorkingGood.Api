@@ -2,6 +2,7 @@
 using Application.EmployeesAuth.Commands;
 using Domain.Interfaces.Validation;
 using FluentValidation;
+using NLog.Filters;
 
 namespace Application.CQRS.EmployeesAuth.Commands.RegisterEmployee
 {
@@ -15,9 +16,13 @@ namespace Application.CQRS.EmployeesAuth.Commands.RegisterEmployee
             _companyChecker = companyChecker;
             RuleFor(x => x.RegisterEmployeeDto.Email)
                 .NotNull()
-                .EmailAddress()
-                .Must(x => _employeeChecker.IsEmployeeExists(x) == false)
-                .WithMessage("Email already exists");
+                .EmailAddress();
+            When(x => !(x.RegisterEmployeeDto == null || x.RegisterEmployeeDto.Email == null), () =>
+            {
+                RuleFor(x => x.RegisterEmployeeDto.Email)
+                    .Must(x => _employeeChecker.IsEmployeeExists(x) == false)
+                    .WithMessage("Email already exists");
+            });
             RuleFor(x => x.RegisterEmployeeDto.FirstName)
                 .NotNull()
                 .NotEmpty()
@@ -28,17 +33,24 @@ namespace Application.CQRS.EmployeesAuth.Commands.RegisterEmployee
                 .MaximumLength(60);
             RuleFor(x => x.RegisterEmployeeDto.Password)
                 .NotNull()
-                .NotEmpty()
-                .Must(x => IsPasswordValid(x) == true)
-                .WithMessage("Password must contains uppercase, lowercase and number");
+                .NotEmpty();
+            When(x => !(x.RegisterEmployeeDto == null || x.RegisterEmployeeDto.Password == null), () =>
+            {
+                RuleFor(x => x.RegisterEmployeeDto.Password)
+                    .Must(x => IsPasswordValid(x) == true)
+                    .WithMessage("Password must contains uppercase, lowercase and number");
+            });
             RuleFor(x => x.CompanyId)
                 .NotNull()
                 .NotEmpty();
-            RuleFor(x => x.CompanyId)
-                .NotEmpty()
-                .NotNull()
-                .Must(x => _companyChecker.IsCompanyExists((Guid)x))
-                .WithMessage("Company is not exists");
+            When(x => x.CompanyId != null, () =>
+            {
+                RuleFor(x => x.CompanyId)
+                    .NotEmpty()
+                    .NotNull()
+                    .Must(x => _companyChecker.IsCompanyExists((Guid)x))
+                    .WithMessage("Company is not exists");
+            });
         }
         private bool IsPasswordValid(string password)
         {

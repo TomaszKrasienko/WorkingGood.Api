@@ -9,8 +9,12 @@ public class VerifyEmployeeValidator : AbstractValidator<VerifyEmployeeCommand>
     {
         RuleFor(x => x.VerificationToken)
             .NotNull()
-            .NotEmpty()
-            .Must(x => employeeChecker.IsVerificationTokenExists(x))
-            .WithMessage("Token is not exists");
+            .NotEmpty();
+        When(x => x.VerificationToken != null, () =>
+        {
+            RuleFor(x => x.VerificationToken)
+                .Must(x => employeeChecker.IsVerificationTokenExists(x))
+                .WithMessage("Token is not exists");
+        });
     }
 }
