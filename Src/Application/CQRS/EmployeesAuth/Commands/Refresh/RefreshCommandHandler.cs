@@ -40,7 +40,7 @@ public class RefreshCommandHandler : IRequestHandler<RefreshCommand, BaseMessage
         if (employee == null)
             return new ()
             {
-                Message = "Refresh token is invalid"
+                Errors = "Refresh token is invalid"
             };
         LoginToken loginToken = employee.Refresh(_jwtConfig.TokenKey, _jwtConfig.Audience, _jwtConfig.Issuer);
         await _unitOfWork.CompleteAsync();
