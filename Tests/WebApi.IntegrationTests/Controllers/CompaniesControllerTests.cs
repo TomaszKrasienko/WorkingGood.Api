@@ -1,6 +1,5 @@
 using Application.DTOs.Companies;
 using Domain.Models.Company;
-using Domain.Models.Employee;
 using FluentAssertions;
 using Infrastructure.Persistance;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -12,8 +11,8 @@ namespace WebApi.IntegrationTests.Controllers;
 
 public class CompaniesControllerTests : IClassFixture<WebApplicationFactory<Program>>
 {
-    private WebApplicationFactory<Program> _factory;
-    private HttpClient _client;
+    private readonly WebApplicationFactory<Program> _factory;
+    private readonly HttpClient _client;
     public CompaniesControllerTests(WebApplicationFactory<Program> factory)
     {
         _factory = factory
@@ -29,7 +28,7 @@ public class CompaniesControllerTests : IClassFixture<WebApplicationFactory<Prog
         _client = _factory.CreateClient();
     }
     [Fact]
-    public async Task AddCompany_ForNonExistingCompanyNameInCompanyDto_ShouldReturnOkStatus()
+    public async Task AddCompany_ForNonExistingCompanyNameInCompanyDtoAndValidCompanyDto_ShouldReturnOkStatus()
     {
         //Arrange
             CompanyDto companyDto = new()
@@ -42,16 +41,11 @@ public class CompaniesControllerTests : IClassFixture<WebApplicationFactory<Prog
         //Assert
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
     }
-
     [Fact]
     public async Task AddCompany_ForExistingCompanyNameInCompanyDto_ShouldReturnBadRequest()
     {
         //Arrange
-            var scopeFactory = _factory.Services.GetService<IServiceScopeFactory>();
-            using var scope = scopeFactory.CreateScope();
-            WgDbContext dbContext = scope.ServiceProvider.GetService<WgDbContext>();
-            await dbContext.Companies.AddAsync(new Company("TestCompany"));
-            await dbContext.SaveChangesAsync();
+            await SeedCompany();
             CompanyDto companyDto = new()
             {
                 Name = "TestCompany"
@@ -61,5 +55,13 @@ public class CompaniesControllerTests : IClassFixture<WebApplicationFactory<Prog
             var response = await _client.PostAsync("api/Companies/AddCompany", httpContent);
         //Assert
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
+    }
+    private async Task SeedCompany()
+    {
+        var scopeFactory = _factory.Services.GetService<IServiceScopeFactory>();
+        using var scope = scopeFactory!.CreateScope();
+        WgDbContext dbContext = scope.ServiceProvider.GetService<WgDbContext>()!;
+        await dbContext.Companies.AddAsync(new Company("TestCompany"));
+        await dbContext.SaveChangesAsync();
     }
 }

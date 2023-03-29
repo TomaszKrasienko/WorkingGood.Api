@@ -31,6 +31,8 @@
       <ProjectReference Include="..\..\Src\Infrastructure\Infrastructure.csproj" />
       <ProjectReference Include="..\..\Src\Domain\Domain.csproj" />
       <ProjectReference Include="..\..\Src\Application\Application.csproj" />
+      <ProjectReference Include="..\Application.Tests\Application.Tests.csproj" />
+      <ProjectReference Include="..\Domain.Tests\Domain.Tests.csproj" />
     </ItemGroup>
 
     <ItemGroup>
