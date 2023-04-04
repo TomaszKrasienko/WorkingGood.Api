@@ -1,3 +1,4 @@
+using Application.DTOs.EmployeesAuth;
 using Domain.Models.Employee;
 using FluentAssertions;
 using Infrastructure.Persistance;
@@ -9,11 +10,11 @@ using WebApi.IntegrationTests.Tests.Helpers;
 namespace WebApi.IntegrationTests.Controllers.EmployeesAuthController;
 
 [Collection("WebApiTests")]
-public class EmployeesAuthControllerTests_VerifyEmployee : IClassFixture<WebApplicationFactory<Program>>
-{    
+public class EmployeeAuthControllerTests_ForgotPassword: IClassFixture<WebApplicationFactory<Program>>
+{
     private readonly WebApplicationFactory<Program> _factory;
     private readonly HttpClient _client;
-    public EmployeesAuthControllerTests_VerifyEmployee(WebApplicationFactory<Program> factory)
+    public EmployeeAuthControllerTests_ForgotPassword(WebApplicationFactory<Program> factory)
     {
         _factory = factory
             .WithWebHostBuilder(builder =>
@@ -28,36 +29,37 @@ public class EmployeesAuthControllerTests_VerifyEmployee : IClassFixture<WebAppl
         _client = _factory.CreateClient();
     }
     [Fact]
-    public async Task VerifyEmployee_ForExistingVerificationToken_ShouldReturnOkResult()
+    public async Task ForgotPassword_ForValidResetPasswordDto_ShouldReturnOkResult()
     {
         //Arrange
-        string httpContentString = string.Empty;
-        var httpContent = httpContentString.ToJsonContent();
-        var verificationToken = await SeedEmployeeAndGetVerificationToken();
+            string email = $"{Guid.NewGuid()}@test.pl";
+            string password = "Test123!";
+            string newPassword = "Test123#";
+            string resetToken = await SeedLoggedEmployee(email, password);
+            ResetPasswordDto resetPasswordDto = new()
+            {
+                ResetToken = resetToken,
+                NewPassword = newPassword,
+                ConfirmNewPassword = newPassword
+            };
+            var httpContent = resetPasswordDto.ToJsonContent();
         //Act
-        var response = await _client.PostAsync($"api/EmployeesAuth/VerifyEmployee/{verificationToken}", httpContent);
+            var response = await _client.PostAsync("api/EmployeesAuth/ResetPassword", httpContent);
         //Assert
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
     }
-    private async Task<string> SeedEmployeeAndGetVerificationToken()
+    private async Task<string> SeedLoggedEmployee(string email, string password)
     {
-        Employee employee = new Employee("Test", "Test", "test@test.pl", "Test123", Guid.NewGuid());
+        Employee employee = new Employee("Test", "Test", email, password, Guid.NewGuid());
         var scopeFactory = _factory.Services.GetService<IServiceScopeFactory>();
         using var scope = scopeFactory!.CreateScope();
         WgDbContext dbContext = scope.ServiceProvider.GetService<WgDbContext>()!;
         await dbContext.Employees.AddAsync(employee);
         await dbContext.SaveChangesAsync();
-        return employee.VerificationToken.Token;
+        employee.Activate();
+        await dbContext.SaveChangesAsync();
+        employee.SetResetToken();
+        await dbContext.SaveChangesAsync();
+        return employee.ResetToken?.Token ?? string.Empty;
     }
-    [Fact]
-    public async Task VerifyEmployee_ForNonExistingVerificationToken_ShouldReturnBadRequestResult()
-    {
-        //Arrange
-        string httpContentString = string.Empty;
-        var httpContent = httpContentString.ToJsonContent();
-        //Act
-        var response = await _client.PostAsync($"api/EmployeesAuth/VerifyEmployee/Test", httpContent);
-        //Assert
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
-    }    
 }

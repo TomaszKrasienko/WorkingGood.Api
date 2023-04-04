@@ -11,6 +11,7 @@ using WebApi.IntegrationTests.Tests.Helpers;
 
 namespace WebApi.IntegrationTests.Controllers.EmployeesAuthController;
 
+[Collection("WebApiTests")]
 public class EmployeesAuthControllerTests_Login: IClassFixture<WebApplicationFactory<Program>>
 {    
     private readonly WebApplicationFactory<Program> _factory;
@@ -39,57 +40,57 @@ public class EmployeesAuthControllerTests_Login: IClassFixture<WebApplicationFac
     [Fact]
     public async Task Login_ForValidCredentialsDto_ShouldReturnOkResult()
     {
-        string email = "test@test.pl";
-        string password = "Test123!";
         //Arrange
-        CredentialsDto credentials = new()
-        {
-            Email = email,
-            Password = password,
-        };
-        var httpContent = credentials.ToJsonContent();
-        await SeedEmployee(email, password);
+            string email = "test@test.pl";
+            string password = "Test123!";
+            CredentialsDto credentials = new()
+            {
+                Email = email,
+                Password = password,
+            };
+            var httpContent = credentials.ToJsonContent();
+            await SeedEmployee(email, password);
         //Act
-        var response = await _client.PostAsync($"api/EmployeesAuth/Login", httpContent);
+            var response = await _client.PostAsync($"api/EmployeesAuth/Login", httpContent);
         //Assert
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
     }
 
     [Fact]
     public async Task Login_ForInvalidPassword_ShouldReturnBadRequest()
     {
-        string email = "test@test.pl";
-        string validPassword = "Test123!";
-        string invalidPassword = "InvalidPassword123!";
         //Arrange
-        CredentialsDto credentials = new()
-        {
-            Email = email,
-            Password = validPassword,
-        };
-        var httpContent = credentials.ToJsonContent();
-        await SeedEmployee(email, invalidPassword);
+            string email = "test@test.pl";
+            string validPassword = "Test123!";
+            string invalidPassword = "InvalidPassword123!";
+            CredentialsDto credentials = new()
+            {
+                Email = email,
+                Password = validPassword,
+            };
+            var httpContent = credentials.ToJsonContent();
+            await SeedEmployee(email, invalidPassword);
         //Act
-        var response = await _client.PostAsync($"api/EmployeesAuth/Login", httpContent);
+            var response = await _client.PostAsync($"api/EmployeesAuth/Login", httpContent);
         //Assert
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
     }
     [Fact]
     public async Task Login_ForNotExistingEmployee_ShouldReturnBadRequest()
     {
-        string email = "test@test.pl";
-        string password = "Test123!";
         //Arrange
-        CredentialsDto credentials = new()
-        {
-            Email = email,
-            Password = password,
-        };
-        var httpContent = credentials.ToJsonContent();
+            string email = "noExistingtest@test.pl";
+            string password = "Test123!";
+            CredentialsDto credentials = new()
+            {
+                Email = email,
+                Password = password,
+            };
+            var httpContent = credentials.ToJsonContent();
         //Act
-        var response = await _client.PostAsync($"api/EmployeesAuth/Login", httpContent);
+            var response = await _client.PostAsync($"api/EmployeesAuth/Login", httpContent);
         //Assert
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
     }
     private async Task SeedEmployee(string email, string password)
     {

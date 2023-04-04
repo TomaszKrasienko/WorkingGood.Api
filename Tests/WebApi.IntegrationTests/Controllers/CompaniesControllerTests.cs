@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using WebApi.IntegrationTests.Tests.Helpers;
 
 namespace WebApi.IntegrationTests.Controllers;
-
+[Collection("WebApiTests")]
 public class CompaniesControllerTests : IClassFixture<WebApplicationFactory<Program>>
 {
     private readonly WebApplicationFactory<Program> _factory;

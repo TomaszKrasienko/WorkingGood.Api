@@ -10,6 +10,7 @@ using WebApi.IntegrationTests.Tests.Helpers.EmployeesAuthController;
 
 namespace WebApi.IntegrationTests.Controllers.EmployeesAuthController;
 
+[Collection("WebApiTests")]
 public class EmployeesAuthControllerTests_Register : IClassFixture<WebApplicationFactory<Program>>
 {
     private readonly WebApplicationFactory<Program> _factory;
@@ -24,7 +25,9 @@ public class EmployeesAuthControllerTests_Register : IClassFixture<WebApplicatio
                     var dbContextOptions = services.SingleOrDefault(x => x.ServiceType == typeof(DbContextOptions<WgDbContext>));
                     services.Remove(dbContextOptions!);
                     services.AddDbContext<WgDbContext>(options => options.UseInMemoryDatabase("WorkingGoodTests"));
+                    services.ConfigureTestRabbitMq();
                 });
+                
             });
         _client = _factory.CreateClient();
     }
@@ -34,7 +37,7 @@ public class EmployeesAuthControllerTests_Register : IClassFixture<WebApplicatio
         //Arrange
             RegisterEmployeeDto registerEmployeeDto = new()
             {
-                Email = "test@test.pl",
+                Email = $"{Guid.NewGuid().ToString()}@test.pl",
                 Password = "Test123!",
                 FirstName = "TestFirstName",
                 LastName = "TestLastName"
