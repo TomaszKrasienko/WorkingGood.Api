@@ -3,6 +3,7 @@ using Application.CQRS.EmployeesAuth.Commands.ChangePassword;
 using Application.CQRS.EmployeesAuth.Commands.ForgotPassword;
 using Application.CQRS.EmployeesAuth.Commands.Login;
 using Application.CQRS.EmployeesAuth.Commands.Refresh;
+using Application.CQRS.EmployeesAuth.Commands.ResetPassword;
 using Application.CQRS.EmployeesAuth.Commands.VerifyEmployee;
 using Application.DTOs;
 using Application.DTOs.EmployeesAuth;
@@ -94,6 +95,16 @@ namespace WebApi.Controllers
                 return Ok(baseMessageDto);
             else
                 return BadRequest(baseMessageDto);
+        }
+
+        [HttpPost("ResetPassword")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto resetPasswordDto)
+        {
+            BaseMessageDto baseMessageDto = await _mediator.Send(new ResetPasswordCommand
+            {
+                ResetPasswordDto = resetPasswordDto
+            });
+            return Ok(baseMessageDto);
         }
     }
 }

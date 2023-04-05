@@ -29,6 +29,12 @@ namespace Infrastructure.Validation
 		        .Employees
 		        .Any(x => x.VerificationToken.Token == verificationToken);
         }
+        public bool IsResetTokenExists(string resetToken)
+        {
+	        return _context
+		        .Employees
+		        .Any(x => x.ResetToken!.Token == resetToken);
+        }
 	}
 }
 

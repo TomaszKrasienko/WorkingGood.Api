@@ -6,6 +6,7 @@ namespace Domain.Interfaces.Validation
 		bool IsEmployeeExists(string email);
 		bool IsEmployeeExists(Guid employeeId);
 		bool IsVerificationTokenExists(string verificationToken);
+		bool IsResetTokenExists(string resetToken);
 	}
 }
 

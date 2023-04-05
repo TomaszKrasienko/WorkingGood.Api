@@ -31,4 +31,11 @@ public class EmployeeRepository : BaseRepository<Employee>, IEmployeeRepository
             .FirstOrDefaultAsync(x =>
                 x.RefreshToken.Token == refreshToken);
     }
+
+    public async Task<Employee> GetByResetToken(string token)
+    {
+        return await _context
+            .Employees
+            .FirstOrDefaultAsync(x => x.ResetToken.Token == token);
+    }
 }
