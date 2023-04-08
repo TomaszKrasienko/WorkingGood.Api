@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Persistance.Migrations
 {
     [DbContext(typeof(WgDbContext))]
-    [Migration("20230318103355_Initial_3")]
-    partial class Initial_3
+    [Migration("20230408114815_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -39,13 +39,13 @@ namespace Infrastructure.Persistance.Migrations
                     b.ToTable("Companies");
                 });
 
-            modelBuilder.Entity("Domain.Models.Company.Employee", b =>
+            modelBuilder.Entity("Domain.Models.Employee.Employee", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CompanyId")
+                    b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Email")
@@ -73,11 +73,58 @@ namespace Infrastructure.Persistance.Migrations
                     b.ToTable("Employees");
                 });
 
-            modelBuilder.Entity("Domain.Models.Company.Employee", b =>
+            modelBuilder.Entity("Domain.Models.Offer.Offer", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AuthorId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("PositionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.HasIndex("PositionId");
+
+                    b.ToTable("Offers");
+                });
+
+            modelBuilder.Entity("Domain.Models.Offer.Position", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Positions");
+                });
+
+            modelBuilder.Entity("Domain.Models.Employee.Employee", b =>
                 {
                     b.HasOne("Domain.Models.Company.Company", null)
-                        .WithMany("Employees")
-                        .HasForeignKey("CompanyId");
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.OwnsOne("Domain.ValueObjects.Password", "Password", b1 =>
                         {
@@ -173,9 +220,42 @@ namespace Infrastructure.Persistance.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Domain.Models.Company.Company", b =>
+            modelBuilder.Entity("Domain.Models.Offer.Offer", b =>
                 {
-                    b.Navigation("Employees");
+                    b.HasOne("Domain.Models.Employee.Employee", null)
+                        .WithMany()
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Models.Offer.Position", "Position")
+                        .WithMany()
+                        .HasForeignKey("PositionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.OwnsOne("Domain.ValueObjects.Offer.SalaryRanges", "SalaryRanges", b1 =>
+                        {
+                            b1.Property<Guid>("OfferId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<double>("ValueMax")
+                                .HasColumnType("float");
+
+                            b1.Property<double>("ValueMin")
+                                .HasColumnType("float");
+
+                            b1.HasKey("OfferId");
+
+                            b1.ToTable("Offers");
+
+                            b1.WithOwner()
+                                .HasForeignKey("OfferId");
+                        });
+
+                    b.Navigation("Position");
+
+                    b.Navigation("SalaryRanges");
                 });
 #pragma warning restore 612, 618
         }

@@ -7,6 +7,7 @@ namespace Domain.Interfaces
     {
         ICompanyRepository CompanyRepository { get; }
         IEmployeeRepository EmployeeRepository { get; }
+        IOfferRepository OffersRepository { get; }
         Task CompleteAsync();
     }
 }

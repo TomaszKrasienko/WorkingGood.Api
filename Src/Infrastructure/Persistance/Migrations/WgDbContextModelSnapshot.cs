@@ -37,7 +37,7 @@ namespace Infrastructure.Persistance.Migrations
                     b.ToTable("Companies");
                 });
 
-            modelBuilder.Entity("Domain.Models.Company.Employee", b =>
+            modelBuilder.Entity("Domain.Models.Employee.Employee", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -71,7 +71,52 @@ namespace Infrastructure.Persistance.Migrations
                     b.ToTable("Employees");
                 });
 
-            modelBuilder.Entity("Domain.Models.Company.Employee", b =>
+            modelBuilder.Entity("Domain.Models.Offer.Offer", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AuthorId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("PositionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.HasIndex("PositionId");
+
+                    b.ToTable("Offers");
+                });
+
+            modelBuilder.Entity("Domain.Models.Offer.Position", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Positions");
+                });
+
+            modelBuilder.Entity("Domain.Models.Employee.Employee", b =>
                 {
                     b.HasOne("Domain.Models.Company.Company", null)
                         .WithMany()
@@ -171,6 +216,44 @@ namespace Infrastructure.Persistance.Migrations
 
                     b.Navigation("VerificationToken")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Models.Offer.Offer", b =>
+                {
+                    b.HasOne("Domain.Models.Employee.Employee", null)
+                        .WithMany()
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Models.Offer.Position", "Position")
+                        .WithMany()
+                        .HasForeignKey("PositionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.OwnsOne("Domain.ValueObjects.Offer.SalaryRanges", "SalaryRanges", b1 =>
+                        {
+                            b1.Property<Guid>("OfferId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<double>("ValueMax")
+                                .HasColumnType("float");
+
+                            b1.Property<double>("ValueMin")
+                                .HasColumnType("float");
+
+                            b1.HasKey("OfferId");
+
+                            b1.ToTable("Offers");
+
+                            b1.WithOwner()
+                                .HasForeignKey("OfferId");
+                        });
+
+                    b.Navigation("Position");
+
+                    b.Navigation("SalaryRanges");
                 });
 #pragma warning restore 612, 618
         }

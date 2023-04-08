@@ -19,6 +19,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Persistance\" />
+    <Folder Include="Persistance\Migrations" />
     <Folder Include="Persistance\ModelsConfiguration\" />
     <Folder Include="Persistance\Repositories\" />
     <Folder Include="Validation\" />

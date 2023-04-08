@@ -27,6 +27,17 @@ namespace Infrastructure.Persistance
                 return _employeeRepository;
             }
         }
+
+        private OfferRepository _offerRepository;
+        public IOfferRepository OffersRepository
+        {
+            get
+            {
+                if (_offerRepository is null)
+                    _offerRepository = new OfferRepository(_context);
+                return _offerRepository;
+            }
+        }
         private EmployeeRepository _employeeRepository;
         public UnitOfWork(WgDbContext context)
         {
