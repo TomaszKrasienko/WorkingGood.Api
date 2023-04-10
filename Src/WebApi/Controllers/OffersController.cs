@@ -1,4 +1,5 @@
 using Application.CQRS.Offers.Commands;
+using Application.CQRS.Offers.Queries.GetAllForCompany;
 using Application.DTOs.Offers;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -18,7 +19,11 @@ public class OffersController : BaseController
     {
         //Todo: testy integracyjne 
         var employeeId = HttpContext.User.FindFirst("EmployeeId");
-        //var result = 
+        var result = await _mediator.Send(new GetAllForCompanyQuery
+        {
+            EmployeeId = Guid.Parse(employeeId.Value),
+        });
+        return Ok(result);
     }
     [HttpPost("AddOffer")]
     public async Task<IActionResult> AddOffer([FromBody]OfferDto offerDto)

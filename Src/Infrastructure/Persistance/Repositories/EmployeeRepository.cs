@@ -38,4 +38,12 @@ public class EmployeeRepository : BaseRepository<Employee>, IEmployeeRepository
             .Employees
             .FirstOrDefaultAsync(x => x.ResetToken.Token == token);
     }
+
+    public async Task<List<Employee>> GetByCompanyIdAsync(Guid companyId)
+    {
+        return await _context
+            .Employees
+            .Where(x => x.CompanyId == companyId)
+            .ToListAsync();
+    }
 }

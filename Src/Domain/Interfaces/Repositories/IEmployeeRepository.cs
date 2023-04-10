@@ -8,4 +8,5 @@ public interface IEmployeeRepository : IRepository<Employee>
     Task<Employee> GetByEmailAsync(string email);
     Task<Employee> GetByRefreshTokenAsync(string refreshToken);
     Task<Employee> GetByResetToken(string token);
+    Task<List<Employee>> GetByCompanyIdAsync(Guid companyId);
 }

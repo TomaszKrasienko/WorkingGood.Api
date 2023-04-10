@@ -5,6 +5,15 @@ namespace WebApi.IntegrationTests.Tests.Helpers;
 
 public class FakeUserFilter : IAsyncActionFilter
 {
+    private readonly string? _employeeId;
+    public FakeUserFilter()
+    {
+        
+    }
+    public FakeUserFilter(Guid employeeId)
+    {
+        _employeeId = employeeId.ToString();
+    }
     public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {
         //Todo: Przeanalizować
@@ -12,7 +21,7 @@ public class FakeUserFilter : IAsyncActionFilter
         claimsPrincipal.AddIdentity(new ClaimsIdentity(
             new[]
             {
-                new Claim("EmployeeId", Guid.NewGuid().ToString())
+                new Claim("EmployeeId",  _employeeId ?? Guid.NewGuid().ToString())
             })
         );
         context.HttpContext.User = claimsPrincipal;

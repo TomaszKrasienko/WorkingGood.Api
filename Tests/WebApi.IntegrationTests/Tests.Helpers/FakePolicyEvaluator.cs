@@ -8,6 +8,15 @@ namespace WebApi.IntegrationTests.Tests.Helpers;
 
 public class FakePolicyEvaluator : IPolicyEvaluator
 {
+    private static string? _employeeId;
+    public FakePolicyEvaluator()
+    {
+        
+    }
+    public FakePolicyEvaluator(Guid employeeId)
+    {
+        _employeeId = employeeId.ToString();
+    }
     public Task<AuthenticateResult> AuthenticateAsync(AuthorizationPolicy policy, HttpContext context)
     {
         //Todo: Przeanalizować
@@ -15,7 +24,7 @@ public class FakePolicyEvaluator : IPolicyEvaluator
         claimsPrincipal.AddIdentity(new ClaimsIdentity(
             new[]
             {
-                new Claim("EmployeeId", Guid.NewGuid().ToString())
+                new Claim("EmployeeId",  _employeeId ?? Guid.NewGuid().ToString())
             })
         );
         var ticket = new AuthenticationTicket(claimsPrincipal, "Test");

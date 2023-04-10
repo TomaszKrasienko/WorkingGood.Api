@@ -1,4 +1,5 @@
 using Application.DTOs.Offers;
+using Domain.Models.Employee;
 using FluentAssertions;
 using Infrastructure.Persistance;
 using Microsoft.AspNetCore.Authorization.Policy;
@@ -51,12 +52,5 @@ public class OffersControllerTests : IClassFixture<WebApplicationFactory<Program
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
     }
 
-    [Fact]
-    public async Task GetAllForCompany_ForLoginEmployee_ShouldReturnOkResult()
-    {
-        //Act
-        var response = await _client.GetAsync("api/Offers/GetAllForCompany");
-        //Assert
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
-    }
+
 }

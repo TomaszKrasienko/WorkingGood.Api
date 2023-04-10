@@ -49,6 +49,5 @@ public class AddOfferCommandHandlerTests
         result.Should().BeOfType<BaseMessageDto>();
         result.Message.Should().Be("Offer added successfully");
         result.Object.Should().BeOfType<Offer>();
-
     }
 }
