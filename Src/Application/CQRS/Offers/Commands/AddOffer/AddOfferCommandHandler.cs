@@ -33,7 +33,8 @@ public class AddOfferCommandHandler : IRequestHandler<AddOfferCommand, BaseMessa
             (double)request.OfferDto.SalaryRangeMin,
             (double)request.OfferDto.SalaryRangeMax,
             request.OfferDto.Description,
-            request.EmployeeId
+            request.EmployeeId,
+            (bool)request.OfferDto.IsActive
         );
         await _unitOfWork.OffersRepository.AddAsync(offer);
         await _unitOfWork.CompleteAsync();

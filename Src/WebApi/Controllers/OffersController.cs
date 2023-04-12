@@ -37,4 +37,11 @@ public class OffersController : BaseController
         });
         return Ok(result);
     }
+    [AllowAnonymous]
+    [HttpGet("GetOfferStatus/{offerId}")]
+    public async Task<IActionResult> GetOfferStatus([FromRoute] Guid offerId)
+    {
+        return Ok(1);
+    }
+    
 }

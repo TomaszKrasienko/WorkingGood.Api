@@ -7,4 +7,5 @@ public class OfferDto
     public double? SalaryRangeMin { get; set; }
     public double? SalaryRangeMax { get; set; }
     public string? Description { get; set; }
+    public bool? IsActive { get; set; }
 }

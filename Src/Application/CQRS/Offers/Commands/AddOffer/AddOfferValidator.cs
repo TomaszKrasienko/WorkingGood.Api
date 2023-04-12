@@ -28,6 +28,9 @@ public class AddOfferValidator : AbstractValidator<AddOfferCommand>
                 .NotNull()
                 .NotEmpty()
                 .MinimumLength(30);
+            RuleFor(x => x.OfferDto.IsActive)
+                .NotNull()
+                .NotEmpty();
         });
     }
 }

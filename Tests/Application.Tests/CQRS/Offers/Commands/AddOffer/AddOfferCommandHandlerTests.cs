@@ -40,7 +40,8 @@ public class AddOfferCommandHandlerTests
                 Description = "Description description Description description",
                 PositionType = "Test",
                 SalaryRangeMax = 12000,
-                SalaryRangeMin = 10000
+                SalaryRangeMin = 10000,
+                IsActive = true
             }
         };
         //Act

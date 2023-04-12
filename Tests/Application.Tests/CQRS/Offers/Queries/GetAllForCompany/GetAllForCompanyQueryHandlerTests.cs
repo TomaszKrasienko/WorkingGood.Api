@@ -50,7 +50,8 @@ public class GetAllForCompanyQueryHandlerTests
             10000,
             15000,
             "Description test Description test Description test",
-            Guid.NewGuid()
+            Guid.NewGuid(),
+            true
             );
         _mockOfferRepository
             .Setup(x => x.GetAllForEmployees(It.IsAny<List<Guid>>()))
