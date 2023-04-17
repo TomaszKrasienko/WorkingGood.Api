@@ -28,4 +28,10 @@
     <ProjectReference Include="..\..\Src\Domain\Domain.csproj" />
     <ProjectReference Include="..\..\Src\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="CQRS\Offers\Queries\GetById\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="CQRS\Offers\Queries\GetById\" />
+  </ItemGroup>
 </Project>

@@ -1,5 +1,7 @@
 using Application.CQRS.Offers.Commands;
 using Application.CQRS.Offers.Queries.GetAllForCompany;
+using Application.CQRS.Offers.Queries.GetById;
+using Application.CQRS.Offers.Queries.GetOfferStatus;
 using Application.DTOs.Offers;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -25,6 +27,27 @@ public class OffersController : BaseController
         });
         return Ok(result);
     }
+    [AllowAnonymous]
+    [HttpGet("GetOfferStatus/{offerId}")]
+    public async Task<IActionResult> GetOfferStatus([FromRoute] Guid offerId)
+    {
+        var result = await _mediator.Send(new GetStatusQuery
+        {
+            OfferId = offerId
+        });
+        return Ok(result);
+    }
+    [AllowAnonymous]
+    [HttpGet("GetById/{id}")]
+    public async Task<IActionResult> GetById([FromRoute] Guid id)
+    {
+        //Todo: testy integracyjne
+        var result = await _mediator.Send(new GetByIdQuery
+        {
+            Id = id
+        });
+        return Ok(result);
+    }
     [HttpPost("AddOffer")]
     public async Task<IActionResult> AddOffer([FromBody]OfferDto offerDto)
     {
@@ -37,11 +60,4 @@ public class OffersController : BaseController
         });
         return Ok(result);
     }
-    [AllowAnonymous]
-    [HttpGet("GetOfferStatus/{offerId}")]
-    public async Task<IActionResult> GetOfferStatus([FromRoute] Guid offerId)
-    {
-        return Ok(1);
-    }
-    
 }

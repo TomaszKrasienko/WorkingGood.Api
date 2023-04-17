@@ -1,3 +1,4 @@
+using Application.DTOs;
 using Application.DTOs.Offers;
 using Domain.Models.Employee;
 using Domain.Models.Offer;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using WebApi.IntegrationTests.Tests.Helpers;
 
 namespace WebApi.IntegrationTests.Controllers.OffersController;
@@ -61,10 +63,11 @@ public class OffersControllerTests : IClassFixture<WebApplicationFactory<Program
         //Arrange
         Guid offerId = await SeedOffer(isActive);
         //Act
-        var response = await _client.GetAsync($"/api/Offer/GetOfferStatus/{offerId}");
+        var response = await _client.GetAsync($"/api/Offers/GetOfferStatus/{offerId}");
         //Assert
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
-        response.Content.Should().Be(isActive);
+        var stringContent = await response.Content.ReadAsStringAsync();
+        stringContent.GetBaseMessageDto().Object.Should().Be(isActive);
     }
     private async Task<Guid> SeedOffer(bool isActive)
     {

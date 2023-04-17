@@ -2,6 +2,7 @@ using System.Text;
 using System.Text.Json.Nodes;
 using Domain.Enums;
 using Domain.Interfaces.Communication;
+using Domain.ValueObjects;
 using Infrastructure.Common.ConfigModels;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
@@ -17,13 +18,15 @@ public class RabbitMqSender : IBrokerSender
     }
     public void Send<T>(MessageDestinations messageDestinations, T obj)
     {
-        ConnectionFactory connectionFactory = new ConnectionFactory()
+        //Todo: do poprawy
+        ConnectionFactory connectionFactory = new ConnectionFactory();
+        connectionFactory.HostName = _rabbitMqConfig.Host;
+        connectionFactory.UserName = _rabbitMqConfig.UserName;
+        connectionFactory.Password = _rabbitMqConfig.Password;
+        if (_rabbitMqConfig.Port != null)
         {
-            HostName = _rabbitMqConfig.Host,
-            Port = _rabbitMqConfig.Port,
-            UserName = _rabbitMqConfig.UserName,
-            Password = _rabbitMqConfig.Password
-        };
+            connectionFactory.Port = (int)_rabbitMqConfig.Port;
+        }
         RabbitMqRoutesConfig routesConfig = GetRouteConfig(messageDestinations);
         using (var connection = connectionFactory.CreateConnection())
         using (var channel = connection.CreateModel())

@@ -21,6 +21,7 @@ namespace Infrastructure.Common.Extensions.Configuration
 				.ConfigureConfigs(configuration)
 				.AddScoped<IEmployeeChecker, EmployeeChecker>()
 				.AddScoped<ICompanyChecker, CompanyChecker>()
+				.AddScoped<IOfferChecker, OfferChecker>()
 				.AddScoped<IBrokerSender, RabbitMqSender>();
 			return services;
 		}

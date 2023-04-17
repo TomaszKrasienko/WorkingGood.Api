@@ -16,14 +16,6 @@ public class Offer : IAggregateRoot
     {
         
     }
-    public Offer(string title, string positionType, string description, Guid authorId)
-    {
-        Title = title;
-        Position = new(positionType);
-        Description = description;
-        AuthorId = authorId;
-        IsActive = false;
-    }
     public Offer(
         string title, 
         string positionType, 

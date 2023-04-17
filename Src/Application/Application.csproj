@@ -20,6 +20,7 @@
     <None Remove="CQRS\Companies\Commands\" />
     <None Remove="Extensions\" />
     <None Remove="Extensions\Configuration\" />
+    <None Remove="CQRS\Offers\Queries\GetById\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DTOs\" />
@@ -31,6 +32,7 @@
     <Folder Include="CQRS\Companies\Commands\" />
     <Folder Include="Extensions\" />
     <Folder Include="Extensions\Configuration\" />
+    <Folder Include="CQRS\Offers\Queries\GetById\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.5.1" />

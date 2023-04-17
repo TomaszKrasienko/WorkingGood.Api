@@ -1,5 +1,8 @@
 using Application.DTOs;
+using Application.Extensions.Validation;
 using Domain.Interfaces;
+using Domain.Models.Employee;
+using Domain.Models.Offer;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -17,8 +20,18 @@ public class GetStatusQueryHandler : IRequestHandler<GetStatusQuery, BaseMessage
         _unitOfWork = unitOfWork;
         _validator = validator;
     }
-    public Task<BaseMessageDto> Handle(GetStatusQuery request, CancellationToken cancellationToken)
+    public async Task<BaseMessageDto> Handle(GetStatusQuery request, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+        if(!validationResult.IsValid)
+            return new BaseMessageDto
+            {
+                Errors = validationResult.Errors.GetErrorString()
+            };
+        Offer offer = await _unitOfWork.OffersRepository.GetByIdAsync(request.OfferId);
+        return new BaseMessageDto()
+        {
+            Object = offer.IsActive
+        };
     }
 }
