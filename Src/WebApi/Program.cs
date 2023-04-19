@@ -10,7 +10,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddConfiguration(builder.Configuration);
-builder.Services.ConfigureSwagger();
 builder.Host.UseNLog();
 var app = builder.Build();
 app.UseSwagger();

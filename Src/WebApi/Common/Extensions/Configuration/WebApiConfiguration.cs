@@ -4,6 +4,7 @@ using Infrastructure.Common.ConfigModels;
 using Infrastructure.Common.Extensions.Configuration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using WebApi.Extensions.Configuration;
 
 namespace WebApi.Common.Extensions.Configuration
 {
@@ -15,6 +16,7 @@ namespace WebApi.Common.Extensions.Configuration
                 .AddInfrastructureConfiguration(configuration)
                 .AddApplicationConfiguration(configuration)
                 .AddJwtAuthentication(configuration)
+                .ConfigureSwagger()
                 .AddCorsPolicy();
             return services;
         }
