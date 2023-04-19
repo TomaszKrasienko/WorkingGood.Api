@@ -1,4 +1,5 @@
 using Application.CQRS.Offers.Commands;
+using Application.CQRS.Offers.Commands.AddOffer;
 using Application.DTOs;
 using Domain.Interfaces;
 using Domain.Interfaces.Repositories;

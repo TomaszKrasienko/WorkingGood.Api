@@ -23,6 +23,7 @@
     <None Remove="CQRS\Offers\Queries\GetById\" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Common" />
     <Folder Include="DTOs\" />
     <Folder Include="DTOs\EmployeesAuth\" />
     <Folder Include="CQRS\" />
@@ -30,8 +31,6 @@
     <Folder Include="CQRS\Companies\" />
     <Folder Include="DTOs\Companies\" />
     <Folder Include="CQRS\Companies\Commands\" />
-    <Folder Include="Extensions\" />
-    <Folder Include="Extensions\Configuration\" />
     <Folder Include="CQRS\Offers\Queries\GetById\" />
   </ItemGroup>
   <ItemGroup>

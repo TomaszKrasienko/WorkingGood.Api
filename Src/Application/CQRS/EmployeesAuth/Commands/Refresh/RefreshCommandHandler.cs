@@ -1,5 +1,5 @@
+using Application.Common.Extensions.Validation;
 using Application.DTOs;
-using Application.Extensions.Validation;
 using Application.ViewModels.Login;
 using Domain.Interfaces;
 using Domain.Models.Employee;
@@ -28,20 +28,27 @@ public class RefreshCommandHandler : IRequestHandler<RefreshCommand, BaseMessage
     }
     public async Task<BaseMessageDto> Handle(RefreshCommand request, CancellationToken cancellationToken)
     {
-        var validationResult = await _validator.ValidateAsync(request);
+        _logger.LogInformation("Handling RefreshCommand");
+        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
         if (!validationResult.IsValid)
-            return new ()
+        {                
+            _logger.LogWarning(validationResult.Errors.GetErrorString());
+            return new()
             {
                 Errors = validationResult.Errors.GetErrorsStringList()
             };
+        }
         Employee employee = await _unitOfWork
             .EmployeeRepository
             .GetByRefreshTokenAsync(request.RefreshDto.RefreshToken!);
         if (employee == null)
-            return new ()
+        {
+            _logger.LogWarning("Employee is null");
+            return new()
             {
                 Errors = "Refresh token is invalid"
             };
+        }
         LoginToken loginToken = employee.Refresh(_jwtConfig.TokenKey, _jwtConfig.Audience, _jwtConfig.Issuer);
         await _unitOfWork.CompleteAsync();
         return new ()

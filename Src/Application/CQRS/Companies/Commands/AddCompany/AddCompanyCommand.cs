@@ -1,10 +1,8 @@
-﻿using System;
-using Application.DTOs;
+﻿using Application.DTOs;
 using Application.DTOs.Companies;
 using MediatR;
-using Microsoft.AspNetCore.Mvc;
 
-namespace Application.CQRS.Companies.Commands
+namespace Application.CQRS.Companies.Commands.AddCompany
 {
 	public record AddCompanyCommand : IRequest<BaseMessageDto>
 	{

@@ -15,7 +15,7 @@ namespace WebApi.IntegrationTests.Controllers.OffersController;
 public class OffersControllerTests_GetAllForCompany : IClassFixture<WebApplicationFactory<Program>>
 {
     private readonly WebApplicationFactory<Program> _factory;
-    private JwtConfig _jwtConfig;
+    private JwtConfig? _jwtConfig;
     private readonly HttpClient _client;
     public OffersControllerTests_GetAllForCompany(WebApplicationFactory<Program> factory)
     {
@@ -33,7 +33,7 @@ public class OffersControllerTests_GetAllForCompany : IClassFixture<WebApplicati
                     services.AddDbContext<WgDbContext>(options => options.UseInMemoryDatabase("WorkingGoodTests"));
                     var jwtConfigDescriptor =
                         services.SingleOrDefault(x => x.ServiceType == typeof(JwtConfig));
-                    _jwtConfig = jwtConfigDescriptor.ImplementationInstance as JwtConfig;
+                    _jwtConfig = (jwtConfigDescriptor!.ImplementationInstance as JwtConfig)!;
                 });
             });
         _client = _factory.CreateClient();

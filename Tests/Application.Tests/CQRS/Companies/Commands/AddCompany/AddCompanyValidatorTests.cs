@@ -1,4 +1,5 @@
 using Application.CQRS.Companies.Commands;
+using Application.CQRS.Companies.Commands.AddCompany;
 using Domain.Interfaces.Validation;
 using FluentValidation;
 using FluentValidation.TestHelper;

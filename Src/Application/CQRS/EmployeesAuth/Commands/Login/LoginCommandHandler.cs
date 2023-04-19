@@ -1,5 +1,5 @@
+using Application.Common.Extensions.Validation;
 using Application.DTOs;
-using Application.Extensions.Validation;
 using Application.ViewModels.Login;
 using Domain.Interfaces;
 using Domain.Models.Employee;
@@ -27,13 +27,17 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, BaseMessageDto>
         _validator = validator;
     }
     public async Task<BaseMessageDto> Handle(LoginCommand request, CancellationToken cancellationToken)
-    {
+    {            
+        _logger.LogInformation("Handling AddCompanyCommand");
         var validationResult = await _validator.ValidateAsync(request, cancellationToken);
         if (!validationResult.IsValid)
-            return new ()
+        {                
+            _logger.LogWarning(validationResult.Errors.GetErrorString());
+            return new()
             {
                 Errors = validationResult.Errors.GetErrorsStringList()
             };
+        }
         Employee employee = await _unitOfWork
             .EmployeeRepository
             .GetByEmailAsync(request.CredentialsDto.Email!);

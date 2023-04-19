@@ -19,10 +19,18 @@ namespace Infrastructure.Common.Extensions.Configuration
 			services
 				.ConfigureEntityFramework(configuration)
 				.ConfigureConfigs(configuration)
+				.ConfigureServices();
+			return services;
+		}
+
+		private static IServiceCollection ConfigureServices(this IServiceCollection services)
+		{
+			services
 				.AddScoped<IEmployeeChecker, EmployeeChecker>()
 				.AddScoped<ICompanyChecker, CompanyChecker>()
 				.AddScoped<IOfferChecker, OfferChecker>()
-				.AddScoped<IBrokerSender, RabbitMqSender>();
+				.AddScoped<IBrokerSender, RabbitMqSender>()
+			    .AddScoped<IUnitOfWork, UnitOfWork>();
 			return services;
 		}
 		private static IServiceCollection ConfigureEntityFramework(this IServiceCollection services, IConfiguration configuration)
@@ -31,7 +39,6 @@ namespace Infrastructure.Common.Extensions.Configuration
             {
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnectionString")!);
             });
-			services.AddScoped<IUnitOfWork, UnitOfWork>();
 			return services;
         }
 		private static IServiceCollection ConfigureConfigs(this IServiceCollection services,

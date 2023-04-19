@@ -1,7 +1,7 @@
 ﻿using System;
+using Application.Common.Extensions.Validation;
 using Application.DTOs;
 using Application.EmployeesAuth.Commands;
-using Application.Extensions.Validation;
 using Domain.Enums;
 using Domain.Interfaces;
 using Domain.Interfaces.Communication;
@@ -30,18 +30,22 @@ namespace Application.CQRS.EmployeesAuth.Commands.RegisterEmployee
         }
         public async Task<BaseMessageDto> Handle(RegisterEmployeeCommand request, CancellationToken cancellationToken)
         {
-            var validationResult = await _validator.ValidateAsync(request);
-            if(!validationResult.IsValid)
+            _logger.LogInformation("Handling RegisterEmployeeCommand");
+            var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+            if (!validationResult.IsValid)
+            {
+                _logger.LogWarning(validationResult.Errors.GetErrorString());
                 return new()
                 {
                     Errors = validationResult.Errors.GetErrorsStringList()
                 };
+            }
             Employee employee = new Employee(
                 request.RegisterEmployeeDto.FirstName!,
                 request.RegisterEmployeeDto.LastName!,
                 request.RegisterEmployeeDto.Email!,
                 request.RegisterEmployeeDto.Password!,
-                (Guid)request.CompanyId
+                (Guid)request.CompanyId!
                 );
             await _unitOfWork.EmployeeRepository.AddAsync(employee);
             await _unitOfWork.CompleteAsync();

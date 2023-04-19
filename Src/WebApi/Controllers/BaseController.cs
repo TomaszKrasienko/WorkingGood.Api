@@ -5,14 +5,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
 {
-    [Route("api/[controller]")]
     public class BaseController : Controller
     {
-        protected readonly IMediator _mediator;
+        protected readonly IMediator Mediator;
         protected const string EMPLOYEE_ID_KEY = "EmployeeId";
         public BaseController(IMediator mediator)
         {
-            _mediator = mediator;
+            Mediator = mediator;
         }
     }
 }

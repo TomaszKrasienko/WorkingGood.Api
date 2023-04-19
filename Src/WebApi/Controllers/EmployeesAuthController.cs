@@ -11,18 +11,18 @@ using Application.EmployeesAuth.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.Common.Exceptions;
 
 namespace WebApi.Controllers
 {
+    [Route("employeesAuth")]
     public class EmployeesAuthController : BaseController
     {
-        public EmployeesAuthController(IMediator mediator) : base(mediator)
-        {
-        }
-        [HttpPost("RegisterEmployee/{companyId}")]
+        public EmployeesAuthController(IMediator mediator) : base(mediator) { }
+        [HttpPost("registerEmployee/{companyId}")]
         public async Task<IActionResult> Register([FromBody] RegisterEmployeeDto registerEmployeeDto, [FromRoute]Guid companyId)
         {
-            BaseMessageDto baseMessageDto = await _mediator.Send(new RegisterEmployeeCommand
+            BaseMessageDto baseMessageDto = await Mediator.Send(new RegisterEmployeeCommand
             {
                 RegisterEmployeeDto = registerEmployeeDto,
                 CompanyId = companyId
@@ -32,10 +32,10 @@ namespace WebApi.Controllers
             else
                 return BadRequest(baseMessageDto);
         }
-        [HttpPost("VerifyEmployee/{verificationToken}")]
+        [HttpPost("verifyEmployee/{verificationToken}")]
         public async Task<IActionResult> VerifyEmployee([FromRoute] string verificationToken)
         {
-            BaseMessageDto baseMessageDto = await _mediator.Send(new VerifyEmployeeCommand
+            BaseMessageDto baseMessageDto = await Mediator.Send(new VerifyEmployeeCommand
             {
                 VerificationToken = verificationToken
             });            
@@ -44,10 +44,10 @@ namespace WebApi.Controllers
             else
                 return BadRequest(baseMessageDto);
         }
-        [HttpPost("Login")]
+        [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] CredentialsDto credentialsDto)
         {
-            BaseMessageDto baseMessageDto = await _mediator.Send(new LoginCommand
+            BaseMessageDto baseMessageDto = await Mediator.Send(new LoginCommand
             {
                 CredentialsDto = credentialsDto
             });
@@ -56,10 +56,10 @@ namespace WebApi.Controllers
             else
                 return BadRequest(baseMessageDto);
         }
-        [HttpPost("Refresh")]
+        [HttpPost("refresh")]
         public async Task<IActionResult> Refresh([FromBody]RefreshDto refreshDto)
         {
-            BaseMessageDto baseMessageDto = await _mediator.Send(new RefreshCommand
+            BaseMessageDto baseMessageDto = await Mediator.Send(new RefreshCommand
             {
                 RefreshDto = refreshDto
             });
@@ -68,13 +68,13 @@ namespace WebApi.Controllers
             else
                 return BadRequest(baseMessageDto);
         }
-        [HttpPost("ChangePassword")]
+        [HttpPost("vhangePassword")]
         [Authorize]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto changePasswordDto)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
-            var employeeId = identity.FindFirst(EMPLOYEE_ID_KEY).Value;
-            BaseMessageDto baseMessageDto = await _mediator.Send(new ChangePasswordCommand
+            var employeeId = identity!.FindFirst(EMPLOYEE_ID_KEY)?.Value ?? throw new UserNotFoundException();
+            BaseMessageDto baseMessageDto = await Mediator.Send(new ChangePasswordCommand
             {
                 EmployeeId = Guid.Parse(employeeId),
                 ChangePasswordDto = changePasswordDto
@@ -84,10 +84,10 @@ namespace WebApi.Controllers
             else
                 return BadRequest(baseMessageDto);
         }
-        [HttpPost("ForgotPassword")]
+        [HttpPost("forgotPassword")]
         public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto forgotPasswordDto)
         {
-            BaseMessageDto baseMessageDto = await _mediator.Send(new ForgotPasswordCommand
+            BaseMessageDto baseMessageDto = await Mediator.Send(new ForgotPasswordCommand
             {
                 ForgotPasswordDto = forgotPasswordDto
             });
@@ -96,11 +96,10 @@ namespace WebApi.Controllers
             else
                 return BadRequest(baseMessageDto);
         }
-
-        [HttpPost("ResetPassword")]
+        [HttpPost("resetPassword")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto resetPasswordDto)
         {
-            BaseMessageDto baseMessageDto = await _mediator.Send(new ResetPasswordCommand
+            BaseMessageDto baseMessageDto = await Mediator.Send(new ResetPasswordCommand
             {
                 ResetPasswordDto = resetPasswordDto
             });

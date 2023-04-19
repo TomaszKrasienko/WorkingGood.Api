@@ -14,7 +14,7 @@ public static class SwaggerConfiguration
         {
             options.SwaggerDoc("v1", new OpenApiInfo
             {
-                Title = "MyPanel Authorize",
+                Title = "WorkingGood.Api",
                 Description = $"Assembly version: {version} \nEnvironment: {environment}"
             });
             options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme

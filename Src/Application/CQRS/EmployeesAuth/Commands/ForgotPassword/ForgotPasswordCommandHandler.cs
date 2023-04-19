@@ -1,5 +1,5 @@
+using Application.Common.Extensions.Validation;
 using Application.DTOs;
-using Application.Extensions.Validation;
 using Domain.Enums;
 using Domain.Interfaces;
 using Domain.Interfaces.Communication;
@@ -26,13 +26,17 @@ public class ForgotPasswordCommandHandler : IRequestHandler<ForgotPasswordComman
         _brokerSender = brokerSender;
     }
     public async Task<BaseMessageDto> Handle(ForgotPasswordCommand request, CancellationToken cancellationToken)
-    {
+    {            
+        _logger.LogInformation("Handling ForgotPasswordCommand");
         var validationResult = await _validator.ValidateAsync(request);
         if (!validationResult.IsValid)
-            return new ()
+        {
+            _logger.LogWarning(validationResult.Errors.GetErrorString());
+            return new()
             {
                 Errors = validationResult.Errors.GetErrorsStringList()
             };
+        }
         Employee employee = await _unitOfWork.EmployeeRepository.GetByEmailAsync(request.ForgotPasswordDto.EmployeeEmail!);
         employee.SetResetToken();
         await _unitOfWork.CompleteAsync();

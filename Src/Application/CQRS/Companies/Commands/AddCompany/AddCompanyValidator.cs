@@ -1,8 +1,7 @@
-﻿using System;
-using Domain.Interfaces.Validation;
+﻿using Domain.Interfaces.Validation;
 using FluentValidation;
 
-namespace Application.CQRS.Companies.Commands
+namespace Application.CQRS.Companies.Commands.AddCompany
 {
 	public class AddCompanyValidator : AbstractValidator<AddCompanyCommand>
 	{

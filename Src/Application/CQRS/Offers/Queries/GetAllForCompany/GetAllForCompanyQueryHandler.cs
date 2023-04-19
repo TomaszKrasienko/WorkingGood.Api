@@ -1,5 +1,5 @@
+using Application.Common.Extensions.Validation;
 using Application.DTOs;
-using Application.Extensions.Validation;
 using Domain.Interfaces;
 using Domain.Models.Employee;
 using Domain.Models.Offer;
@@ -23,12 +23,16 @@ public class GetAllForCompanyQueryHandler : IRequestHandler<GetAllForCompanyQuer
     }
     public async Task<BaseMessageDto> Handle(GetAllForCompanyQuery request, CancellationToken cancellationToken)
     {
+        _logger.LogInformation("Handling GetAllForCompanyQuery");
         var validationResult = await _validator.ValidateAsync(request, cancellationToken);
-        if(!validationResult.IsValid)
+        if (!validationResult.IsValid)
+        {
+            _logger.LogWarning(validationResult.Errors.GetErrorString());
             return new BaseMessageDto
             {
                 Errors = validationResult.Errors.GetErrorString()
             };
+        }
         Employee employee = await _unitOfWork.EmployeeRepository.GetByIdAsync(request.EmployeeId);
         List<Employee> employeesList = await _unitOfWork.EmployeeRepository.GetByCompanyIdAsync(employee.CompanyId);
         List<Offer> offers = await _unitOfWork

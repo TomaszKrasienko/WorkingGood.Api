@@ -1,12 +1,12 @@
+using Application.Common.Extensions.Validation;
 using Application.DTOs;
-using Application.Extensions.Validation;
 using Domain.Interfaces;
 using Domain.Models.Offer;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace Application.CQRS.Offers.Commands;
+namespace Application.CQRS.Offers.Commands.AddOffer;
 
 public class AddOfferCommandHandler : IRequestHandler<AddOfferCommand, BaseMessageDto>
 {
@@ -20,21 +20,25 @@ public class AddOfferCommandHandler : IRequestHandler<AddOfferCommand, BaseMessa
         _validator = validator;
     }
     public async Task<BaseMessageDto> Handle(AddOfferCommand request, CancellationToken cancellationToken)
-    {
+    {            
+        _logger.LogInformation("Handling AddOfferCommand");
         var validationResult = await _validator.ValidateAsync(request, cancellationToken);
         if (!validationResult.IsValid)
+        {
+            _logger.LogWarning(validationResult.Errors.GetErrorString());
             return new BaseMessageDto
             {
                 Errors = validationResult.Errors.GetErrorString()
             };
-            Offer offer = new Offer(
-            request.OfferDto.Title,
-            request.OfferDto.PositionType,
-            (double)request.OfferDto.SalaryRangeMin,
-            (double)request.OfferDto.SalaryRangeMax,
-            request.OfferDto.Description,
+        }
+        Offer offer = new Offer(
+            request.OfferDto.Title!,
+            request.OfferDto.PositionType!,
+            (double)request.OfferDto.SalaryRangeMin!,
+            (double)request.OfferDto.SalaryRangeMax!,
+            request.OfferDto.Description!,
             request.EmployeeId,
-            (bool)request.OfferDto.IsActive
+            (bool)request.OfferDto.IsActive!
         );
         await _unitOfWork.OffersRepository.AddAsync(offer);
         await _unitOfWork.CompleteAsync();

@@ -1,14 +1,12 @@
-﻿using System;
+﻿using Application.Common.Extensions.Validation;
 using Application.DTOs;
-using Application.Extensions.Validation;
 using Domain.Interfaces;
 using Domain.Models.Company;
 using FluentValidation;
 using MediatR;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace Application.CQRS.Companies.Commands
+namespace Application.CQRS.Companies.Commands.AddCompany
 {
     public class AddCompanyCommandHandler : IRequestHandler<AddCompanyCommand, BaseMessageDto>
     {
@@ -23,6 +21,7 @@ namespace Application.CQRS.Companies.Commands
         }
         public async Task<BaseMessageDto> Handle(AddCompanyCommand request, CancellationToken cancellationToken)
         {
+            _logger.LogInformation("Handling AddCompanyCommand");
             var validationResult = await _validator.ValidateAsync(request, cancellationToken);
             if (!validationResult.IsValid)
             {

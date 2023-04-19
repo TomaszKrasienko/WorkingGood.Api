@@ -1,8 +1,6 @@
 using System.Text;
 using FluentValidation.Results;
-
-namespace Application.Extensions.Validation;
-
+namespace Application.Common.Extensions.Validation;
 public static class FluentValidationError
 {
     public static List<string> GetErrorsStringList(this List<ValidationFailure> errors)
@@ -11,7 +9,6 @@ public static class FluentValidationError
         errors.ForEach(x => errorsList.Add(x.ErrorMessage));
         return errorsList;
     }
-
     public static string GetErrorString(this List<ValidationFailure> errors)
     {
         StringBuilder stringBuilder = new StringBuilder();

@@ -1,4 +1,5 @@
 using Application.CQRS.Companies.Commands;
+using Application.CQRS.Companies.Commands.AddCompany;
 using Application.DTOs;
 using Domain.Interfaces;
 using Domain.Interfaces.Repositories;
@@ -6,11 +7,10 @@ using Domain.Interfaces.Validation;
 using Domain.Models.Company;
 using FluentAssertions;
 using FluentValidation;
-using Infrastructure.Persistance;
 using Microsoft.Extensions.Logging;
 using Moq;
 
-namespace Application.Tests.CQRS.Companies.Commands;
+namespace Application.Tests.CQRS.Companies.Commands.AddCompany;
 
 public class AddCompanyCommandHandlerTests
 {

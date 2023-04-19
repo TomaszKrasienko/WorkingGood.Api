@@ -1,6 +1,6 @@
 ﻿using System;
+using Application.Common.Extensions.Validation;
 using Application.DTOs;
-using Application.Extensions.Validation;
 using Domain.Interfaces;
 using FluentValidation;
 using MediatR;
@@ -22,13 +22,17 @@ namespace Application.CQRS.Offers.Queries.GetById
 
         public async Task<BaseMessageDto> Handle(GetByIdQuery request, CancellationToken cancellationToken)
         {
-			var validationResult = await _validator.ValidateAsync(request);
-			if (!validationResult.IsValid)
-				return new()
-				{
-					Errors = validationResult.Errors.GetErrorString()
-				};
-			var entity = await _unitOfWork.OffersRepository.GetByIdAsync(request.Id);
+	        _logger.LogInformation("Handling GetByIdQuery");
+	        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+	        if (!validationResult.IsValid)
+	        {
+		        _logger.LogWarning(validationResult.Errors.GetErrorString());
+		        return new()
+		        {
+			        Errors = validationResult.Errors.GetErrorString()
+		        };
+	        }
+	        var entity = await _unitOfWork.OffersRepository.GetByIdAsync(request.Id);
 			return new()
 			{
 				Object = entity

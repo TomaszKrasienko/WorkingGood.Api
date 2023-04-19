@@ -1,12 +1,11 @@
 ﻿using System.Text;
-using Application.Extensions;
+using Application.Common.Extensions.Configuration;
 using Infrastructure.Common.ConfigModels;
 using Infrastructure.Common.Extensions.Configuration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 
-namespace WebApi.Extensions.Configuration
+namespace WebApi.Common.Extensions.Configuration
 {
 	public static class WebApiConfiguration
 	{
@@ -15,7 +14,8 @@ namespace WebApi.Extensions.Configuration
             services
                 .AddInfrastructureConfiguration(configuration)
                 .AddApplicationConfiguration(configuration)
-                .AddJwtAuthentication(configuration);
+                .AddJwtAuthentication(configuration)
+                .AddCorsPolicy();
             return services;
         }
         private static IServiceCollection AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
@@ -35,6 +35,21 @@ namespace WebApi.Extensions.Configuration
                         ValidAudience = jwtConfig.Audience
                     };
                 }); 
+            return services;
+        }
+        private static IServiceCollection AddCorsPolicy(this IServiceCollection services)
+        {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(Common.Statics.ConfigurationConst.CORS_POLICY_NAME, builder =>
+                {
+                    builder
+                        .SetIsOriginAllowed(_ => true)
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials();
+                });
+            });
             return services;
         }
     }

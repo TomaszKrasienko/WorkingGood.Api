@@ -15,7 +15,7 @@ public static class RabbitTestConfigurationProvider
         RabbitMqConfig rabbitMqConfig = new();
         config.Bind("Tests:RabbitMq", rabbitMqConfig);
         var originalService = services.SingleOrDefault(x => x.ServiceType == typeof(RabbitMqConfig));
-        services.Remove(originalService);
+        services.Remove(originalService!);
         services.AddSingleton(rabbitMqConfig);
         return services;
     }

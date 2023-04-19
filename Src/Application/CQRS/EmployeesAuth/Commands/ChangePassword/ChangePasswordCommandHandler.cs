@@ -1,11 +1,9 @@
+using Application.Common.Extensions.Validation;
 using Application.DTOs;
-using Application.DTOs.EmployeesAuth;
-using Application.Extensions.Validation;
 using Domain.Interfaces;
 using Domain.Models.Employee;
 using FluentValidation;
 using MediatR;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace Application.CQRS.EmployeesAuth.Commands.ChangePassword;
@@ -23,18 +21,25 @@ public class ChangePasswordCommandHandler : IRequestHandler<ChangePasswordComman
     }
     public async Task<BaseMessageDto> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
     {
+        _logger.LogInformation("Handling ChangePasswordCommand");
         var validationResult = await _validator.ValidateAsync(request, cancellationToken);
         if (!validationResult.IsValid)
+        {
+            _logger.LogWarning(validationResult.Errors.GetErrorString());
             return new()
             {
                 Errors = validationResult.Errors.GetErrorsStringList()
             };
+        }
         Employee employee = await _unitOfWork.EmployeeRepository.GetByIdAsync(request.EmployeeId);
         if (!(employee.IsPasswordMatch(request.ChangePasswordDto.OldPassword!)))
-            return new ()
+        {
+            _logger.LogWarning("Password is incorrect");
+            return new()
             {
                 Errors = "Password is incorrect"
             };
+        }
         employee.SetNewPassword(request.ChangePasswordDto.NewPassword!);
         await _unitOfWork.CompleteAsync();
         return new ()

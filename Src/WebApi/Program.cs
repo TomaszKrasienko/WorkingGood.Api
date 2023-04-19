@@ -1,5 +1,7 @@
 ﻿using NLog;
 using NLog.Web;
+using WebApi.Common.Extensions.Configuration;
+using WebApi.Common.Statics;
 using WebApi.Extensions.Configuration;
 
 Logger logger = LogManager.GetLogger("RmqTarget");
@@ -12,14 +14,17 @@ builder.Services.ConfigureSwagger();
 builder.Host.UseNLog();
 var app = builder.Build();
 app.UseSwagger();
-app.UseSwaggerUI();
+app.UseSwaggerUI(options =>
+{
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+    options.RoutePrefix = string.Empty;
+});
 app.AddCustomMiddlewares();
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseCors(ConfigurationConst.CORS_POLICY_NAME);
 app.MapControllers();
-
 app.Run();
 
 public partial class Program {}

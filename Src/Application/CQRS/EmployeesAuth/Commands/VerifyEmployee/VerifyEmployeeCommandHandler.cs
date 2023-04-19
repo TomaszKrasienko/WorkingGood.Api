@@ -1,5 +1,5 @@
+using Application.Common.Extensions.Validation;
 using Application.DTOs;
-using Application.Extensions.Validation;
 using Domain.Interfaces;
 using Domain.Models.Company;
 using Domain.Models.Employee;
@@ -23,12 +23,16 @@ public class VerifyEmployeeCommandHandler : IRequestHandler<VerifyEmployeeComman
     }
     public async Task<BaseMessageDto> Handle(VerifyEmployeeCommand request, CancellationToken cancellationToken)
     {
-        var validationResult = await _validator.ValidateAsync(request);
+        _logger.LogInformation("Handling VerifyEmployeeCommand");
+        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
         if (!validationResult.IsValid)
-            return new ()
+        {
+            _logger.LogWarning(validationResult.Errors.GetErrorString());
+            return new()
             {
                 Errors = validationResult.Errors.GetErrorsStringList()
             };
+        }
         Employee employee = await _unitOfWork
             .EmployeeRepository
             .GetByVerificationTokenAsync(request.VerificationToken!);

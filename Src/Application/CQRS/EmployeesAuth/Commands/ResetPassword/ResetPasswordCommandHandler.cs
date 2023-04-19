@@ -1,5 +1,5 @@
+using Application.Common.Extensions.Validation;
 using Application.DTOs;
-using Application.Extensions.Validation;
 using Domain.Interfaces;
 using Domain.Models.Employee;
 using FluentValidation;
@@ -20,15 +20,19 @@ public class ResetPasswordCommandHandler : IRequestHandler<ResetPasswordCommand,
         _validator = validator;
     }
     public async Task<BaseMessageDto> Handle(ResetPasswordCommand request, CancellationToken cancellationToken)
-    {
+    {            
+        _logger.LogInformation("Handling ResetPasswordCommand");
         var validationResult = await _validator.ValidateAsync(request, cancellationToken);
         if (!validationResult.IsValid)
+        {
+            _logger.LogWarning(validationResult.Errors.GetErrorString());
             return new()
             {
                 Errors = validationResult.Errors.GetErrorsStringList()
             };
-        Employee employee = await _unitOfWork.EmployeeRepository.GetByResetToken(request.ResetPasswordDto.ResetToken);
-        employee.SetNewPassword(request.ResetPasswordDto.NewPassword);
+        }
+        Employee employee = await _unitOfWork.EmployeeRepository.GetByResetToken(request.ResetPasswordDto.ResetToken!);
+        employee.SetNewPassword(request.ResetPasswordDto.NewPassword!);
         await _unitOfWork.CompleteAsync();
         return new()
         {
