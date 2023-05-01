@@ -24,7 +24,6 @@ namespace Infrastructure.Common.Extensions.Configuration
 				.ConfigureServices();
 			return services;
 		}
-
 		private static IServiceCollection ConfigureServices(this IServiceCollection services)
 		{
 			services

@@ -48,7 +48,6 @@ namespace Domain.Models.Employee
 	        GenerateRefreshToken();
 	        return GetToken(tokenKey, audience, issuer);
         }
-
         public LoginToken Login(string password, ITokenProvider tokenProvider)
         {
 	        if (!EmployeeStatus.IsActive)

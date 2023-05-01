@@ -27,6 +27,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models.Tests\" />
+    <Folder Include="Services.Tests" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Src\Domain\Domain.csproj" />

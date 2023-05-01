@@ -6,6 +6,7 @@ using Domain.Interfaces;
 using Domain.Interfaces.Repositories;
 using Domain.Interfaces.Validation;
 using Domain.Models.Employee;
+using Domain.Services;
 using FluentAssertions;
 using FluentValidation;
 using Infrastructure.Common.ConfigModels;
@@ -22,6 +23,7 @@ public class LoginCommandHandlerTests
     private readonly Mock<IUnitOfWork> _mockUnitOfWork;
     private readonly Mock<IEmployeeRepository> _mockEmployeeRepository;
     private readonly Mock<IEmployeeChecker> _mockEmployeeChecker;
+    private readonly Mock<ITokenProvider> _mockTokenProvider;
     private readonly JwtConfig _jwtConfig;
     public LoginCommandHandlerTests()
     {
@@ -30,6 +32,7 @@ public class LoginCommandHandlerTests
         _mockEmployeeRepository = new();
         _mockUnitOfWork.Setup(x => x.EmployeeRepository).Returns(_mockEmployeeRepository.Object);
         _mockEmployeeChecker = new();
+        _mockTokenProvider = new();
         _jwtConfig = new JwtConfig()
         {
             TokenKey = "my top secret key",
@@ -56,7 +59,7 @@ public class LoginCommandHandlerTests
             employee.Activate();
             _mockEmployeeRepository.Setup(x => x.GetByEmailAsync(It.IsAny<string>())).ReturnsAsync(employee);
             LoginCommandHandler loginCommandHandler =
-                new LoginCommandHandler(_mockLogger.Object, _jwtConfig, _mockUnitOfWork.Object, validator);
+                new LoginCommandHandler(_mockLogger.Object, validator, _jwtConfig, _mockUnitOfWork.Object, _mockTokenProvider.Object);
         //Act
             var result = await loginCommandHandler.Handle(loginCommand, new CancellationToken());
         //Assert
@@ -83,7 +86,7 @@ public class LoginCommandHandlerTests
         Employee employee = new Employee("name", "lastName", "test@test.pl", empPass, Guid.NewGuid());
         _mockEmployeeRepository.Setup(x => x.GetByEmailAsync(It.IsAny<string>())).ReturnsAsync(employee);
         LoginCommandHandler loginCommandHandler =
-            new LoginCommandHandler(_mockLogger.Object, _jwtConfig, _mockUnitOfWork.Object, validator);
+            new LoginCommandHandler(_mockLogger.Object, validator, _jwtConfig, _mockUnitOfWork.Object, _mockTokenProvider.Object);
         //Act
         Func<Task> result = async() => await loginCommandHandler.Handle(loginCommand, new CancellationToken());
         //Assert

@@ -56,7 +56,6 @@ namespace Application.CQRS.EmployeesAuth.Commands.RegisterEmployee
                 (Guid)request.CompanyId!
                 );
             await _unitOfWork.EmployeeRepository.AddAsync(employee);
-            await _unitOfWork.CompleteAsync();
             _brokerSender.Send<RegisterMessage>(MessageDestinations.RegisterEmail, new RegisterMessage
             {
                 Email = employee.Email.EmailAddress,
@@ -64,6 +63,7 @@ namespace Application.CQRS.EmployeesAuth.Commands.RegisterEmployee
                 LastName = employee.EmployeeName.LastName,
                 RegistrationUrl= $"{_addressesConfig.RegistrationUrl}/{employee.VerificationToken.Token}"
             });
+            await _unitOfWork.CompleteAsync();
             return new ()
             {
                 Message = "Added employee successfully",
