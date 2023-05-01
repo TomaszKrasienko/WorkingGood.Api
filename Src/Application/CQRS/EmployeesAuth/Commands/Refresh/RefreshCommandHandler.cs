@@ -3,6 +3,7 @@ using Application.DTOs;
 using Application.ViewModels.Login;
 using Domain.Interfaces;
 using Domain.Models.Employee;
+using Domain.Services;
 using Domain.ValueObjects;
 using FluentValidation;
 using Infrastructure.Common.ConfigModels;
@@ -19,12 +20,14 @@ public class RefreshCommandHandler : IRequestHandler<RefreshCommand, BaseMessage
     private readonly JwtConfig _jwtConfig;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IValidator<RefreshCommand> _validator;
-    public RefreshCommandHandler(ILogger<RefreshCommandHandler> logger, JwtConfig jwtConfig, IUnitOfWork unitOfWork, IValidator<RefreshCommand> validator)
+    private readonly ITokenProvider _tokenProvider;
+    public RefreshCommandHandler(ILogger<RefreshCommandHandler> logger, IValidator<RefreshCommand> validator, JwtConfig jwtConfig, IUnitOfWork unitOfWork, ITokenProvider tokenProvider)
     {
         _logger = logger;
         _jwtConfig = jwtConfig;
         _unitOfWork = unitOfWork;
         _validator = validator;
+        _tokenProvider = tokenProvider;
     }
     public async Task<BaseMessageDto> Handle(RefreshCommand request, CancellationToken cancellationToken)
     {
@@ -49,7 +52,7 @@ public class RefreshCommandHandler : IRequestHandler<RefreshCommand, BaseMessage
                 Errors = "Refresh token is invalid"
             };
         }
-        LoginToken loginToken = employee.Refresh(_jwtConfig.TokenKey, _jwtConfig.Audience, _jwtConfig.Issuer);
+        LoginToken loginToken = employee.Refresh(_tokenProvider);
         await _unitOfWork.CompleteAsync();
         return new ()
         {

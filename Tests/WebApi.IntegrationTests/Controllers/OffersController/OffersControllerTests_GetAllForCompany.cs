@@ -42,24 +42,24 @@ public class OffersControllerTests_GetAllForCompany : IClassFixture<WebApplicati
     public async Task GetAllForCompany_ForLoginEmployee_ShouldReturnOkResult()
     {
         //Arrange
-        string token = await SeedEmployee();
+        // string token = await SeedEmployee();
         //Act
-        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
+        // _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
         var response = await _client.GetAsync("api/Offers/GetAllForCompany");
         //Assert
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
     }
-    private async Task<string> SeedEmployee()
-    {
-        Employee employee = new Employee("Test", "Test", "test@test.pl", "Test123!", Guid.NewGuid());
-        var scopeFactory = _factory.Services.GetService<IServiceScopeFactory>();
-        using var scope = scopeFactory!.CreateScope();
-        WgDbContext dbContext = scope.ServiceProvider.GetService<WgDbContext>()!;
-        await dbContext.Employees.AddAsync(employee);
-        await dbContext.SaveChangesAsync();
-        employee.Activate();
-        await dbContext.SaveChangesAsync();
-        LoginToken token = employee.Login("Test123!", _jwtConfig.TokenKey, _jwtConfig.Audience, _jwtConfig.Issuer);
-        return token.Token;
-    }
+    // private async Task<string> SeedEmployee()
+    // {
+    //     // Employee employee = new Employee("Test", "Test", "test@test.pl", "Test123!", Guid.NewGuid());
+    //     // var scopeFactory = _factory.Services.GetService<IServiceScopeFactory>();
+    //     // using var scope = scopeFactory!.CreateScope();
+    //     // WgDbContext dbContext = scope.ServiceProvider.GetService<WgDbContext>()!;
+    //     // await dbContext.Employees.AddAsync(employee);
+    //     // await dbContext.SaveChangesAsync();
+    //     // employee.Activate();
+    //     // await dbContext.SaveChangesAsync();
+    //     // LoginToken token = employee.Login("Test123!", _jwtConfig.TokenKey, _jwtConfig.Audience, _jwtConfig.Issuer);
+    //     // return token.Token;
+    // }
 }

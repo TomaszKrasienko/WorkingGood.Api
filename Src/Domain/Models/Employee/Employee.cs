@@ -39,15 +39,6 @@ namespace Domain.Models.Employee
 	        EmployeeStatus.ChangeStatus();
 	        VerificationToken.ConfirmToken();
         }
-        public LoginToken Login(string password, string tokenKey, string audience, string issuer)
-        {
-	        if (!EmployeeStatus.IsActive)
-		        throw new LoginException("Employee is not active");
-	        if (!Password.IsPasswordCorrect(password))
-		        throw new LoginException("Password is incorrect");
-	        GenerateRefreshToken();
-	        return GetToken(tokenKey, audience, issuer);
-        }
         public LoginToken Login(string password, ITokenProvider tokenProvider)
         {
 	        if (!EmployeeStatus.IsActive)
@@ -64,38 +55,17 @@ namespace Domain.Models.Employee
         {
 	        return Password.IsPasswordCorrect(password);
         }
-        public LoginToken Refresh(string tokenKey, string audience, string issuer)
+        public LoginToken Refresh(ITokenProvider tokenProvider)
         {
 	        GenerateRefreshToken();
-	        return GetToken(tokenKey, audience, issuer);
+	        return tokenProvider.Provide(		        
+		        emailAddress: Email.EmailAddress,
+		        roles: new List<string>(){"user"},
+		        userId: Id.ToString());
         }
         private void GenerateRefreshToken()
         {
 	        RefreshToken = new RefreshToken();
-        }
-        private LoginToken GetToken(string tokenKey, string audience, string issuer)
-        {
-	        DateTime expiration = DateTime.Now.AddMinutes(20);
-	        List<Claim> claims = new()
-	        {
-		        new Claim("Email", Email.EmailAddress),
-		        new(ClaimTypes.Role, "User"),
-		        new Claim("EmployeeId", Id.ToString())
-	        };
-	        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenKey));
-	        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-	        var token = new JwtSecurityToken(
-		        claims: claims,
-		        expires: expiration,
-		        signingCredentials: creds,
-		        audience: audience,
-		        issuer: issuer
-	        );
-	        return new LoginToken
-	        {
-		        Token = new JwtSecurityTokenHandler().WriteToken(token),
-		        Expiration = expiration
-	        };
         }
         public void SetNewPassword(string password)
         {
