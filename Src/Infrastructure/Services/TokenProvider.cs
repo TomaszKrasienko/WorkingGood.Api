@@ -10,6 +10,9 @@ namespace Infrastructure.Services;
 
 public class TokenProvider : ITokenProvider
 {
+    private const string EMPLOYEE_ID_KEY = "EmployeeId";
+    private const string EMPLOYEE_ROLES_KEY = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role";
+    private const string EMPLOYEE_EMAIL_KEY = "Email";
     private readonly JwtConfig _jwtConfig;
     public TokenProvider(JwtConfig jwtConfig)
     {

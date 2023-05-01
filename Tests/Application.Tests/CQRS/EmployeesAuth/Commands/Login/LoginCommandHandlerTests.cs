@@ -7,6 +7,7 @@ using Domain.Interfaces.Repositories;
 using Domain.Interfaces.Validation;
 using Domain.Models.Employee;
 using Domain.Services;
+using Domain.ValueObjects;
 using FluentAssertions;
 using FluentValidation;
 using Infrastructure.Common.ConfigModels;
@@ -24,7 +25,6 @@ public class LoginCommandHandlerTests
     private readonly Mock<IEmployeeRepository> _mockEmployeeRepository;
     private readonly Mock<IEmployeeChecker> _mockEmployeeChecker;
     private readonly Mock<ITokenProvider> _mockTokenProvider;
-    private readonly JwtConfig _jwtConfig;
     public LoginCommandHandlerTests()
     {
         _mockLogger = new();
@@ -33,12 +33,6 @@ public class LoginCommandHandlerTests
         _mockUnitOfWork.Setup(x => x.EmployeeRepository).Returns(_mockEmployeeRepository.Object);
         _mockEmployeeChecker = new();
         _mockTokenProvider = new();
-        _jwtConfig = new JwtConfig()
-        {
-            TokenKey = "my top secret key",
-            Audience = "my_secret_audience",
-            Issuer = "my_secret_issuer"
-        };
     }
     [Fact]
     public async Task Handle_ForValidLoginCommand_ShouldReturnBaseMessageDtoWithMessageAndLoginVmObject()
@@ -53,13 +47,24 @@ public class LoginCommandHandlerTests
                     Password = empPass
                 }
             };
-            _mockEmployeeChecker.Setup(x => x.IsEmployeeExists(It.IsAny<string>())).Returns(true);
+            _mockEmployeeChecker
+                .Setup(x => x.IsEmployeeExists(It.IsAny<string>()))
+                .Returns(true);
+            _mockTokenProvider
+                .Setup(x => x.Provide(It.IsAny<string>(), It.IsAny<List<string>>(), It.IsAny<string>()))
+                .Returns(new LoginToken()
+                {
+                    Expiration = DateTime.Now,
+                    Token = "test string token"
+                });
             IValidator<LoginCommand> validator = new LoginValidator(_mockEmployeeChecker.Object);
             Employee employee = new Employee("name", "lastName", "test@test.pl", empPass, Guid.NewGuid());
             employee.Activate();
-            _mockEmployeeRepository.Setup(x => x.GetByEmailAsync(It.IsAny<string>())).ReturnsAsync(employee);
+            _mockEmployeeRepository
+                .Setup(x => x.GetByEmailAsync(It.IsAny<string>()))
+                .ReturnsAsync(employee);
             LoginCommandHandler loginCommandHandler =
-                new LoginCommandHandler(_mockLogger.Object, validator, _jwtConfig, _mockUnitOfWork.Object, _mockTokenProvider.Object);
+                new LoginCommandHandler(_mockLogger.Object, validator, _mockUnitOfWork.Object, _mockTokenProvider.Object);
         //Act
             var result = await loginCommandHandler.Handle(loginCommand, new CancellationToken());
         //Assert
@@ -81,12 +86,23 @@ public class LoginCommandHandlerTests
                 Password = empPass
             }
         };
-        _mockEmployeeChecker.Setup(x => x.IsEmployeeExists(It.IsAny<string>())).Returns(true);
+        _mockEmployeeChecker
+            .Setup(x => x.IsEmployeeExists(It.IsAny<string>()))
+            .Returns(true);
+        _mockTokenProvider
+            .Setup(x => x.Provide(It.IsAny<string>(), It.IsAny<List<string>>(), It.IsAny<string>()))
+            .Returns(new LoginToken()
+            {
+                Expiration = DateTime.Now,
+                Token = "test string token"
+            });
         IValidator<LoginCommand> validator = new LoginValidator(_mockEmployeeChecker.Object);
         Employee employee = new Employee("name", "lastName", "test@test.pl", empPass, Guid.NewGuid());
-        _mockEmployeeRepository.Setup(x => x.GetByEmailAsync(It.IsAny<string>())).ReturnsAsync(employee);
+        _mockEmployeeRepository
+            .Setup(x => x.GetByEmailAsync(It.IsAny<string>()))
+            .ReturnsAsync(employee);
         LoginCommandHandler loginCommandHandler =
-            new LoginCommandHandler(_mockLogger.Object, validator, _jwtConfig, _mockUnitOfWork.Object, _mockTokenProvider.Object);
+            new LoginCommandHandler(_mockLogger.Object, validator, _mockUnitOfWork.Object, _mockTokenProvider.Object);
         //Act
         Func<Task> result = async() => await loginCommandHandler.Handle(loginCommand, new CancellationToken());
         //Assert

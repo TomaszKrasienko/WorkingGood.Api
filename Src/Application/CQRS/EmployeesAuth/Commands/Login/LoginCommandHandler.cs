@@ -18,13 +18,11 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, BaseMessageDto>
 {
     private readonly ILogger<LoginCommandHandler> _logger;
     private readonly IValidator<LoginCommand> _validator;
-    private readonly JwtConfig _jwtConfig;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ITokenProvider _tokenProvider;
-    public LoginCommandHandler(ILogger<LoginCommandHandler> logger, IValidator<LoginCommand> validator, JwtConfig jwtConfig, IUnitOfWork unitOfWork, ITokenProvider tokenProvider)
+    public LoginCommandHandler(ILogger<LoginCommandHandler> logger, IValidator<LoginCommand> validator, IUnitOfWork unitOfWork, ITokenProvider tokenProvider)
     {
         _logger = logger;
-        _jwtConfig = jwtConfig;
         _unitOfWork = unitOfWork;
         _validator = validator;
         _tokenProvider = tokenProvider;
@@ -44,12 +42,6 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, BaseMessageDto>
         Employee employee = await _unitOfWork
             .EmployeeRepository
             .GetByEmailAsync(request.CredentialsDto.Email!);
-        // LoginToken loginToken = employee.Login(
-        //     request.CredentialsDto.Password!,
-        //     _jwtConfig.TokenKey,
-        //     _jwtConfig.Audience,
-        //     _jwtConfig.Issuer
-        // );
         LoginToken loginToken = employee.Login(request.CredentialsDto.Password!, _tokenProvider);
         await _unitOfWork.CompleteAsync();
         return new ()
