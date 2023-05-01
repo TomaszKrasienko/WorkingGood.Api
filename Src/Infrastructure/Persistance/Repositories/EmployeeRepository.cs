@@ -21,7 +21,7 @@ public class EmployeeRepository : BaseRepository<Employee>, IEmployeeRepository
         return await _context
             .Employees
             .FirstOrDefaultAsync(x =>
-                x.Email == email);
+                x.Email.EmailAddress == email);
     }
 
     public async Task<Employee> GetByRefreshTokenAsync(string refreshToken)

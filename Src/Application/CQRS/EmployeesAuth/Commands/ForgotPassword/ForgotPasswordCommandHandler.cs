@@ -42,9 +42,9 @@ public class ForgotPasswordCommandHandler : IRequestHandler<ForgotPasswordComman
         await _unitOfWork.CompleteAsync();
         _brokerSender.Send<ForgotPasswordMessage>(MessageDestinations.ForgotPasswordEmail, new ForgotPasswordMessage
         {
-            Email = employee.Email,
-            FirstName = employee.FirstName,
-            LastName = employee.LastName,
+            Email = employee.Email.EmailAddress,
+            FirstName = employee.EmployeeName.FirstName,
+            LastName = employee.EmployeeName.LastName,
             ForgotPasswordToken = employee!.ResetToken!.Token!
         });
         return new ()

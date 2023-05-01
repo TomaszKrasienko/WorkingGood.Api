@@ -18,12 +18,14 @@ app.UseSwaggerUI(options =>
     options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
     options.RoutePrefix = string.Empty;
 });
-app.AddCustomMiddlewares();
 app.UseHttpsRedirection();
+
+app.UseCors(ConfigurationConst.CORS_POLICY_NAME);
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseCors(ConfigurationConst.CORS_POLICY_NAME);
+
 app.MapControllers();
+app.AddCustomMiddlewares();
 app.Run();
 
 public partial class Program {}

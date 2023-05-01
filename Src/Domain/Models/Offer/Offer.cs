@@ -3,16 +3,14 @@ using Domain.ValueObjects.Offer;
 
 namespace Domain.Models.Offer;
 
-public class Offer : IAggregateRoot
+public class Offer : AggregateRoot<Guid>
 {
-    public Guid Id { get; private set; }
-    public string Title { get; private set; }
+    public OfferContent Content { get; set; }
     public Position Position { get; private set; }
     public SalaryRanges? SalaryRanges { get; private set; }
     public Guid AuthorId { get; private set; }
-    public string Description { get; private set; }
-    public bool IsActive { get; private set; }
-    public Offer()
+    public OfferStatus OfferStatus { get; private set; }
+    public Offer() : base(Guid.NewGuid())
     {
         
     }
@@ -24,17 +22,16 @@ public class Offer : IAggregateRoot
         string description,
         Guid authorId,
         bool isActive
-        )
+        ) : base(Guid.NewGuid())
     {
-        Title = title;
+        Content = new OfferContent(title, description);
         Position = new(positionType);
         SalaryRanges = new SalaryRanges(salaryRangesValueMin, salaryRangesValueMax);
-        Description = description;
         AuthorId = authorId;
-        IsActive = isActive;
+        OfferStatus = new OfferStatus(isActive);
     }
     public void ChangeStatus()
     {
-        IsActive = !IsActive;
+        OfferStatus.ChangeStatus();
     }
 }

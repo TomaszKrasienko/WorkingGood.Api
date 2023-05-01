@@ -66,9 +66,9 @@ namespace WebApi.Controllers
             if (baseMessageDto.IsSuccess())
                 return Ok(baseMessageDto);
             else
-                return BadRequest(baseMessageDto);
+                return Unauthorized(baseMessageDto);
         }
-        [HttpPost("vhangePassword")]
+        [HttpPost("changePassword")]
         [Authorize]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto changePasswordDto)
         {

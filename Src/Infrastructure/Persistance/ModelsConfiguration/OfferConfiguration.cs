@@ -13,12 +13,25 @@ public class OfferConfiguration : IEntityTypeConfiguration<Offer>
             .Property(x => x.Id)
             .IsRequired();
         builder
-            .Property(x => x.Title)
-            .IsRequired()
-            .HasMaxLength(200);
-        builder
-            .Property(x => x.Description)
-            .IsRequired();
+            .OwnsOne(x => x.Content,
+                options =>
+                {
+
+                    options
+                        .Property(x => x.Title)
+                        .IsRequired()
+                        .HasMaxLength(200);
+                    options
+                        .Property(x => x.Description)
+                        .IsRequired();
+                });
+        // builder
+        //     .Property(x => x.Title)
+        //     .IsRequired()
+        //     .HasMaxLength(200);
+        // builder
+        //     .Property(x => x.Description)
+        //     .IsRequired();
         builder
             .Property(x => x.AuthorId)
             .IsRequired();
@@ -33,6 +46,13 @@ public class OfferConfiguration : IEntityTypeConfiguration<Offer>
                     options
                         .Property(x => x.ValueMax);
                 });
+        builder.OwnsOne(x => x.OfferStatus,
+            options =>
+            {
+                options
+                    .Property(x => x.IsActive)
+                    .IsRequired();
+            });
         builder
             .HasOne(x => x.Position);
         builder

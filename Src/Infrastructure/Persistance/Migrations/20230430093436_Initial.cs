@@ -14,7 +14,7 @@ namespace Infrastructure.Persistance.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name_Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -38,15 +38,15 @@ namespace Infrastructure.Persistance.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
+                    EmployeeName_FirstName = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
+                    EmployeeName_LastName = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
+                    Email_EmailAddress = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
                     Password_Salt = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
                     Password_Hash = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
                     RefreshToken_Token = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RefreshToken_CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     RefreshToken_Expiration = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    EmployeeStatus_IsActive = table.Column<bool>(type: "bit", nullable: false),
                     VerificationToken_Token = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     VerificationToken_ConfirmDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ResetToken_Token = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -69,12 +69,13 @@ namespace Infrastructure.Persistance.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Content_Title = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Content_Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PositionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     SalaryRanges_ValueMin = table.Column<double>(type: "float", nullable: true),
                     SalaryRanges_ValueMax = table.Column<double>(type: "float", nullable: true),
                     AuthorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    OfferStatus_IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {

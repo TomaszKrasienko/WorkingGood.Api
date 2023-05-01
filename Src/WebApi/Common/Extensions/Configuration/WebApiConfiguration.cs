@@ -47,6 +47,7 @@ namespace WebApi.Common.Extensions.Configuration
                 {
                     builder
                         .SetIsOriginAllowed(_ => true)
+                        //.AllowAnyOrigin()
                         .AllowAnyMethod()
                         .AllowAnyHeader()
                         .AllowCredentials();

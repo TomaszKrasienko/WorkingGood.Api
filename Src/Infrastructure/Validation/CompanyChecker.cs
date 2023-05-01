@@ -18,6 +18,6 @@ public class CompanyChecker : ICompanyChecker
 
     public bool IsCompanyExists(string name)
     {
-        return _context.Companies.Any(x => x.Name == name);
+        return _context.Companies.Any(x => x.Name.Name == name);
     }
 }

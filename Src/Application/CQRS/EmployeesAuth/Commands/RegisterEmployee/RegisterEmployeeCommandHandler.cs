@@ -8,6 +8,7 @@ using Domain.Interfaces.Communication;
 using Domain.Models.Company;
 using Domain.Models.Employee;
 using FluentValidation;
+using Infrastructure.Common.ConfigModels;
 using Infrastructure.Communication.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -21,12 +22,19 @@ namespace Application.CQRS.EmployeesAuth.Commands.RegisterEmployee
         private readonly IUnitOfWork _unitOfWork;
         private readonly IValidator<RegisterEmployeeCommand> _validator;
         private readonly IBrokerSender _brokerSender;
-		public RegisterEmployeeCommandHandler(ILogger<RegisterEmployeeCommandHandler> logger, IUnitOfWork unitOfWork, IValidator<RegisterEmployeeCommand> validator, IBrokerSender brokerSender)
+        private readonly AddressesConfig _addressesConfig;
+		public RegisterEmployeeCommandHandler(
+            ILogger<RegisterEmployeeCommandHandler> logger,
+            IUnitOfWork unitOfWork,
+            IValidator<RegisterEmployeeCommand> validator,
+            IBrokerSender brokerSender,
+            AddressesConfig addressesConfig)
         {
             _logger = logger;
             _unitOfWork = unitOfWork;
             _validator = validator;
             _brokerSender = brokerSender;
+            _addressesConfig = addressesConfig;
         }
         public async Task<BaseMessageDto> Handle(RegisterEmployeeCommand request, CancellationToken cancellationToken)
         {
@@ -51,10 +59,10 @@ namespace Application.CQRS.EmployeesAuth.Commands.RegisterEmployee
             await _unitOfWork.CompleteAsync();
             _brokerSender.Send<RegisterMessage>(MessageDestinations.RegisterEmail, new RegisterMessage
             {
-                Email = employee.Email,
-                FirstName = employee.FirstName,
-                LastName = employee.LastName,
-                RegistrationToken = employee.VerificationToken.Token
+                Email = employee.Email.EmailAddress,
+                FirstName = employee.EmployeeName.FirstName,
+                LastName = employee.EmployeeName.LastName,
+                RegistrationUrl= $"{_addressesConfig.RegistrationUrl}/{employee.VerificationToken.Token}"
             });
             return new ()
             {

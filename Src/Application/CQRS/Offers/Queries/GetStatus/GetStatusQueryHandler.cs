@@ -35,7 +35,7 @@ public class GetStatusQueryHandler : IRequestHandler<GetStatusQuery, BaseMessage
         Offer offer = await _unitOfWork.OffersRepository.GetByIdAsync(request.OfferId);
         return new BaseMessageDto()
         {
-            Object = offer.IsActive
+            Object = offer.OfferStatus.IsActive
         };
     }
 }

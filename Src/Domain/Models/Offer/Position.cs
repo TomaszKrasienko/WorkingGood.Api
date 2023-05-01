@@ -1,10 +1,9 @@
 namespace Domain.Models.Offer;
 
-public class Position
+public class Position : Entity<Guid>
 {
-    public Guid Id { get; private set; }
     public string Type { get; private set; }
-    internal Position(string type)
+    internal Position(string type) : base(Guid.NewGuid())
     {
         Type = type;
     }

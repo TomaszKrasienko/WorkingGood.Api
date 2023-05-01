@@ -23,7 +23,7 @@ namespace Domain.Tests.Models.Tests
 			//Act
 			offer.ChangeStatus();
 			//Assert
-			offer.IsActive.Should().Be(!isActive);
+			offer.OfferStatus.IsActive.Should().Be(!isActive);
 		}
 	}
 }

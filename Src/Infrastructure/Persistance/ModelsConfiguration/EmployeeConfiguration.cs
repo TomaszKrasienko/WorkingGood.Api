@@ -13,18 +13,37 @@ namespace Infrastructure.Persistance.ModelsConfiguration
             builder
                 .Property(x => x.Id)
                 .IsRequired();
-            builder
-                .Property(x => x.FirstName)
-                .IsRequired()
-                .HasMaxLength(60);
-            builder
-                .Property(x => x.LastName)
-                .IsRequired()
-                .HasMaxLength(60);
-            builder
-                .Property(x => x.Email)
-                .IsRequired()
-                .HasMaxLength(60);
+            builder.OwnsOne(x => x.EmployeeName,
+                options =>
+                {
+                    options
+                        .Property(x => x.FirstName)
+                        .IsRequired()
+                        .HasMaxLength(60);
+                    options
+                        .Property(x => x.LastName)
+                        .IsRequired()
+                        .HasMaxLength(60);
+                });
+            // builder
+            //     .Property(x => x.FirstName)
+            //     .IsRequired()
+            //     .HasMaxLength(60);
+            // builder
+            //     .Property(x => x.LastName)
+            //     .IsRequired()
+            //     .HasMaxLength(60);
+            builder.OwnsOne(x => x.Email, options =>
+            {
+                options
+                    .Property(x => x.EmailAddress)
+                    .IsRequired()
+                    .HasMaxLength(60);
+            });
+            // builder
+            //     .Property(x => x.Email)
+            //     .IsRequired()
+            //     .HasMaxLength(60);
             builder
                 .OwnsOne(x => x.Password,
                     options =>
@@ -48,7 +67,14 @@ namespace Infrastructure.Persistance.ModelsConfiguration
                             .Property(x => x.Expiration);
                     });
             builder
-                .Property(x => x.IsActive);
+                .OwnsOne(x => x.EmployeeStatus,
+                    options =>
+                    {
+                        options
+                            .Property(x => x.IsActive);
+                    });
+            // builder
+            //     .Property(x => x.IsActive);
             builder
                 .OwnsOne(x => x.VerificationToken,
                     options =>

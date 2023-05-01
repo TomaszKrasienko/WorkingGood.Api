@@ -1,17 +1,19 @@
 ﻿using System;
 using Domain.Interfaces;
+using Domain.ValueObjects.Company;
 
 namespace Domain.Models.Company
 {
-	public class Company : IAggregateRoot
+	public sealed class Company : AggregateRoot<Guid>
 	{
-		public Guid Id { get; private set; }
-		public string Name { get; private set; }
-		public Company() { }
-		public Company(string name)
+		public CompanyName Name { get; private set; }
+		public Company() : base(Guid.NewGuid())
 		{
-			Id = Guid.NewGuid();
-			Name = name;
+			
+		}
+		public Company(string name) : base(Guid.NewGuid())
+		{
+			Name = new CompanyName(name);
 		}
 	}
 }

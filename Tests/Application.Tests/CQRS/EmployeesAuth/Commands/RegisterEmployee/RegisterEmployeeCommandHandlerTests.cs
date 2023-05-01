@@ -8,6 +8,7 @@ using Domain.Interfaces.Validation;
 using Domain.Models.Employee;
 using FluentAssertions;
 using FluentValidation;
+using Infrastructure.Common.ConfigModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -22,6 +23,7 @@ public class RegisterEmployeeCommandHandlerTests
     private readonly Mock<IBrokerSender> _brokerSender;
     private readonly Mock<IEmployeeChecker> _mockEmployeeChecker;
     private readonly Mock<ICompanyChecker> _mockCompanyChecker;
+    private readonly Mock<AddressesConfig> _mockAddressesConfig;
     public RegisterEmployeeCommandHandlerTests()
     {
         _mockLogger = new ();
@@ -32,6 +34,7 @@ public class RegisterEmployeeCommandHandlerTests
         _brokerSender = new();
         _mockEmployeeChecker = new();
         _mockCompanyChecker = new();
+        _mockAddressesConfig = new();
     }
 
     [Fact]
@@ -51,8 +54,9 @@ public class RegisterEmployeeCommandHandlerTests
             };
             _mockEmployeeChecker.Setup(x => x.IsEmployeeExists(It.IsAny<string>())).Returns(false);
             _mockCompanyChecker.Setup(x => x.IsCompanyExists(It.IsAny<Guid>())).Returns(true);
+            _mockAddressesConfig.Setup(x => x.RegistrationUrl).Returns("tmp");
             IValidator<RegisterEmployeeCommand> validator = new RegisterEmployeeValidator(_mockEmployeeChecker.Object, _mockCompanyChecker.Object);
-            RegisterEmployeeCommandHandler registerEmployeeCommandHandler = new(_mockLogger.Object, _mockUnitOfWork.Object, validator, _brokerSender.Object);
+            RegisterEmployeeCommandHandler registerEmployeeCommandHandler = new(_mockLogger.Object, _mockUnitOfWork.Object, validator, _brokerSender.Object, _mockAddressesConfig.Object);
         //Act
             var result = await registerEmployeeCommandHandler.Handle(registerEmployeeCommand, new CancellationToken());
         //Assert
@@ -68,8 +72,9 @@ public class RegisterEmployeeCommandHandlerTests
         //Arrange
             _mockEmployeeChecker.Setup(x => x.IsEmployeeExists(It.IsAny<string>())).Returns(false);
             _mockCompanyChecker.Setup(x => x.IsCompanyExists(It.IsAny<Guid>())).Returns(true);
+            _mockAddressesConfig.Setup(x => x.RegistrationUrl).Returns("tmp");
             IValidator<RegisterEmployeeCommand> validator = new RegisterEmployeeValidator(_mockEmployeeChecker.Object, _mockCompanyChecker.Object);
-            RegisterEmployeeCommandHandler registerEmployeeCommandHandler = new(_mockLogger.Object, _mockUnitOfWork.Object, validator, _brokerSender.Object);
+            RegisterEmployeeCommandHandler registerEmployeeCommandHandler = new(_mockLogger.Object, _mockUnitOfWork.Object, validator, _brokerSender.Object, _mockAddressesConfig.Object);
         //Act
             var result = await registerEmployeeCommandHandler.Handle(registerEmployeeCommand, new CancellationToken());
         //Assert

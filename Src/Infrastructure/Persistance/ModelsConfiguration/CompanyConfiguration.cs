@@ -13,8 +13,14 @@ namespace Infrastructure.Persistance.ModelsConfiguration
                 .Property(x => x.Id)
                 .IsRequired();
             builder
-                .Property(x => x.Name)
-                .IsRequired();
+                .OwnsOne(x => x.Name,
+                    options =>
+                    {
+                        options
+                            .Property(x => x.Name)
+                            .IsRequired()
+                            .HasMaxLength(200);
+                    });
             builder
                 .HasKey(x => x.Id);
         }

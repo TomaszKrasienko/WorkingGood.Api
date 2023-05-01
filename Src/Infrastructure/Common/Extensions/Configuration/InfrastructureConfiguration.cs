@@ -2,9 +2,11 @@
 using Domain.Interfaces;
 using Domain.Interfaces.Communication;
 using Domain.Interfaces.Validation;
+using Domain.Services;
 using Infrastructure.Common.ConfigModels;
 using Infrastructure.Communication;
 using Infrastructure.Persistance;
+using Infrastructure.Services;
 using Infrastructure.Validation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -30,7 +32,8 @@ namespace Infrastructure.Common.Extensions.Configuration
 				.AddScoped<ICompanyChecker, CompanyChecker>()
 				.AddScoped<IOfferChecker, OfferChecker>()
 				.AddScoped<IBrokerSender, RabbitMqSender>()
-			    .AddScoped<IUnitOfWork, UnitOfWork>();
+				.AddScoped<IUnitOfWork, UnitOfWork>()
+				.AddScoped<ITokenProvider, TokenProvider>();
 			return services;
 		}
 		private static IServiceCollection ConfigureEntityFramework(this IServiceCollection services, IConfiguration configuration)
@@ -50,6 +53,9 @@ namespace Infrastructure.Common.Extensions.Configuration
 			JwtConfig jwtConfig = new();
 			configuration.Bind("Jwt", jwtConfig);
 			services.AddSingleton(jwtConfig);
+			AddressesConfig addressesConfig = new();
+			configuration.Bind("Addresses", addressesConfig);
+			services.AddSingleton(addressesConfig);
 			return services;
 		}
 	}

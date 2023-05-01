@@ -15,7 +15,7 @@ public class EmployeeTests
         //Act
             employee.Activate();
         //Assert
-            employee.IsActive.Should().BeTrue();
+            employee.EmployeeStatus.IsActive.Should().BeTrue();
             employee.VerificationToken.ConfirmDate.Should().NotBeNull();
     }
 

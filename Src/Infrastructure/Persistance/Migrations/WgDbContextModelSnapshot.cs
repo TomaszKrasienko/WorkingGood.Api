@@ -28,10 +28,6 @@ namespace Infrastructure.Persistance.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.ToTable("Companies");
@@ -45,24 +41,6 @@ namespace Infrastructure.Persistance.Migrations
 
                     b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(60)
-                        .HasColumnType("nvarchar(60)");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(60)
-                        .HasColumnType("nvarchar(60)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(60)
-                        .HasColumnType("nvarchar(60)");
 
                     b.HasKey("Id");
 
@@ -80,20 +58,8 @@ namespace Infrastructure.Persistance.Migrations
                     b.Property<Guid>("AuthorId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
                     b.Property<Guid>("PositionId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
 
                     b.HasKey("Id");
 
@@ -119,6 +85,30 @@ namespace Infrastructure.Persistance.Migrations
                     b.ToTable("Positions");
                 });
 
+            modelBuilder.Entity("Domain.Models.Company.Company", b =>
+                {
+                    b.OwnsOne("Domain.ValueObjects.Company.CompanyName", "Name", b1 =>
+                        {
+                            b1.Property<Guid>("CompanyId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Name")
+                                .IsRequired()
+                                .HasMaxLength(200)
+                                .HasColumnType("nvarchar(200)");
+
+                            b1.HasKey("CompanyId");
+
+                            b1.ToTable("Companies");
+
+                            b1.WithOwner()
+                                .HasForeignKey("CompanyId");
+                        });
+
+                    b.Navigation("Name")
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Domain.Models.Employee.Employee", b =>
                 {
                     b.HasOne("Domain.Models.Company.Company", null)
@@ -126,6 +116,63 @@ namespace Infrastructure.Persistance.Migrations
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.OwnsOne("Domain.ValueObjects.Email", "Email", b1 =>
+                        {
+                            b1.Property<Guid>("EmployeeId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("EmailAddress")
+                                .IsRequired()
+                                .HasMaxLength(60)
+                                .HasColumnType("nvarchar(60)");
+
+                            b1.HasKey("EmployeeId");
+
+                            b1.ToTable("Employees");
+
+                            b1.WithOwner()
+                                .HasForeignKey("EmployeeId");
+                        });
+
+                    b.OwnsOne("Domain.ValueObjects.EmployeeName", "EmployeeName", b1 =>
+                        {
+                            b1.Property<Guid>("EmployeeId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("FirstName")
+                                .IsRequired()
+                                .HasMaxLength(60)
+                                .HasColumnType("nvarchar(60)");
+
+                            b1.Property<string>("LastName")
+                                .IsRequired()
+                                .HasMaxLength(60)
+                                .HasColumnType("nvarchar(60)");
+
+                            b1.HasKey("EmployeeId");
+
+                            b1.ToTable("Employees");
+
+                            b1.WithOwner()
+                                .HasForeignKey("EmployeeId");
+                        });
+
+                    b.OwnsOne("Domain.ValueObjects.EmployeeStatus", "EmployeeStatus", b1 =>
+                        {
+                            b1.Property<Guid>("EmployeeId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<bool>("IsActive")
+                                .HasColumnType("bit");
+
+                            b1.HasKey("EmployeeId");
+
+                            b1.ToTable("Employees");
+
+                            b1.WithOwner()
+                                .HasForeignKey("EmployeeId");
+                        });
 
                     b.OwnsOne("Domain.ValueObjects.Password", "Password", b1 =>
                         {
@@ -209,6 +256,15 @@ namespace Infrastructure.Persistance.Migrations
                                 .HasForeignKey("EmployeeId");
                         });
 
+                    b.Navigation("Email")
+                        .IsRequired();
+
+                    b.Navigation("EmployeeName")
+                        .IsRequired();
+
+                    b.Navigation("EmployeeStatus")
+                        .IsRequired();
+
                     b.Navigation("Password")
                         .IsRequired();
 
@@ -235,6 +291,44 @@ namespace Infrastructure.Persistance.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.OwnsOne("Domain.ValueObjects.Offer.OfferContent", "Content", b1 =>
+                        {
+                            b1.Property<Guid>("OfferId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Description")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("Title")
+                                .IsRequired()
+                                .HasMaxLength(200)
+                                .HasColumnType("nvarchar(200)");
+
+                            b1.HasKey("OfferId");
+
+                            b1.ToTable("Offers");
+
+                            b1.WithOwner()
+                                .HasForeignKey("OfferId");
+                        });
+
+                    b.OwnsOne("Domain.ValueObjects.Offer.OfferStatus", "OfferStatus", b1 =>
+                        {
+                            b1.Property<Guid>("OfferId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<bool>("IsActive")
+                                .HasColumnType("bit");
+
+                            b1.HasKey("OfferId");
+
+                            b1.ToTable("Offers");
+
+                            b1.WithOwner()
+                                .HasForeignKey("OfferId");
+                        });
+
                     b.OwnsOne("Domain.ValueObjects.Offer.SalaryRanges", "SalaryRanges", b1 =>
                         {
                             b1.Property<Guid>("OfferId")
@@ -253,6 +347,12 @@ namespace Infrastructure.Persistance.Migrations
                             b1.WithOwner()
                                 .HasForeignKey("OfferId");
                         });
+
+                    b.Navigation("Content")
+                        .IsRequired();
+
+                    b.Navigation("OfferStatus")
+                        .IsRequired();
 
                     b.Navigation("Position");
 

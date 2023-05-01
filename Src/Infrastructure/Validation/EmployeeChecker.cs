@@ -15,7 +15,7 @@ namespace Infrastructure.Validation
         {
             return _context
                 .Employees
-                .Any(x => x.Email == email);
+                .Any(x => x.Email.EmailAddress == email);
         }
         public bool IsEmployeeExists(Guid employeeId)
         {
