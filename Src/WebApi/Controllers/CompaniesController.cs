@@ -1,6 +1,5 @@
 ﻿using Application.CQRS.Companies.Commands;
 using Application.CQRS.Companies.Commands.AddCompany;
-using Application.CQRS.Companies.Commands.RegisterCompany;
 using Application.DTOs;
 using Application.DTOs.Companies;
 using MediatR;
@@ -24,18 +23,7 @@ namespace WebApi.Controllers
                 return BadRequest(baseMessageDto);
         }
 
-        [HttpPost("registerCompany")]
-        public async Task<IActionResult> RegisterCompany([FromBody] RegisterCompanyDto registerCompanyDto)
-        {
-            BaseMessageDto baseMessageDto = await Mediator.Send(new RegisterCompanyCommand
-            {
-                RegisterCompanyDto = registerCompanyDto
-            });
-            if (baseMessageDto.IsSuccess())
-                return Ok(baseMessageDto);
-            else
-                return BadRequest(baseMessageDto);
-        }
+
     }
 }
 

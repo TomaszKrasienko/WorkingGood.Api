@@ -12,6 +12,15 @@ public class OfferChecker : IOfferChecker
     }
     public bool IsOfferExists(Guid offerId)
     {
-        return _context.Offers.Any(x => x.Id == offerId);
+        return _context
+            .Offers
+            .Any(x => x.Id == offerId);
+    }
+
+    public bool IsOfferActive(Guid offerId)
+    {
+        return _context
+            .Offers
+            .Any(x => x.Id == offerId && x.OfferStatus.IsActive == true);
     }
 }

@@ -59,14 +59,16 @@ namespace WebApi.Controllers
         [HttpPost("refresh")]
         public async Task<IActionResult> Refresh([FromBody]RefreshDto refreshDto)
         {
-            BaseMessageDto baseMessageDto = await Mediator.Send(new RefreshCommand
+            RefreshResponseDto refreshResponseDto = await Mediator.Send(new RefreshCommand
             {
                 RefreshDto = refreshDto
             });
-            if (baseMessageDto.IsSuccess())
-                return Ok(baseMessageDto);
+            if (refreshResponseDto.IsSuccess())
+                return Ok(refreshResponseDto as BaseMessageDto);
+            else if (!refreshResponseDto.IsSuccess() && refreshResponseDto.IsAuthorized)
+                return Unauthorized(refreshResponseDto as BaseMessageDto);
             else
-                return Unauthorized(baseMessageDto);
+                return BadRequest(refreshResponseDto as BaseMessageDto);
         }
         [HttpPost("changePassword")]
         [Authorize]

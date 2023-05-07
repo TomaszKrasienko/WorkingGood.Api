@@ -23,7 +23,6 @@
     <None Remove="CQRS\Offers\Queries\GetById\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Common" />
     <Folder Include="DTOs\" />
     <Folder Include="DTOs\EmployeesAuth\" />
     <Folder Include="CQRS\" />
@@ -31,9 +30,11 @@
     <Folder Include="CQRS\Companies\" />
     <Folder Include="DTOs\Companies\" />
     <Folder Include="CQRS\Companies\Commands\" />
-    <Folder Include="CQRS\Offers\Queries\GetById\" />
+    <Folder Include="CQRS\Offers\Queries\GetActiveOfferById\" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.5.1" />
     <PackageReference Include="MediatR" Version="12.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />

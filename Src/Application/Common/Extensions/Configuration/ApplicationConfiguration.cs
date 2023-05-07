@@ -16,7 +16,8 @@ namespace Application.Common.Extensions.Configuration
 		{
 			services
 				.ConfigureValidators()
-				.ConfigureMediatr();
+				.ConfigureMediatr()
+				.SetAutoMapper();
             return services;
 		}
 		private static IServiceCollection ConfigureValidators(this IServiceCollection services)
@@ -30,9 +31,14 @@ namespace Application.Common.Extensions.Configuration
 		}
 		private static IServiceCollection ConfigureMediatr(this IServiceCollection services)
 		{
-			services
+			return services
 				.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
-			return services;
+		}
+
+		private static IServiceCollection SetAutoMapper(this IServiceCollection services)
+		{
+			return services
+				.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 		}
 	}
 }

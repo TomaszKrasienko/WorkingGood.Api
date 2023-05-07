@@ -19,22 +19,23 @@ public class RegisterEmployeeCommandHandlerTests
 {
     private readonly Mock<ILogger<RegisterEmployeeCommandHandler>> _mockLogger;
     private readonly Mock<IUnitOfWork> _mockUnitOfWork;
-    private readonly Mock<IEmployeeRepository> _mockEmployeeRepositor;
+    private readonly Mock<IEmployeeRepository> _mockEmployeeRepository;
     private readonly Mock<IBrokerSender> _brokerSender;
     private readonly Mock<IEmployeeChecker> _mockEmployeeChecker;
     private readonly Mock<ICompanyChecker> _mockCompanyChecker;
-    private readonly Mock<AddressesConfig> _mockAddressesConfig;
+    private readonly AddressesConfig _addressesConfig;
     public RegisterEmployeeCommandHandlerTests()
     {
         _mockLogger = new ();
         _mockUnitOfWork = new ();
-        _mockEmployeeRepositor = new ();
-        _mockUnitOfWork.Setup(x => x.EmployeeRepository)
-            .Returns(_mockEmployeeRepositor.Object);
+        _mockEmployeeRepository = new ();
+        _mockUnitOfWork
+            .Setup(x => x.EmployeeRepository)
+            .Returns(_mockEmployeeRepository.Object);
         _brokerSender = new();
         _mockEmployeeChecker = new();
         _mockCompanyChecker = new();
-        _mockAddressesConfig = new();
+        _addressesConfig = new();
     }
 
     [Fact]
@@ -52,11 +53,15 @@ public class RegisterEmployeeCommandHandlerTests
                     LastName = "TestTest"
                 }
             };
-            _mockEmployeeChecker.Setup(x => x.IsEmployeeExists(It.IsAny<string>())).Returns(false);
-            _mockCompanyChecker.Setup(x => x.IsCompanyExists(It.IsAny<Guid>())).Returns(true);
-            _mockAddressesConfig.Setup(x => x.RegistrationUrl).Returns("tmp");
+            _mockEmployeeChecker
+                .Setup(x => x.IsEmployeeExists(It.IsAny<string>()))
+                .Returns(false);
+            _mockCompanyChecker
+                .Setup(x => x.IsCompanyExists(It.IsAny<Guid>()))
+                .Returns(true);
+            _addressesConfig.RegistrationUrl = "tmp";
             IValidator<RegisterEmployeeCommand> validator = new RegisterEmployeeValidator(_mockEmployeeChecker.Object, _mockCompanyChecker.Object);
-            RegisterEmployeeCommandHandler registerEmployeeCommandHandler = new(_mockLogger.Object, _mockUnitOfWork.Object, validator, _brokerSender.Object, _mockAddressesConfig.Object);
+            RegisterEmployeeCommandHandler registerEmployeeCommandHandler = new(_mockLogger.Object, _mockUnitOfWork.Object, validator, _brokerSender.Object, _addressesConfig);
         //Act
             var result = await registerEmployeeCommandHandler.Handle(registerEmployeeCommand, new CancellationToken());
         //Assert
@@ -70,11 +75,15 @@ public class RegisterEmployeeCommandHandlerTests
     public async Task Handle_ForInvalidRegisterEmployeeCommand_ShouldReturnBaseMessageDtoWithObjectEmployeeIdAndMessage(RegisterEmployeeCommand registerEmployeeCommand)
     {
         //Arrange
-            _mockEmployeeChecker.Setup(x => x.IsEmployeeExists(It.IsAny<string>())).Returns(false);
-            _mockCompanyChecker.Setup(x => x.IsCompanyExists(It.IsAny<Guid>())).Returns(true);
-            _mockAddressesConfig.Setup(x => x.RegistrationUrl).Returns("tmp");
+            _mockEmployeeChecker
+                .Setup(x => x.IsEmployeeExists(It.IsAny<string>()))
+                .Returns(false);
+            _mockCompanyChecker
+                .Setup(x => x.IsCompanyExists(It.IsAny<Guid>()))
+                .Returns(true);
+            _addressesConfig.RegistrationUrl = "tmp";
             IValidator<RegisterEmployeeCommand> validator = new RegisterEmployeeValidator(_mockEmployeeChecker.Object, _mockCompanyChecker.Object);
-            RegisterEmployeeCommandHandler registerEmployeeCommandHandler = new(_mockLogger.Object, _mockUnitOfWork.Object, validator, _brokerSender.Object, _mockAddressesConfig.Object);
+            RegisterEmployeeCommandHandler registerEmployeeCommandHandler = new(_mockLogger.Object, _mockUnitOfWork.Object, validator, _brokerSender.Object, _addressesConfig);
         //Act
             var result = await registerEmployeeCommandHandler.Handle(registerEmployeeCommand, new CancellationToken());
         //Assert

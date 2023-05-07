@@ -4,13 +4,13 @@ using Application.CQRS.Offers.Queries.GetById;
 
 namespace Application.Tests.CQRS.Offers.Queries.GetById
 {
-    public class GetByIdTestInvalidDataProvider : IEnumerable<object[]>
+    public class GetActiveOfferByIdInvalidDataProvider : IEnumerable<object[]>
     {
         public IEnumerator<object[]> GetEnumerator()
         {
             yield return new[]
             {
-                new GetByIdQuery
+                new GetActiveOfferByIdQuery
                 {
 
                 }

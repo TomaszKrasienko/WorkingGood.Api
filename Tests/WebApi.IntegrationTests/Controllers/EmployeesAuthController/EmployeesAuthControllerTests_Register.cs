@@ -45,7 +45,7 @@ public class EmployeesAuthControllerTests_Register : IClassFixture<WebApplicatio
             var httpContent = registerEmployeeDto.ToJsonContent();
             var addedCompanyId = await SeedCompany();
         //Act
-            var response = await _client.PostAsync($"api/EmployeesAuth/RegisterEmployee/{addedCompanyId}", httpContent);
+            var response = await _client.PostAsync($"employeesAuth/registerEmployee/{addedCompanyId}", httpContent);
         //Assert
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
     }  
@@ -72,7 +72,7 @@ public class EmployeesAuthControllerTests_Register : IClassFixture<WebApplicatio
             };
             var httpContent = registerEmployeeDto.ToJsonContent();
         //Act
-            var response = await _client.PostAsync($"api/EmployeesAuth/RegisterEmployee/{Guid.NewGuid()}", httpContent);
+            var response = await _client.PostAsync($"employeesAuth/registerEmployee/{Guid.NewGuid()}", httpContent);
         //Assert
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
     }
@@ -84,7 +84,7 @@ public class EmployeesAuthControllerTests_Register : IClassFixture<WebApplicatio
             var httpContent = registerEmployeeDto.ToJsonContent();
             var addedCompanyId = await SeedCompany();
         //Act
-            var response = await _client.PostAsync($"api/EmployeesAuth/RegisterEmployee/{addedCompanyId}", httpContent);
+            var response = await _client.PostAsync($"employeesAuth/registerEmployee/{addedCompanyId}", httpContent);
         //Assert
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
     }

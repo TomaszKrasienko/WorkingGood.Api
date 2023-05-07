@@ -1,5 +1,6 @@
 using Application.Common.Extensions.Validation;
 using Application.DTOs;
+using Application.DTOs.EmployeesAuth;
 using Application.ViewModels.Login;
 using Domain.Interfaces;
 using Domain.Models.Employee;
@@ -14,22 +15,20 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.CQRS.EmployeesAuth.Commands.Refresh;
 
-public class RefreshCommandHandler : IRequestHandler<RefreshCommand, BaseMessageDto>
+public class RefreshCommandHandler : IRequestHandler<RefreshCommand, RefreshResponseDto>
 {
     private readonly ILogger<RefreshCommandHandler> _logger;
-    private readonly JwtConfig _jwtConfig;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IValidator<RefreshCommand> _validator;
     private readonly ITokenProvider _tokenProvider;
-    public RefreshCommandHandler(ILogger<RefreshCommandHandler> logger, IValidator<RefreshCommand> validator, JwtConfig jwtConfig, IUnitOfWork unitOfWork, ITokenProvider tokenProvider)
+    public RefreshCommandHandler(ILogger<RefreshCommandHandler> logger, IValidator<RefreshCommand> validator, IUnitOfWork unitOfWork, ITokenProvider tokenProvider)
     {
         _logger = logger;
-        _jwtConfig = jwtConfig;
         _unitOfWork = unitOfWork;
         _validator = validator;
         _tokenProvider = tokenProvider;
     }
-    public async Task<BaseMessageDto> Handle(RefreshCommand request, CancellationToken cancellationToken)
+    public async Task<RefreshResponseDto> Handle(RefreshCommand request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handling RefreshCommand");
         var validationResult = await _validator.ValidateAsync(request, cancellationToken);
@@ -38,18 +37,19 @@ public class RefreshCommandHandler : IRequestHandler<RefreshCommand, BaseMessage
             _logger.LogWarning(validationResult.Errors.GetErrorString());
             return new()
             {
-                Errors = validationResult.Errors.GetErrorsStringList()
+                Errors = validationResult.Errors.GetErrorsStringList(),
+                IsAuthorized = true
             };
         }
         Employee employee = await _unitOfWork
             .EmployeeRepository
             .GetByRefreshTokenAsync(request.RefreshDto.RefreshToken!);
-        if (employee == null)
+        if (employee is null)
         {
-            _logger.LogWarning("Employee is null");
             return new()
             {
-                Errors = "Refresh token is invalid"
+                Errors = "Refresh token is invalid",
+                IsAuthorized = false
             };
         }
         LoginToken loginToken = employee.Refresh(_tokenProvider);
@@ -63,7 +63,8 @@ public class RefreshCommandHandler : IRequestHandler<RefreshCommand, BaseMessage
                 TokenExpiration = loginToken.Expiration,
                 RefreshToken = employee.RefreshToken.Token!,
                 RefreshTokenExpiration = (DateTime)employee.RefreshToken.Expiration!
-            }
+            },
+            IsAuthorized = true
         };
     }
 }

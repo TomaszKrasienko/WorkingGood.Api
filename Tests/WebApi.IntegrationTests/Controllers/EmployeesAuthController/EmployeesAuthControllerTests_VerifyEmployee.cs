@@ -35,7 +35,7 @@ public class EmployeesAuthControllerTests_VerifyEmployee : IClassFixture<WebAppl
         var httpContent = httpContentString.ToJsonContent();
         var verificationToken = await SeedEmployeeAndGetVerificationToken();
         //Act
-        var response = await _client.PostAsync($"api/EmployeesAuth/VerifyEmployee/{verificationToken}", httpContent);
+        var response = await _client.PostAsync($"employeesAuth/VerifyEmployee/{verificationToken}", httpContent);
         //Assert
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
     }
@@ -56,7 +56,7 @@ public class EmployeesAuthControllerTests_VerifyEmployee : IClassFixture<WebAppl
         string httpContentString = string.Empty;
         var httpContent = httpContentString.ToJsonContent();
         //Act
-        var response = await _client.PostAsync($"api/EmployeesAuth/VerifyEmployee/Test", httpContent);
+        var response = await _client.PostAsync($"employeesAuth/VerifyEmployee/Test", httpContent);
         //Assert
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
     }    

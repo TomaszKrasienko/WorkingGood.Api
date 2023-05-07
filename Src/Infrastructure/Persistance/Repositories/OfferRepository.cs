@@ -16,4 +16,12 @@ public class OfferRepository : BaseRepository<Offer>, IOfferRepository
             .Where(x => employeesId.Contains(x.AuthorId))
             .ToListAsync();
     }
+
+    public async Task<List<Offer>> GetAllActive()
+    {
+        return await _context
+            .Offers
+            .Where(x => x.OfferStatus.IsActive == true)
+            .ToListAsync();
+    }
 }

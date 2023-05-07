@@ -44,7 +44,7 @@ public class EmployeeAuthControllerTests_ForgotPassword: IClassFixture<WebApplic
             };
             var httpContent = resetPasswordDto.ToJsonContent();
         //Act
-            var response = await _client.PostAsync("api/EmployeesAuth/ResetPassword", httpContent);
+            var response = await _client.PostAsync("employeesAuth/resetPassword", httpContent);
         //Assert
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
     }

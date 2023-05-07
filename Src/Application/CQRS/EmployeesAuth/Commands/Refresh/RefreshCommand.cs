@@ -5,7 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Application.CQRS.EmployeesAuth.Commands.Refresh;
-public record RefreshCommand : IRequest<BaseMessageDto>
+public record RefreshCommand : IRequest<RefreshResponseDto>
 {
-    public RefreshDto RefreshDto { get; init; }   
+    public RefreshDto RefreshDto { get; init; } = new();
 }

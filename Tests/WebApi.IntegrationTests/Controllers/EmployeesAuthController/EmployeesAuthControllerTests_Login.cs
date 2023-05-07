@@ -51,7 +51,7 @@ public class EmployeesAuthControllerTests_Login: IClassFixture<WebApplicationFac
             var httpContent = credentials.ToJsonContent();
             await SeedEmployee(email, password);
         //Act
-            var response = await _client.PostAsync($"api/EmployeesAuth/Login", httpContent);
+            var response = await _client.PostAsync($"employeesAuth/Login", httpContent);
         //Assert
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
     }
@@ -71,7 +71,7 @@ public class EmployeesAuthControllerTests_Login: IClassFixture<WebApplicationFac
             var httpContent = credentials.ToJsonContent();
             await SeedEmployee(email, invalidPassword);
         //Act
-            var response = await _client.PostAsync($"api/EmployeesAuth/Login", httpContent);
+            var response = await _client.PostAsync($"employeesAuth/Login", httpContent);
         //Assert
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
     }
@@ -88,7 +88,7 @@ public class EmployeesAuthControllerTests_Login: IClassFixture<WebApplicationFac
             };
             var httpContent = credentials.ToJsonContent();
         //Act
-            var response = await _client.PostAsync($"api/EmployeesAuth/Login", httpContent);
+            var response = await _client.PostAsync($"employeesAuth/Login", httpContent);
         //Assert
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
     }

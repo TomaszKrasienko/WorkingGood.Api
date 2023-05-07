@@ -1,24 +1,20 @@
-using Application.DTOs;
-using Application.DTOs.Offers;
-using Domain.Models.Employee;
+using Application.ViewModels.Offer;
 using Domain.Models.Offer;
 using FluentAssertions;
 using Infrastructure.Persistance;
 using Microsoft.AspNetCore.Authorization.Policy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
 using WebApi.IntegrationTests.Tests.Helpers;
 
 namespace WebApi.IntegrationTests.Controllers.OffersController;
 
-public class OffersControllerTests : IClassFixture<WebApplicationFactory<Program>>
-{
+public class OffersControllerTests_GetActiveOffers : IClassFixture<WebApplicationFactory<Program>>
+{    
     private readonly WebApplicationFactory<Program> _factory;
     private readonly HttpClient _client;
-    public OffersControllerTests(WebApplicationFactory<Program> factory)
+    public OffersControllerTests_GetActiveOffers(WebApplicationFactory<Program> factory)
     {
         _factory = factory
             .WithWebHostBuilder(builder =>
@@ -35,58 +31,56 @@ public class OffersControllerTests : IClassFixture<WebApplicationFactory<Program
             });
         _client = _factory.CreateClient();
     }
-
     [Fact]
-    public async Task AddOffer_ForValidOfferDto_ShouldReturnOkResult()
+    public async Task GetActiveOffers_ForExistingOffers_ShouldReturnOk()
     {
         //Arrange
-        OfferDto offerDto = new()
-        {
-            Title = "Test title",
-            Description = "Description test Description test Description test Description test",
-            PositionType = "Position type test",
-            SalaryRangeMax = 12000,
-            SalaryRangeMin = 8000
-        };
-        var httpContent = offerDto.ToJsonContent();
+        await SeedOffers();
         //Act
-        var response = await _client.PostAsync("offers/addOffer", httpContent);
-        //Assert
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
-    }
-
-    [Theory]
-    [InlineData(true)]
-    [InlineData(false)]
-    public async Task? GetOfferStatus_ForExistingOfferShouldReturnOk(bool isActive)
-    {
-        //Arrange
-        Guid offerId = await SeedOffer(isActive);
-        //Act
-        var response = await _client.GetAsync($"offers/getOfferStatus/{offerId}");
+        var response = await _client.GetAsync("offers/getActiveOffers");
         //Assert
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         var stringContent = await response.Content.ReadAsStringAsync();
-        stringContent.GetBaseMessageDto().Object.Should().Be(isActive);
+        //stringContent.GetBaseMessageDto().Object.Should().BeOfType<List<GetOfferVM>>();
+        var objectResult = stringContent.GetBaseMessageDto().Object;
+        (objectResult as List<GetOfferVM>).Count().Should().Be(2);
     }
-    private async Task<Guid> SeedOffer(bool isActive)
+    private async Task SeedOffers()
     {
-        Offer offer = new Offer(
-            "testTitle",
-            "testPositionType",
-            1000,
-            1000,
-            "descriptionTestdescriptionTestdescriptionTest",
-            Guid.NewGuid(),
-            isActive
-        );
+        List<Offer> offersList = new()
+        {
+            new Offer(
+                "testTitle",
+                "testPositionType",
+                1000,
+                1000,
+                "descriptionTestdescriptionTestdescriptionTest",
+                Guid.NewGuid(),
+                true
+            ),
+            new Offer(
+                "testTitle",
+                "testPositionType",
+                1000,
+                1000,
+                "descriptionTestdescriptionTestdescriptionTest",
+                Guid.NewGuid(),
+                true
+            ),
+            new Offer(
+                "testTitle",
+                "testPositionType",
+                1000,
+                1000,
+                "descriptionTestdescriptionTestdescriptionTest",
+                Guid.NewGuid(),
+                false
+            )
+        };
         var scopeFactory = _factory.Services.GetService<IServiceScopeFactory>();
         using var scope = scopeFactory!.CreateScope();
         WgDbContext dbContext = scope.ServiceProvider.GetService<WgDbContext>()!;
-        await dbContext.Offers.AddAsync(offer);
+        await dbContext.Offers.AddRangeAsync(offersList);
         await dbContext.SaveChangesAsync();
-        return offer.Id;
     }
-
-
 }

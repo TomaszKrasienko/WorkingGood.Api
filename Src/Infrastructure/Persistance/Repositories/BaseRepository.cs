@@ -31,7 +31,7 @@ namespace Infrastructure.Persistance.Repositories
             IQueryable<T> query = _context.Set<T>();
             query = includeProperties.Aggregate(
                 query,
-                (curerent, includeProperties) => curerent.Include(includeProperties));
+                (current, includeProperties) => current.Include(includeProperties));
             return await query.ToListAsync();
         }
 

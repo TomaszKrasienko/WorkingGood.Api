@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using Application.CQRS.Offers.Commands;
+using Application.CQRS.Offers.Queries.GetActiveOffers;
 using Application.CQRS.Offers.Queries.GetAllForCompany;
 using Application.CQRS.Offers.Queries.GetById;
 using Application.CQRS.Offers.Queries.GetOfferStatus;
@@ -18,16 +19,12 @@ public class OffersController : BaseController
     public OffersController(IMediator mediator) : base(mediator)
     {
     }
-    [HttpGet("getAllForCompany")]
-    public async Task<IActionResult> GetAllForCompany()
+
+    [AllowAnonymous]
+    [HttpGet("getActiveOffers")]
+    public async Task<IActionResult> GetActiveOffers()
     {
-        //Todo: testy integracyjne 
-        var identity = HttpContext.User.Identity as ClaimsIdentity;
-        var employeeId = identity!.FindFirst(EMPLOYEE_ID_KEY)?.Value ?? throw new UserNotFoundException();
-        var result = await Mediator.Send(new GetAllForCompanyQuery
-        {
-            EmployeeId = Guid.Parse(employeeId),
-        });
+        var result = await Mediator.Send(new GetActiveOffersQuery());
         return Ok(result);
     }
     [AllowAnonymous]
@@ -41,13 +38,25 @@ public class OffersController : BaseController
         return Ok(result);
     }
     [AllowAnonymous]
-    [HttpGet("getById/{id}")]
+    [HttpGet("getActiveById/{id}")]
     public async Task<IActionResult> GetById([FromRoute] Guid id)
     {
         //Todo: testy integracyjne
-        var result = await Mediator.Send(new GetByIdQuery
+        var result = await Mediator.Send(new GetActiveOfferByIdQuery
         {
             Id = id
+        });
+        return Ok(result);
+    }
+    [HttpGet("getAllForCompany")]
+    public async Task<IActionResult> GetAllForCompany()
+    {
+        //Todo: testy integracyjne 
+        var identity = HttpContext.User.Identity as ClaimsIdentity;
+        var employeeId = identity!.FindFirst(EMPLOYEE_ID_KEY)?.Value ?? throw new UserNotFoundException();
+        var result = await Mediator.Send(new GetAllForCompanyQuery
+        {
+            EmployeeId = Guid.Parse(employeeId),
         });
         return Ok(result);
     }

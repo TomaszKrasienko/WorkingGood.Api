@@ -1,6 +1,7 @@
 using System.Net;
 using Application.DTOs;
 using Newtonsoft.Json;
+using WebApi.Common.Exceptions;
 
 namespace WebApi.Middlewares;
 
@@ -19,6 +20,16 @@ public class ExceptionMiddleware
         try
         {
             await _next(httpContext);
+        }
+        catch (UserNotFoundException unfex)
+        {
+            httpContext.Response.StatusCode = (int) HttpStatusCode.Unauthorized;
+            httpContext.Response.ContentType = "application/json";
+            BaseMessageDto baseMessageDto = new BaseMessageDto()
+            {
+                Errors = unfex
+            };
+            await httpContext.Response.WriteAsync(JsonConvert.SerializeObject(baseMessageDto));
         }
         catch (Exception ex)
         {
