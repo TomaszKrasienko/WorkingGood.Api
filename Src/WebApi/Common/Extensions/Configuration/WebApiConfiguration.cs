@@ -4,6 +4,8 @@ using Infrastructure.Common.ConfigModels;
 using Infrastructure.Common.Extensions.Configuration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using WebApi.Extensions.Configuration;
 
 namespace WebApi.Common.Extensions.Configuration
@@ -17,6 +19,7 @@ namespace WebApi.Common.Extensions.Configuration
                 .AddApplicationConfiguration(configuration)
                 .AddJwtAuthentication(configuration)
                 .ConfigureSwagger()
+                .SetJsonSerializerSettings()
                 .AddCorsPolicy();
             return services;
         }
@@ -50,9 +53,19 @@ namespace WebApi.Common.Extensions.Configuration
                         //.AllowAnyOrigin()
                         .AllowAnyMethod()
                         .AllowAnyHeader()
-                        .AllowCredentials();
+                        .AllowCredentials()
+                        .WithExposedHeaders("X-Pagination");
                 });
             });
+            return services;
+        }
+
+        private static IServiceCollection SetJsonSerializerSettings(this IServiceCollection services)
+        {
+            JsonConvert.DefaultSettings = () => new JsonSerializerSettings()
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            };
             return services;
         }
     }

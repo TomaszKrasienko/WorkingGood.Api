@@ -1,6 +1,6 @@
 namespace Application.DTOs.EmployeesAuth;
 
-public class RefreshResponseDto : BaseMessageDto
+public record RefreshResponseDto : BaseMessageDto
 {
-    public bool IsAuthorized { get; set; }
+    public bool IsAuthorized { get; init; }
 }

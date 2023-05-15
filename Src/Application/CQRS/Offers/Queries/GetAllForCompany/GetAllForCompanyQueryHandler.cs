@@ -1,5 +1,7 @@
 using Application.Common.Extensions.Validation;
 using Application.DTOs;
+using Application.ViewModels.Offer;
+using AutoMapper;
 using Domain.Interfaces;
 using Domain.Models.Employee;
 using Domain.Models.Offer;
@@ -15,11 +17,17 @@ public class GetAllForCompanyQueryHandler : IRequestHandler<GetAllForCompanyQuer
     private readonly ILogger<GetAllForCompanyQueryHandler> _logger;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IValidator<GetAllForCompanyQuery> _validator;
-    public GetAllForCompanyQueryHandler(ILogger<GetAllForCompanyQueryHandler> logger, IUnitOfWork unitOfWork, IValidator<GetAllForCompanyQuery> validator)
+    private readonly IMapper _mapper;
+    public GetAllForCompanyQueryHandler(
+        ILogger<GetAllForCompanyQueryHandler> logger, 
+        IUnitOfWork unitOfWork, 
+        IValidator<GetAllForCompanyQuery> validator,
+        IMapper mapper)
     {
         _logger = logger;
         _unitOfWork = unitOfWork;
         _validator = validator;
+        _mapper = mapper;
     }
     public async Task<BaseMessageDto> Handle(GetAllForCompanyQuery request, CancellationToken cancellationToken)
     {
@@ -40,9 +48,10 @@ public class GetAllForCompanyQueryHandler : IRequestHandler<GetAllForCompanyQuer
             .GetAllForEmployees(employeesList
                 .Select(x => x.Id)
                 .ToList());
+        List<GetOfferVM> getOfferVms = _mapper.Map<List<GetOfferVM>>(offers);
         return new()
         {
-            Object = offers
+            Object = getOfferVms
         };
     }
 }

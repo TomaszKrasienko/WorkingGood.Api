@@ -2,10 +2,10 @@ namespace Application.DTOs.Offers;
 
 public class OfferDto
 {
-    public string? Title { get; set; }
-    public string? PositionType { get; set; }
-    public double? SalaryRangeMin { get; set; }
-    public double? SalaryRangeMax { get; set; }
-    public string? Description { get; set; }
-    public bool? IsActive { get; set; }
+    public string? Title { get; init; }
+    public string? PositionType { get; init; }
+    public double? SalaryRangeMin { get; init; }
+    public double? SalaryRangeMax { get; init; }
+    public string? Description { get; init; }
+    public bool? IsActive { get; init; }
 }

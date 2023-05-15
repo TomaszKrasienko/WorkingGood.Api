@@ -66,7 +66,7 @@ namespace Application.Tests.CQRS.Offers.Queries.GetById
 				.Setup(x => x.Map<GetOfferVM>(It.IsAny<Offer>()))
 				.Returns(getOfferVm);
 			_mockOfferChecker
-				.Setup(x => x.IsOfferActive(It.IsAny<Guid>()))
+				.Setup(x => x.IsOfferExists(It.IsAny<Guid>()))
 				.Returns(true);
 			_mockOfferChecker
 				.Setup(x => x.IsOfferActive(It.IsAny<Guid>()))

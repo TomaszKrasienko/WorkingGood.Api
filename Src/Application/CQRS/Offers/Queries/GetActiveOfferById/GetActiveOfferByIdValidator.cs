@@ -15,14 +15,21 @@ namespace Application.CQRS.Offers.Queries.GetById
 				.NotEmpty()
 				.NotEqual(default(Guid));
 			RuleFor(x => x.Id)
-				.Must(x => IsOfferValid(x) == true)
-				.WithMessage("Can not get offer. Offer is invalid");
-		}
+				.Must(x => IsOfferExists(x) == true)
+				.WithMessage("Can not get offer. Offer is not exists");
+            RuleFor(x => x.Id)
+				.Must(x => IsOfferActive(x) == true)
+				.WithMessage("Can not get offer. Offer is not active");
+        }
 
-		private bool IsOfferValid(Guid offerId)
+		private bool IsOfferExists(Guid offerId)
 		{
-			return _offerChecker.IsOfferExists(offerId) && _offerChecker.IsOfferActive(offerId);
+			return _offerChecker.IsOfferExists(offerId);
 		}
-	}
+        private bool IsOfferActive(Guid offerId)
+        {
+            return _offerChecker.IsOfferActive(offerId);
+        }
+    }
 }
 

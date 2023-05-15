@@ -13,7 +13,7 @@ using Newtonsoft.Json;
 using WebApi.IntegrationTests.Tests.Helpers;
 
 namespace WebApi.IntegrationTests.Controllers.OffersController;
-
+[Collection("WebApiTests")]
 public class OffersControllerTests : IClassFixture<WebApplicationFactory<Program>>
 {
     private readonly WebApplicationFactory<Program> _factory;
@@ -87,6 +87,6 @@ public class OffersControllerTests : IClassFixture<WebApplicationFactory<Program
         await dbContext.SaveChangesAsync();
         return offer.Id;
     }
-
+    
 
 }
