@@ -3,12 +3,14 @@ using Application.CQRS.Offers.Commands;
 using Application.CQRS.Offers.Queries.GetActiveOffers;
 using Application.CQRS.Offers.Queries.GetAllForCompany;
 using Application.CQRS.Offers.Queries.GetById;
+using Application.CQRS.Offers.Queries.GetOfferById;
 using Application.CQRS.Offers.Queries.GetOffersList;
 using Application.CQRS.Offers.Queries.GetOfferStatus;
 using Application.DTOs.Offers;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using WebApi.Common.Exceptions;
@@ -27,16 +29,26 @@ public class OffersController : BaseController
     [HttpGet("getOffersList")]
     public async Task<IActionResult> GetOffersList([FromQuery] GetOffersListRequestDto offersListRequestDto)
     {
-        var identity = HttpContext.User.Identity as ClaimsIdentity;
-        var employeeId = identity!.FindFirst(EMPLOYEE_ID_KEY)?.Value ?? null;
         //string? employeeId = null;
         var result = await Mediator.Send(new GetOffersListQuery()
         {
             GetOffersListRequestDto = offersListRequestDto,
-            EmployeeId = employeeId == null ? null : Guid.Parse(employeeId)
+            EmployeeId = GetEmployeeId()
         });
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
         return Ok(result.Object);
+    }
+
+    [HttpGet("getOfferById/{offerId}")]
+    public async Task<IActionResult> GetOfferById([FromRoute] Guid offerId)
+    {
+        var result = await Mediator.Send(new GetOfferByIdCommand
+        {
+            OfferId = offerId
+        });
+        if (result.IsSuccess())
+            return Ok(result.Object);
+        return BadRequest(result.Errors);
     }
     [AllowAnonymous]
     [HttpGet("getOfferStatus/{offerId}")]
@@ -75,13 +87,16 @@ public class OffersController : BaseController
     public async Task<IActionResult> AddOffer([FromBody]OfferDto offerDto)
     {
         //Todo: testy integracyjne negatywnej ścieżki
-        var identity = HttpContext.User.Identity as ClaimsIdentity;
-        var employeeId = HttpContext.User.FindFirst(EMPLOYEE_ID_KEY)!.Value ?? throw new UserNotFoundException();
         var result = await Mediator.Send(new AddOfferCommand
         {
-            EmployeeId = Guid.Parse(employeeId),
+            EmployeeId = GetEmployeeId(),
             OfferDto = offerDto
         });
         return Ok(result);
+    }
+    [HttpPut("editOffer/{id}")]
+    public async Task<IActionResult> EditOffer([FromRoute] string offerId, [FromBody] OfferDto offerDto)
+    {
+        return Ok();
     }
 }

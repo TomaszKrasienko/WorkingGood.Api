@@ -57,7 +57,7 @@ public class OffersController_GetOffersList : IClassFixture<WebApplicationFactor
             .Select(x => x.Value)
             .FirstOrDefault();
         headers.FirstOrDefault().Should().Be(
-        "{\"TotalCount\":20,\"PageSize\":10,\"CurrentPage\":1,\"TotalPages\":2,\"HasNext\":true,\"HasPrevious\":false}");
+        "{\"totalCount\":20,\"pageSize\":10,\"currentPage\":1,\"totalPages\":2,\"hasNext\":true,\"hasPrevious\":false}");
     }
     private async Task SeedOffers()
     {
@@ -105,7 +105,7 @@ public class OffersController_GetOffersList : IClassFixture<WebApplicationFactor
             .Select(x => x.Value)
             .FirstOrDefault();
         headers.FirstOrDefault().Should().Be(
-            "{\"TotalCount\":5,\"PageSize\":5,\"CurrentPage\":1,\"TotalPages\":1,\"HasNext\":false,\"HasPrevious\":false}");
+            "{\"totalCount\":5,\"pageSize\":5,\"currentPage\":1,\"totalPages\":1,\"hasNext\":false,\"hasPrevious\":false}");
     }
     private async Task SeedOffersForPaginationPageNumber1AndPageSize5AndIsActiveTrue()
     {

@@ -58,7 +58,11 @@ public class GetOffersListQueryHandlerTests
                 It.IsAny<int>(),
                 It.IsAny<int>(),
                 It.IsAny<List<Guid>>(), 
-                It.IsAny<bool>()));
+                It.IsAny<bool>(),
+                It.IsAny<Guid>(),
+                It.IsAny<int>(),
+                It.IsAny<int>(),
+                It.IsAny<string>()));
         _mockMapper
             .Setup(x => x.Map<List<GetOfferVM>>(It.IsAny<List<Offer>>()))
             .Returns(new List<GetOfferVM>()

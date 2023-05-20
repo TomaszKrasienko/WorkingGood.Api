@@ -74,11 +74,9 @@ namespace WebApi.Controllers
         [Authorize]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto changePasswordDto)
         {
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-            var employeeId = identity!.FindFirst(EMPLOYEE_ID_KEY)?.Value ?? throw new UserNotFoundException();
             BaseMessageDto baseMessageDto = await Mediator.Send(new ChangePasswordCommand
             {
-                EmployeeId = Guid.Parse(employeeId),
+                EmployeeId = GetEmployeeId(),
                 ChangePasswordDto = changePasswordDto
             });
             if (baseMessageDto.IsSuccess())

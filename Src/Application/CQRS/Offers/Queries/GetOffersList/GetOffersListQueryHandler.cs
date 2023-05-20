@@ -50,10 +50,14 @@ public class GetOffersListQueryHandler : IRequestHandler<GetOffersListQuery, Bas
         var offers = await _unitOfWork
             .OffersRepository
             .GetAllAsync(
-                request.GetOffersListRequestDto.PageNumber,
-                request.GetOffersListRequestDto.PageSize,
-                employeeIdList,
-                request.GetOffersListRequestDto.IsActive);
+                pageNumber: request.GetOffersListRequestDto.PageNumber,
+                pageSize: request.GetOffersListRequestDto.PageSize,
+                employeeIdList: employeeIdList,
+                isActive: request.GetOffersListRequestDto.IsActive,
+                employeeId: request.EmployeeId,
+                rateFrom: request.GetOffersListRequestDto.RateFrom,
+                rateTo: request.GetOffersListRequestDto.RateTo,
+                searchPhrase: request.GetOffersListRequestDto.SearchPhrase);
         List<GetOfferVM> getOfferVms = _mapper.Map<List<GetOfferVM>>(offers);
         return new BaseMessageDto()
         {

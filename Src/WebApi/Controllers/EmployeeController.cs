@@ -16,11 +16,9 @@ public class EmployeeController : BaseController
     [HttpGet("getLoggedEmployee")]
     public async Task<IActionResult> GetLoggedEmployee()
     {
-        var identity = HttpContext.User.Identity as ClaimsIdentity;
-        string employeeId = identity!.FindFirst(EMPLOYEE_ID_KEY)!.Value ?? throw new UserNotFoundException();
         BaseMessageDto baseMessageDto = await Mediator.Send(new GetEmployeeByIdQuery
         {
-            Id = Guid.Parse(employeeId)
+            Id = GetEmployeeId()
         });
         if (baseMessageDto.IsSuccess())
             return Ok(baseMessageDto);

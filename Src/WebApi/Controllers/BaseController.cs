@@ -1,5 +1,7 @@
-﻿using MediatR;
+﻿using System.Security.Claims;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.Common.Exceptions;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,10 +10,16 @@ namespace WebApi.Controllers
     public class BaseController : Controller
     {
         protected readonly IMediator Mediator;
-        protected const string EMPLOYEE_ID_KEY = "EmployeeId";
+        private const string EMPLOYEE_ID_KEY = "EmployeeId";
         public BaseController(IMediator mediator)
         {
             Mediator = mediator;
+        }
+        protected Guid GetEmployeeId()
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var employeeId = HttpContext.User.FindFirst(EMPLOYEE_ID_KEY)!.Value ?? throw new UserNotFoundException();
+            return Guid.Parse(employeeId);
         }
     }
 }

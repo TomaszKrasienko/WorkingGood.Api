@@ -7,7 +7,7 @@ public class OfferContent : ValueObject
 {
     public string Title { get; private set; }
     public string Description { get; private set; }
-    public OfferContent(string title, string description)
+    internal OfferContent(string title, string description)
     {
         if (string.IsNullOrEmpty(title))
             throw new DomainLogicException("Title can not be null or empty");
