@@ -25,6 +25,36 @@ namespace Domain.Tests.Models.Tests
 			//Assert
 			offer.OfferStatus.IsActive.Should().Be(!isActive);
 		}
+
+		[Fact]
+		public void EditOffer_ForArguments_ShouldEditOffer()
+		{
+			//Arrange
+			Offer offer = new Offer(
+				"testTitle",
+				"testPositionType",
+				1000,
+				1000,
+				"descriptionTestdescriptionTestdescriptionTest",
+				Guid.NewGuid(),
+				true
+			);
+			string newTitle = "newTestTitle";
+			string newPositionType = "newPositionType";
+			double newSalaryRangeMin = 12000;
+			double newSalaryRangeMax = 12000;
+			string newDescription = "newDescriptionnewDescriptionnewDescriptionnewDescription";
+			bool newIsActive = false;
+			//Act
+			offer.EditOffer(newTitle, newPositionType, newSalaryRangeMin, newSalaryRangeMax, newDescription, newIsActive);
+			//Assert
+			offer.Content.Title.Should().Be(newTitle);
+			offer.Content.Description.Should().Be(newDescription);
+			offer.Position.Type.Should().Be(newPositionType);
+			offer.OfferStatus.IsActive.Should().Be(newIsActive);
+			offer.SalaryRanges.ValueMin.Should().Be(newSalaryRangeMin);
+			offer.SalaryRanges.ValueMax.Should().Be(newSalaryRangeMax);
+		}
 	}
 }
 

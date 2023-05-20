@@ -1,5 +1,7 @@
 using Application.Common.Extensions.Validation;
 using Application.DTOs;
+using Application.ViewModels.Offer;
+using AutoMapper;
 using Domain.Interfaces;
 using Domain.Models.Offer;
 using FluentValidation;
@@ -13,11 +15,17 @@ public class EditOfferCommandHandler : IRequestHandler<EditOfferCommand, BaseMes
     private readonly ILogger<EditOfferCommandHandler> _logger;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IValidator<EditOfferCommand> _validator;
-    public EditOfferCommandHandler(ILogger<EditOfferCommandHandler> logger, IUnitOfWork unitOfWork, IValidator<EditOfferCommand> validator)
+    private readonly IMapper _mapper;
+    public EditOfferCommandHandler(
+        ILogger<EditOfferCommandHandler> logger,
+        IUnitOfWork unitOfWork,
+        IValidator<EditOfferCommand> validator,
+        IMapper mapper)
     {
         _logger = logger;
         _unitOfWork = unitOfWork;
         _validator = validator;
+        _mapper = mapper;
     }
     public async Task<BaseMessageDto> Handle(EditOfferCommand request, CancellationToken cancellationToken)
     {
@@ -39,9 +47,10 @@ public class EditOfferCommandHandler : IRequestHandler<EditOfferCommand, BaseMes
             request.OfferDto.Description!,
             (bool)request.OfferDto.IsActive!);
         await _unitOfWork.CompleteAsync();
+        GetOfferVM getOfferVm = _mapper.Map<GetOfferVM>(offer);
         return new BaseMessageDto()
         {
-            Object = offer,
+            Object = getOfferVm,
             Message = "Offer edited successfully"
         };
     }
