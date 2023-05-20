@@ -36,7 +36,7 @@ public class OfferRepository : BaseRepository<Offer>, IOfferRepository
         string? searchPhrase)
     {
         IQueryable<Offer> query = _context.Set<Offer>();
-        if (employeeIdList is not null || employeeIdList!.Any())
+        if (employeeIdList is not null && employeeIdList!.Any())
         {
             query = query.Where(x => employeeIdList!.Contains(x.AuthorId));
         }
@@ -61,6 +61,7 @@ public class OfferRepository : BaseRepository<Offer>, IOfferRepository
             query = query.Where(x => x.Content.Title.ToLower().Contains(searchPhrase.ToLower()) || x.Content.Description.ToLower().Contains(searchPhrase.ToLower()));
         }
         return query
+            .Include(x => x.Position)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();

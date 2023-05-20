@@ -27,6 +27,7 @@ namespace Infrastructure.Persistance
 			modelBuilder.ApplyConfiguration(new EmployeeConfiguration());
 			modelBuilder.ApplyConfiguration(new OfferConfiguration());
 			modelBuilder.ApplyConfiguration(new PositionConfiguration());
+			modelBuilder.Entity<Offer>().Navigation(x => x.Position).AutoInclude();
             base.OnModelCreating(modelBuilder);
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

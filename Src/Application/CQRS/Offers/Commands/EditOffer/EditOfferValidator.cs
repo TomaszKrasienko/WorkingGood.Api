@@ -20,9 +20,6 @@ public class EditOfferValidator : AbstractValidator<EditOfferCommand>
             RuleFor(x => x.OfferDto.Title)
                 .NotNull()
                 .NotEmpty();
-            RuleFor(x => x.OfferDto.PositionType)
-                .NotNull()
-                .NotEmpty();
             RuleFor(x => x.OfferDto.SalaryRangeMin)
                 .NotNull()
                 .GreaterThan(500);

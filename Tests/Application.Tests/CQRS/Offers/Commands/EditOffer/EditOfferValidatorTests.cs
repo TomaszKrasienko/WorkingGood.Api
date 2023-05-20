@@ -26,7 +26,6 @@ public class EditOfferValidatorTests
             {
                 Title = "Title",
                 Description = "Description description Description description",
-                PositionType = "Test",
                 SalaryRangeMax = 12000,
                 SalaryRangeMin = 10000,
                 IsActive = true
@@ -65,7 +64,6 @@ public class EditOfferValidatorTests
             {
                 Title = "Title",
                 Description = "Description description Description description",
-                PositionType = "Test",
                 SalaryRangeMax = 12000,
                 SalaryRangeMin = 10000,
                 IsActive = true

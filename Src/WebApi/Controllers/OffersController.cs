@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using Application.CQRS.Offers.Commands;
+using Application.CQRS.Offers.Commands.EditOffer;
 using Application.CQRS.Offers.Queries.GetActiveOffers;
 using Application.CQRS.Offers.Queries.GetAllForCompany;
 using Application.CQRS.Offers.Queries.GetById;
@@ -50,6 +51,7 @@ public class OffersController : BaseController
             return Ok(result.Object);
         return BadRequest(result.Errors);
     }
+    
     [AllowAnonymous]
     [HttpGet("getOfferStatus/{offerId}")]
     public async Task<IActionResult> GetOfferStatus([FromRoute] Guid offerId)
@@ -60,6 +62,7 @@ public class OffersController : BaseController
         });
         return Ok(result);
     }
+    
     [AllowAnonymous]
     [HttpGet("getActiveById/{id}")]
     public async Task<IActionResult> GetById([FromRoute] Guid id)
@@ -71,18 +74,7 @@ public class OffersController : BaseController
         });
         return Ok(result);
     }
-    // [HttpGet("getAllForCompany")]
-    // public async Task<IActionResult> GetAllForCompany()
-    // {
-    //     //Todo: testy integracyjne 
-    //     var identity = HttpContext.User.Identity as ClaimsIdentity;
-    //     var employeeId = identity!.FindFirst(EMPLOYEE_ID_KEY)?.Value ?? throw new UserNotFoundException();
-    //     var result = await Mediator.Send(new GetAllForCompanyQuery
-    //     {
-    //         EmployeeId = Guid.Parse(employeeId),
-    //     });
-    //     return Ok(result);
-    // }
+    
     [HttpPost("addOffer")]
     public async Task<IActionResult> AddOffer([FromBody]OfferDto offerDto)
     {
@@ -94,8 +86,20 @@ public class OffersController : BaseController
         });
         return Ok(result);
     }
-    [HttpPut("editOffer/{id}")]
-    public async Task<IActionResult> EditOffer([FromRoute] string offerId, [FromBody] OfferDto offerDto)
+    
+    [HttpPut("editOffer/{offerId}")]
+    public async Task<IActionResult> EditOffer([FromRoute] Guid offerId, [FromBody] EditOfferRequestDto offerDto)
+    {
+        var result = await Mediator.Send(new EditOfferCommand
+        {
+            OfferId = offerId,
+            OfferDto = offerDto
+        });
+        return Ok(result);
+    }
+
+    [HttpPatch("changeOfferStatus/{offerId}")]
+    public async Task<IActionResult> ChangeOfferStatus([FromRoute] Guid offerId)
     {
         return Ok();
     }

@@ -41,7 +41,6 @@ public class EditOfferCommandHandler : IRequestHandler<EditOfferCommand, BaseMes
         Offer offer = await _unitOfWork.OffersRepository.GetByIdAsync(request.OfferId);
         offer.EditOffer(
             request.OfferDto.Title!,
-            request.OfferDto.PositionType!,
             (double)request.OfferDto.SalaryRangeMin!,
             (double)request.OfferDto.SalaryRangeMax!,
             request.OfferDto.Description!,

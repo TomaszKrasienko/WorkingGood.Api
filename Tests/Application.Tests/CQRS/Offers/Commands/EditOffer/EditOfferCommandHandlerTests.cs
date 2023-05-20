@@ -45,8 +45,7 @@ public class EditOfferCommandHandlerTests
                 Description = "newTestDescriptionnewTestDescriptionnewTestDescriptionnewTestDescription",
                 SalaryRangeMin = 10000,
                 SalaryRangeMax = 12000,
-                IsActive = true,
-                PositionType = "newPositionType"
+                IsActive = true
             }
         };
         _mockOfferChecker
@@ -74,7 +73,6 @@ public class EditOfferCommandHandlerTests
                 Description = editOfferCommand.OfferDto.Description,
                 SalaryRangeMin = (double) editOfferCommand.OfferDto.SalaryRangeMin,
                 SalaryRangeMax = (double) editOfferCommand.OfferDto.SalaryRangeMax,
-                PositionType = editOfferCommand.OfferDto.PositionType,
                 IsActive = (bool) editOfferCommand.OfferDto.IsActive,
             });
         EditOfferCommandHandler editOfferCommandHandler = new EditOfferCommandHandler(
@@ -103,7 +101,6 @@ public class EditOfferCommandHandlerTests
                 SalaryRangeMin = 10000,
                 SalaryRangeMax = 12000,
                 IsActive = true,
-                PositionType = "newPositionType"
             }
         };
         _mockOfferChecker

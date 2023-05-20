@@ -16,7 +16,6 @@ public class EditOfferTestInvalidDataProvider : IEnumerable<object[]>
                 {
                     Title = "Title",
                     Description = "Description description Description description",
-                    PositionType = "Test",
                     SalaryRangeMax = 12000,
                     SalaryRangeMin = 10000
                 }
@@ -38,7 +37,6 @@ public class EditOfferTestInvalidDataProvider : IEnumerable<object[]>
                 {
                     Title = "",
                     Description = "Description description Description description",
-                    PositionType = "Test",
                     SalaryRangeMax = 12000,
                     SalaryRangeMin = 10000
                 }
@@ -53,7 +51,6 @@ public class EditOfferTestInvalidDataProvider : IEnumerable<object[]>
                 {
                     Title = "Title",
                     Description = "Description description Description description",
-                    PositionType = "",
                     SalaryRangeMax = 12000,
                     SalaryRangeMin = 10000
                 }
@@ -68,7 +65,6 @@ public class EditOfferTestInvalidDataProvider : IEnumerable<object[]>
                 {
                     Title = "Title",
                     Description = "Description description Description description",
-                    PositionType = "Test",
                     SalaryRangeMin = 10000
                 }
             }
@@ -82,7 +78,6 @@ public class EditOfferTestInvalidDataProvider : IEnumerable<object[]>
                 {
                     Title = "Title",
                     Description = "Description description Description description",
-                    PositionType = "Test",
                     SalaryRangeMax = 12000
                 }
             }
@@ -96,7 +91,6 @@ public class EditOfferTestInvalidDataProvider : IEnumerable<object[]>
                 {
                     Title = "Title",
                     Description = "Description description Description description",
-                    PositionType = "Test",
                     SalaryRangeMax = 12000,
                     SalaryRangeMin = 300
                 }
@@ -111,7 +105,6 @@ public class EditOfferTestInvalidDataProvider : IEnumerable<object[]>
                 {
                     Title = "Title",
                     Description = "",
-                    PositionType = "Test",
                     SalaryRangeMax = 12000,
                     SalaryRangeMin = 10000
                 }
@@ -126,7 +119,6 @@ public class EditOfferTestInvalidDataProvider : IEnumerable<object[]>
                 {
                     Title = "Title",
                     Description = "Description",
-                    PositionType = "Test",
                     SalaryRangeMax = 12000,
                     SalaryRangeMin = 10000
                 }
