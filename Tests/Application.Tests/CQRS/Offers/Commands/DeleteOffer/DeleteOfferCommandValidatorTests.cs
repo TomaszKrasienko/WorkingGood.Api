@@ -33,4 +33,35 @@ public class DeleteOfferCommandValidatorTests
         //Assert
         result.ShouldNotHaveAnyValidationErrors();
     }
+    
+    [Fact]
+    public async Task DeleteOfferCommandValidator_ForInValidDeleteCommandAndExistedOffer_ShouldNotHaveAnyValidationErrors()
+    {
+        //Arrange
+        DeleteOfferCommand deleteOfferCommand = new();
+        _mockOfferChecker
+            .Setup(x => x.IsOfferExists(It.IsAny<Guid>()))
+            .Returns(true);
+        //Act
+        var result = await _validator.TestValidateAsync(deleteOfferCommand);
+        //Assert
+        result.ShouldHaveAnyValidationError();
+    }
+    
+    [Fact]
+    public async Task DeleteOfferCommandValidator_ForValidDeleteCommandAndNotExistedOffer_ShouldNotHaveAnyValidationErrors()
+    {
+        //Arrange
+        DeleteOfferCommand deleteOfferCommand = new()
+        {
+            OfferId = Guid.NewGuid()
+        };
+        _mockOfferChecker
+            .Setup(x => x.IsOfferExists(It.IsAny<Guid>()))
+            .Returns(false);
+        //Act
+        var result = await _validator.TestValidateAsync(deleteOfferCommand);
+        //Assert
+        result.ShouldHaveAnyValidationError();
+    }
 }
