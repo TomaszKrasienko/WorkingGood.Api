@@ -17,14 +17,11 @@ public class DeleteOfferCommandValidatorTests
         _validator = new DeleteOfferCommandValidator(_mockOfferChecker.Object);
     }
 
-    [Fact]
-    public async Task DeleteOfferCommandValidator_ForValidDeleteCommandAndExistedOffer_ShouldNotHaveAnyValidationErrors()
+    [Theory]
+    [ClassData(typeof(DeleteOfferCommandValidDataProvider))]
+    public async Task DeleteOfferCommandValidator_ForValidDeleteCommandAndExistedOffer_ShouldNotHaveAnyValidationErrors(DeleteOfferCommand deleteOfferCommand)
     {
         //Arrange
-        DeleteOfferCommand deleteOfferCommand = new()
-        {
-            OfferId = Guid.NewGuid()
-        };
         _mockOfferChecker
             .Setup(x => x.IsOfferExists(It.IsAny<Guid>()))
             .Returns(true);
@@ -34,11 +31,11 @@ public class DeleteOfferCommandValidatorTests
         result.ShouldNotHaveAnyValidationErrors();
     }
     
-    [Fact]
-    public async Task DeleteOfferCommandValidator_ForInValidDeleteCommandAndExistedOffer_ShouldNotHaveAnyValidationErrors()
+    [Theory]
+    [ClassData(typeof(DeleteOfferCommandInvalidDataProvider))]
+    public async Task DeleteOfferCommandValidator_ForInValidDeleteCommandAndExistedOffer_ShouldNotHaveAnyValidationErrors(DeleteOfferCommand deleteOfferCommand)
     {
         //Arrange
-        DeleteOfferCommand deleteOfferCommand = new();
         _mockOfferChecker
             .Setup(x => x.IsOfferExists(It.IsAny<Guid>()))
             .Returns(true);
@@ -48,14 +45,11 @@ public class DeleteOfferCommandValidatorTests
         result.ShouldHaveAnyValidationError();
     }
     
-    [Fact]
-    public async Task DeleteOfferCommandValidator_ForValidDeleteCommandAndNotExistedOffer_ShouldNotHaveAnyValidationErrors()
+    [Theory]
+    [ClassData(typeof(DeleteOfferCommandValidDataProvider))]
+    public async Task DeleteOfferCommandValidator_ForValidDeleteCommandAndNotExistedOffer_ShouldNotHaveAnyValidationErrors(DeleteOfferCommand deleteOfferCommand)
     {
         //Arrange
-        DeleteOfferCommand deleteOfferCommand = new()
-        {
-            OfferId = Guid.NewGuid()
-        };
         _mockOfferChecker
             .Setup(x => x.IsOfferExists(It.IsAny<Guid>()))
             .Returns(false);

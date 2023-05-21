@@ -10,6 +10,7 @@ namespace Domain.Interfaces.Repositories
 		Task<T> GetByIdAsync(Guid id);
 		Task AddAsync(T entity);
 		Task Delete(T entity);
+		//Todo: Napisać delete async 
 	}
 }
 
