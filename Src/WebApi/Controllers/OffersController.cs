@@ -1,8 +1,6 @@
-using System.Security.Claims;
 using Application.CQRS.Offers.Commands;
+using Application.CQRS.Offers.Commands.ChangeOfferStatus;
 using Application.CQRS.Offers.Commands.EditOffer;
-using Application.CQRS.Offers.Queries.GetActiveOffers;
-using Application.CQRS.Offers.Queries.GetAllForCompany;
 using Application.CQRS.Offers.Queries.GetById;
 using Application.CQRS.Offers.Queries.GetOfferById;
 using Application.CQRS.Offers.Queries.GetOffersList;
@@ -11,10 +9,7 @@ using Application.DTOs.Offers;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using WebApi.Common.Exceptions;
 
 namespace WebApi.Controllers;
 
@@ -100,6 +95,18 @@ public class OffersController : BaseController
 
     [HttpPatch("changeOfferStatus/{offerId}")]
     public async Task<IActionResult> ChangeOfferStatus([FromRoute] Guid offerId)
+    {
+        var result = await Mediator.Send(new ChangeOfferStatusCommand
+        {
+            OfferId = offerId
+        });
+        if(result.IsSuccess())
+            return Ok(result);
+        return BadRequest(result);
+    }
+
+    [HttpDelete("deleteOffer/{offerId}")]
+    public async Task<IActionResult> DeleteOffer([FromRoute] Guid offerId)
     {
         return Ok();
     }

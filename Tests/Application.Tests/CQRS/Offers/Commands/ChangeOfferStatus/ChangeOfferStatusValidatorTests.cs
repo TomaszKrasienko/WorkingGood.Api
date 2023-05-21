@@ -35,13 +35,10 @@ public class ChangeOfferStatusValidatorTests
     }
 
     [Fact]
-    public async Task ChangeOfferStatusValidation_ForInvalidChangeStatusCommandAndNonExistedOffer_ShouldHaveAnyValidationErrors()
+    public async Task ChangeOfferStatusValidation_ForInvalidChangeStatusCommandAndExistedOffer_ShouldHaveAnyValidationErrors()
     {
         //Arrange
-        ChangeOfferStatusCommand changeOfferStatusCommand = new()
-        {
-            OfferId = Guid.NewGuid()
-        };
+        ChangeOfferStatusCommand changeOfferStatusCommand = new();
         _mockOfferChecker
             .Setup(x => x.IsOfferExists(It.IsAny<Guid>()))
             .Returns(true);
