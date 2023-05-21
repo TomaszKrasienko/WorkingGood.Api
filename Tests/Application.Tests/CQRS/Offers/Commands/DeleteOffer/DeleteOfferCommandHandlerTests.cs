@@ -1,3 +1,4 @@
+using System.Globalization;
 using Application.CQRS.Offers.Commands.DeleteOffer;
 using Application.DTOs;
 using Domain.Interfaces;
@@ -67,5 +68,52 @@ public class DeleteOfferCommandHandlerTests
         result.Errors.Should().BeNull();
         result.Object.Should().BeNull();
         result.MetaData.Should().BeNull();
+    }
+
+    [Theory]
+    [ClassData(typeof(DeleteOfferCommandInvalidDataProvider))]
+    public async Task Handle_ForInvalidDeleteOfferCommandAndExistedOffer_ShouldReturnBaseMessageWithErrors(
+        DeleteOfferCommand deleteOfferCommand)
+    {
+        //Arrange
+        _mockOfferChecker
+            .Setup(x => x.IsOfferExists(It.IsAny<Guid>()))
+            .Returns(true);
+        DeleteOfferCommandHandler deleteOfferCommandHandler = new(
+            _mockLogger.Object,
+            _mockUnitOfWork.Object,
+            _validator,
+            _mockBrokerSender.Object);
+        //Act
+        var result = await deleteOfferCommandHandler.Handle(deleteOfferCommand, new CancellationToken());
+        //Asserts
+        result.Should().BeOfType<BaseMessageDto>();
+        result.Message.Should().BeNull();
+        result.Object.Should().BeNull();
+        result.MetaData.Should().BeNull();
+        result.Errors.Should().NotBeNull();
+    }
+    [Theory]
+    [ClassData(typeof(DeleteOfferCommandValidDataProvider))]
+    public async Task Handle_ForValidDeleteOfferCommandAndNotExistedOffer_ShouldReturnBaseMessageWithErrors(
+        DeleteOfferCommand deleteOfferCommand)
+    {
+        //Arrange
+        _mockOfferChecker
+            .Setup(x => x.IsOfferExists(It.IsAny<Guid>()))
+            .Returns(false);
+        DeleteOfferCommandHandler deleteOfferCommandHandler = new(
+            _mockLogger.Object,
+            _mockUnitOfWork.Object,
+            _validator,
+            _mockBrokerSender.Object);
+        //Act
+        var result = await deleteOfferCommandHandler.Handle(deleteOfferCommand, new CancellationToken());
+        //Asserts
+        result.Should().BeOfType<BaseMessageDto>();
+        result.Message.Should().BeNull();
+        result.Object.Should().BeNull();
+        result.MetaData.Should().BeNull();
+        result.Errors.Should().NotBeNull();
     }
 }
