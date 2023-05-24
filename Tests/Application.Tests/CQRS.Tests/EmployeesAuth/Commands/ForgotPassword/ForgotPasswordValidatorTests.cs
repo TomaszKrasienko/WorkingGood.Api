@@ -14,76 +14,48 @@ public class ForgotPasswordValidatorTests
     {
         _mockEmployeeChecker = new();
     }
-    [Fact]
-    public async Task ForgotPasswordValidator_ForValidForgotPasswordCommand_ShouldHaveNotErrors()
+    [Theory]
+    [ClassData(typeof(ForgotPasswordCommandValidDataProvider))]
+    public async Task ForgotPasswordValidator_ForValidForgotPasswordCommand_ShouldNotHaveAnyValidationErrors(ForgotPasswordCommand forgotPasswordCommand)
     {
         //Arrange 
-            ForgotPasswordCommand forgotPasswordCommand = new()
-            {
-                ForgotPasswordDto = new()
-                {
-                    EmployeeEmail = "test@test.pl"
-                }
-            };
-            _mockEmployeeChecker.Setup(x => x.IsEmployeeExists(It.IsAny<string>())).Returns(true);
-            _validator = new ForgotPasswordValidator(_mockEmployeeChecker.Object);
+        _mockEmployeeChecker
+            .Setup(x => x.IsEmployeeExists(It.IsAny<string>()))
+            .Returns(true);
+        _validator = new ForgotPasswordValidator(_mockEmployeeChecker.Object);
         //Act
-            var result = await _validator.TestValidateAsync(forgotPasswordCommand);
+        var result = await _validator.TestValidateAsync(forgotPasswordCommand);
         //Assert
-            result.ShouldNotHaveAnyValidationErrors();
+        result.ShouldNotHaveAnyValidationErrors();
     }
 
-    private static IEnumerable<object[]> GetInvalidForgotPasswordCommand()
+    [Theory]
+    [ClassData(typeof(ForgotPasswordCommandInvalidDataProvider))]
+    public async Task ForgotPasswordValidator_ForInvalidEmployeeEmail_ShouldHaveValidationErrorFor(ForgotPasswordCommand forgotPasswordCommand)
     {
-        List<ForgotPasswordCommand> forgotPasswordCommands = new()
-        {
-            new ForgotPasswordCommand()
-            {
-                ForgotPasswordDto = new()
-            },
-            new ForgotPasswordCommand()
-            {
-                
-            },
-            new ForgotPasswordCommand()
-            {
-                ForgotPasswordDto = new()
-                {
-                    EmployeeEmail = "notemail"
-                }
-            }
-        };
-        return forgotPasswordCommands.Select(x => new object[] {x});
+        //Arrange
+        _mockEmployeeChecker
+            .Setup(x => x.IsEmployeeExists(It.IsAny<string>()))
+            .Returns(true);
+        _validator = new ForgotPasswordValidator(_mockEmployeeChecker.Object);
+        //Act
+        var result = await _validator.TestValidateAsync(forgotPasswordCommand);
+        //Assert
+        result.ShouldHaveValidationErrorFor(x => x.ForgotPasswordDto.EmployeeEmail);
     }
     [Theory]
-    [MemberData(nameof(GetInvalidForgotPasswordCommand))]
-    public async Task ForgotPasswordValidator_ForInvalidEmployeeEmail_ShouldHaveErrorForEmployeeEmail(ForgotPasswordCommand forgotPasswordCommand)
+    [ClassData(typeof(ForgotPasswordCommandValidDataProvider))]
+    public async Task ForgotPasswordValidator_ForNonExistingEmployee_ShouldHaveErrorForEmployeeEmail(ForgotPasswordCommand forgotPasswordCommand)
     {
         //Arrange
-            _mockEmployeeChecker.Setup(x => x.IsEmployeeExists(It.IsAny<string>())).Returns(true);
-            _validator = new ForgotPasswordValidator(_mockEmployeeChecker.Object);
+        _mockEmployeeChecker
+            .Setup(x => x.IsEmployeeExists(It.IsAny<string>()))
+            .Returns(false);
+        _validator = new ForgotPasswordValidator(_mockEmployeeChecker.Object);
         //Act
-            var result = await _validator.TestValidateAsync(forgotPasswordCommand);
+        var result = await _validator.TestValidateAsync(forgotPasswordCommand);
         //Assert
-            result.ShouldHaveValidationErrorFor(x => x.ForgotPasswordDto.EmployeeEmail);
-    }
-    [Fact]
-    public async Task ForgotPasswordValidator_ForNonExistingEmployee_ShouldHaveErrorForEmployeeEmail()
-    {
-        //Arrange
-            ForgotPasswordCommand forgotPasswordCommand = new()
-            {
-                ForgotPasswordDto = new()
-                {
-                    EmployeeEmail = "test@test.pl"
-                }
-            };
-            _mockEmployeeChecker.Setup(x => x.IsEmployeeExists(It.IsAny<string>())).Returns(false);
-            _validator = new ForgotPasswordValidator(_mockEmployeeChecker.Object);
-        //Act
-            var result = await _validator.TestValidateAsync(forgotPasswordCommand);
-        //Assert
-            result.ShouldHaveValidationErrorFor(x => x.ForgotPasswordDto.EmployeeEmail);
+        result.ShouldHaveValidationErrorFor(x => x.ForgotPasswordDto.EmployeeEmail);
     }
 
 }

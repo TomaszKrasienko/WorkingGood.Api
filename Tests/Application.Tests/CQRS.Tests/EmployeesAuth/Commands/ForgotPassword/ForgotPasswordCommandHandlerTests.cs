@@ -1,5 +1,6 @@
 using Application.CQRS.EmployeesAuth.Commands.ForgotPassword;
 using Application.DTOs;
+using Application.Tests.Helpers;
 using Domain.Interfaces;
 using Domain.Interfaces.Communication;
 using Domain.Interfaces.Repositories;
@@ -31,52 +32,44 @@ public class ForgotPasswordCommandHandlerTests
         _mockUnitOfWork.Setup(x => x.EmployeeRepository).Returns(_mockEmployeeRepository.Object);
     }
 
-    [Fact]
-    public async Task Handle_ForValidForgotPasswordCommand_ShouldReturnBaseMessageDtoWithMessage()
+    [Theory]
+    [ClassData(typeof(ForgotPasswordCommandValidDataProvider))]
+    public async Task Handle_ForValidForgotPasswordCommand_ShouldReturnBaseMessageDtoWithMessage(ForgotPasswordCommand passwordCommand)
     { 
         //Arrange
-            Employee employee = new("TestFirstName", "TestLastName", "Test@Test.pl", "TestPass123!", Guid.NewGuid());
-            _mockEmployeeChecker.Setup(x => x.IsEmployeeExists(It.IsAny<string>())).Returns(true);
-            IValidator<ForgotPasswordCommand> validator = new ForgotPasswordValidator(_mockEmployeeChecker.Object);
-            _mockEmployeeRepository.Setup(x => x.GetByEmailAsync(It.IsAny<string>())).ReturnsAsync(employee);
-            ForgotPasswordCommandHandler forgotPasswordCommandHandler =
-                new(_mockLogger.Object, _mockUnitOfWork.Object, validator, _mockBrokerSender.Object);
-            ForgotPasswordCommand passwordCommand = new()
-            {
-                ForgotPasswordDto = new()
-                {
-                    EmployeeEmail = "test@test.pl"
-                }
-            };
+        Employee employee = ObjectProvider.GetEmployee();
+        _mockEmployeeChecker
+            .Setup(x => x.IsEmployeeExists(It.IsAny<string>()))
+            .Returns(true);
+        IValidator<ForgotPasswordCommand> validator = new ForgotPasswordValidator(_mockEmployeeChecker.Object);
+        _mockEmployeeRepository
+            .Setup(x => x.GetByEmailAsync(It.IsAny<string>()))
+            .ReturnsAsync(employee);
+        ForgotPasswordCommandHandler forgotPasswordCommandHandler = new(_mockLogger.Object, _mockUnitOfWork.Object, validator, _mockBrokerSender.Object);
         //Act
-            var result = await forgotPasswordCommandHandler.Handle(passwordCommand, new CancellationToken());
+        var result = await forgotPasswordCommandHandler.Handle(passwordCommand, new CancellationToken());
         //Assert
-            result.Should().BeOfType<BaseMessageDto>();
-            result.Message.Should().Be("Message sent to employee email");
-            result.Errors.Should().BeNull();
+        result.Should().BeOfType<BaseMessageDto>();
+        result.Message.Should().Be("Message sent to employee email");
+        result.Errors.Should().BeNull();
     }
-    [Fact]
-    public async Task Handle_ForInvalidForgotPasswordCommand_ShouldReturnBaseMessageDtoWithErrorsMessage()
+    [Theory]
+    [ClassData(typeof(ForgotPasswordCommandInvalidDataProvider))]
+    public async Task Handle_ForInvalidForgotPasswordCommand_ShouldReturnBaseMessageDtoWithErrorsMessage(ForgotPasswordCommand forgotPasswordCommand)
     { 
         //Arrange
-            Employee employee = new("TestFirstName", "TestLastName", "Test@Test.pl", "TestPass123!", Guid.NewGuid());
-            _mockEmployeeChecker.Setup(x => x.IsEmployeeExists(It.IsAny<string>())).Returns(true);
-            IValidator<ForgotPasswordCommand> validator = new ForgotPasswordValidator(_mockEmployeeChecker.Object);
-            _mockEmployeeRepository.Setup(x => x.GetByEmailAsync(It.IsAny<string>())).ReturnsAsync(employee);
-            ForgotPasswordCommandHandler forgotPasswordCommandHandler =
-                new(_mockLogger.Object, _mockUnitOfWork.Object, validator, _mockBrokerSender.Object);
-            ForgotPasswordCommand passwordCommand = new()
-            {
-                ForgotPasswordDto = new()
-                {
-                    EmployeeEmail = "notmail"
-                }
-            };
+        Employee employee = ObjectProvider.GetEmployee();
+        _mockEmployeeChecker
+            .Setup(x => x.IsEmployeeExists(It.IsAny<string>()))
+            .Returns(true);
+        IValidator<ForgotPasswordCommand> validator = new ForgotPasswordValidator(_mockEmployeeChecker.Object);
+        _mockEmployeeRepository.Setup(x => x.GetByEmailAsync(It.IsAny<string>())).ReturnsAsync(employee);
+        ForgotPasswordCommandHandler forgotPasswordCommandHandler = new(_mockLogger.Object, _mockUnitOfWork.Object, validator, _mockBrokerSender.Object);
         //Act
-            var result = await forgotPasswordCommandHandler.Handle(passwordCommand, new CancellationToken());
+        var result = await forgotPasswordCommandHandler.Handle(forgotPasswordCommand, new CancellationToken());
         //Assert
-            result.Should().BeOfType<BaseMessageDto>();
-            result.Message.Should().BeNull();
-            result.Errors.Should().NotBeNull();
+        result.Should().BeOfType<BaseMessageDto>();
+        result.Message.Should().BeNull();
+        result.Errors.Should().NotBeNull();
     }
 }
