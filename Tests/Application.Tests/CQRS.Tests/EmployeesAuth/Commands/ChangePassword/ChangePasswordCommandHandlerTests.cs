@@ -73,34 +73,28 @@ public class ChangePasswordCommandHandlerTests
         result.Should().BeOfType<BaseMessageDto>();
         result.Message.Should().BeNull();
         result.Errors.Should().NotBeNull();
+        result.MetaData.Should().BeNull();
     }
-    [Fact]
-    public async Task Handle_ForNotFoundEmployee_ShouldReturnBaseMessageDtoWithErrorMessage()
+    [Theory]
+    [ClassData(typeof(ChangePasswordCommandValidDataProvider))]
+    public async Task Handle_ForNotFoundEmployee_ShouldReturnBaseMessageDtoWithErrorMessage(ChangePasswordCommand changePasswordCommand)
     {
         //Arrange
-        string empOldPass = "TestOldPass123!";
-        Employee employee = new("TestFirstName", "TestLastName", "Test@Test.pl", "OldPass123", Guid.NewGuid());
-        _mockEmployeeChecker.Setup(x => x.IsEmployeeExists(It.IsAny<Guid>())).Returns(false);
-        _mockEmployeeRepository.Setup(x => x.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(employee);
+        Employee employee = ObjectProvider.GetEmployee();
+        _mockEmployeeChecker
+            .Setup(x => x.IsEmployeeExists(It.IsAny<Guid>()))
+            .Returns(false);
+        _mockEmployeeRepository
+            .Setup(x => x.GetByIdAsync(It.IsAny<Guid>()))
+            .ReturnsAsync(employee);
         IValidator<ChangePasswordCommand> validator = new ChangePasswordValidator(_mockEmployeeChecker.Object);
-        string newPass = "TestPass123";            
-        ChangePasswordCommand changePasswordCommand = new ChangePasswordCommand()
-        {
-            EmployeeId = Guid.NewGuid(),
-            ChangePasswordDto = new()
-            {
-                NewPassword = newPass,
-                OldPassword = empOldPass,
-                ConfirmNewPassword = newPass
-            }
-        };
-        var changePasswordCommandHandler =
-            new ChangePasswordCommandHandler(_mockLogger.Object, _mockUnitOfWork.Object, validator);
+        var changePasswordCommandHandler = new ChangePasswordCommandHandler(_mockLogger.Object, _mockUnitOfWork.Object, validator);
         //Act
         var result = await changePasswordCommandHandler.Handle(changePasswordCommand, new CancellationToken());    
         //Assert
         result.Should().BeOfType<BaseMessageDto>();
         result.Message.Should().BeNull();
         result.Errors.Should().NotBeNull();
+        result.MetaData.Should().BeNull();
     }
 }
