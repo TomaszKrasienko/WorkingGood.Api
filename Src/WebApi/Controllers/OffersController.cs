@@ -1,5 +1,6 @@
 using Application.CQRS.Offers.Commands;
 using Application.CQRS.Offers.Commands.ChangeOfferStatus;
+using Application.CQRS.Offers.Commands.DeleteOffer;
 using Application.CQRS.Offers.Commands.EditOffer;
 using Application.CQRS.Offers.Queries.GetOfferById;
 using Application.CQRS.Offers.Queries.GetOffersList;
@@ -92,6 +93,12 @@ public class OffersController : BaseController
     [HttpDelete("deleteOffer/{offerId}")]
     public async Task<IActionResult> DeleteOffer([FromRoute] Guid offerId)
     {
-        return Ok();
+        var result = await Mediator.Send(new DeleteOfferCommand
+        {
+            OfferId = offerId
+        });
+        if(result.IsSuccess())
+            return Ok(result);
+        return BadRequest(result);
     }
 }
