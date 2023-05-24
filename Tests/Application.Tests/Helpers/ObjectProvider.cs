@@ -1,4 +1,5 @@
 using Application.ViewModels.Offer;
+using Domain.Models.Employee;
 using Domain.Models.Offer;
 
 namespace Application.Tests.Helpers;
@@ -31,4 +32,14 @@ internal static class ObjectProvider
             IsActive = false
         };
     }
+
+    internal static Employee GetEmployee(string password)
+    {
+        return new Employee(
+            "TestFirstName",
+            "TestLastName",
+            "Test@Test.pl",
+            password,
+            Guid.NewGuid());
+    } 
 }

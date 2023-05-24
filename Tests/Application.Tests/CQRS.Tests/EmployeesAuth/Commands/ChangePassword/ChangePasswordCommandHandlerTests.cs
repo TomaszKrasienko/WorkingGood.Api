@@ -2,6 +2,7 @@ using Application.CQRS.Companies.Commands;
 using Application.CQRS.EmployeesAuth.Commands.ChangePassword;
 using Application.DTOs;
 using Application.DTOs.EmployeesAuth;
+using Application.Tests.Helpers;
 using Domain.Interfaces;
 using Domain.Interfaces.Repositories;
 using Domain.Interfaces.Validation;
@@ -28,34 +29,27 @@ public class ChangePasswordCommandHandlerTests
         _mockUnitOfWork.Setup(x => x.EmployeeRepository).Returns(_mockEmployeeRepository.Object);
     }
 
-    [Fact]
-    public async Task Handle_ForValidChangePasswordCommand_ShouldReturnBaseMessageDtoWithMessage()
+    [Theory]
+    [ClassData(typeof(ChangePasswordCommandValidDataProvider))]
+    public async Task Handle_ForValidChangePasswordCommand_ShouldReturnBaseMessageDtoWithMessage(ChangePasswordCommand changePasswordCommand)
     {
         //Arrange
-            string empOldPass = "TestOldPass123!";
-            Employee employee = new("TestFirstName", "TestLastName", "Test@Test.pl", empOldPass, Guid.NewGuid());
-            _mockEmployeeChecker.Setup(x => x.IsEmployeeExists(It.IsAny<Guid>())).Returns(true);
-            _mockEmployeeRepository.Setup(x => x.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(employee);
-            IValidator<ChangePasswordCommand> validator = new ChangePasswordValidator(_mockEmployeeChecker.Object);
-            string newPass = "TestPass123";
-            ChangePasswordCommand changePasswordCommand = new ChangePasswordCommand()
-            {
-                EmployeeId = Guid.NewGuid(),
-                ChangePasswordDto = new()
-                {
-                    NewPassword = newPass,
-                    OldPassword = empOldPass,
-                    ConfirmNewPassword = newPass
-                }
-            };
-            var changePasswordCommandHandler =
-                new ChangePasswordCommandHandler(_mockLogger.Object, _mockUnitOfWork.Object, validator);
+        Employee employee = ObjectProvider.GetEmployee(changePasswordCommand.ChangePasswordDto.OldPassword);
+        _mockEmployeeChecker
+            .Setup(x => x.IsEmployeeExists(It.IsAny<Guid>()))
+            .Returns(true);
+        _mockEmployeeRepository
+            .Setup(x => x.GetByIdAsync(It.IsAny<Guid>()))
+            .ReturnsAsync(employee);
+        IValidator<ChangePasswordCommand> validator = new ChangePasswordValidator(_mockEmployeeChecker.Object);
+        var changePasswordCommandHandler = new ChangePasswordCommandHandler(_mockLogger.Object, _mockUnitOfWork.Object, validator);
         //Act
-            var result = await changePasswordCommandHandler.Handle(changePasswordCommand, new CancellationToken());    
+        var result = await changePasswordCommandHandler.Handle(changePasswordCommand, new CancellationToken());    
         //Assert
-            result.Should().BeOfType<BaseMessageDto>();
-            result.Message.Should().Be("Password changed");
-            result.Errors.Should().BeNull();
+        result.Should().BeOfType<BaseMessageDto>();
+        result.Message.Should().Be("Password changed");
+        result.Errors.Should().BeNull();
+        result.MetaData.Should().BeNull();
     }
 
     private static IEnumerable<object[]> GetInvalidChangePasswordCommands()
