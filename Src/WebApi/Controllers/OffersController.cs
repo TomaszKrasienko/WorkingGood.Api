@@ -1,7 +1,6 @@
 using Application.CQRS.Offers.Commands;
 using Application.CQRS.Offers.Commands.ChangeOfferStatus;
 using Application.CQRS.Offers.Commands.EditOffer;
-using Application.CQRS.Offers.Queries.GetById;
 using Application.CQRS.Offers.Queries.GetOfferById;
 using Application.CQRS.Offers.Queries.GetOffersList;
 using Application.CQRS.Offers.Queries.GetOfferStatus;
@@ -17,15 +16,12 @@ namespace WebApi.Controllers;
 [Route("offers")]
 public class OffersController : BaseController
 {
-    public OffersController(IMediator mediator) : base(mediator)
-    {
-    }
-
+    public OffersController(IMediator mediator) : base(mediator) { }
+    
     [AllowAnonymous]
     [HttpGet("getOffersList")]
     public async Task<IActionResult> GetOffersList([FromQuery] GetOffersListRequestDto offersListRequestDto)
     {
-        //string? employeeId = null;
         var result = await Mediator.Send(new GetOffersListQuery()
         {
             GetOffersListRequestDto = offersListRequestDto,
@@ -46,7 +42,7 @@ public class OffersController : BaseController
             return Ok(result.Object);
         return BadRequest(result.Errors);
     }
-    
+
     [AllowAnonymous]
     [HttpGet("getOfferStatus/{offerId}")]
     public async Task<IActionResult> GetOfferStatus([FromRoute] Guid offerId)
@@ -57,23 +53,11 @@ public class OffersController : BaseController
         });
         return Ok(result);
     }
-    
-    [AllowAnonymous]
-    [HttpGet("getActiveById/{id}")]
-    public async Task<IActionResult> GetById([FromRoute] Guid id)
-    {
-        //Todo: testy integracyjne
-        var result = await Mediator.Send(new GetActiveOfferByIdQuery
-        {
-            Id = id
-        });
-        return Ok(result);
-    }
-    
+
     [HttpPost("addOffer")]
     public async Task<IActionResult> AddOffer([FromBody]OfferDto offerDto)
     {
-        //Todo: testy integracyjne negatywnej ścieżki
+        Guid? employeeId = GetEmployeeId();
         var result = await Mediator.Send(new AddOfferCommand
         {
             EmployeeId = GetEmployeeId(),

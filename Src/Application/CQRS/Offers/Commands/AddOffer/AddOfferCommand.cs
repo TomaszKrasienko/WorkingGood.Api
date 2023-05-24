@@ -4,8 +4,8 @@ using MediatR;
 
 namespace Application.CQRS.Offers.Commands;
 
-public class AddOfferCommand : IRequest<BaseMessageDto>
+public record AddOfferCommand : IRequest<BaseMessageDto>
 {
-    public OfferDto OfferDto { get; set; }
-    public Guid EmployeeId { get; set; }
+    public OfferDto OfferDto { get; init; } = new();
+    public Guid? EmployeeId { get; init; }
 }

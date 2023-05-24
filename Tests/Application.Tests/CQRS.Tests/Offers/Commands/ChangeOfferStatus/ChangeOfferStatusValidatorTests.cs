@@ -17,14 +17,11 @@ public class ChangeOfferStatusValidatorTests
         _validator = new ChangeOfferStatusCommandValidator(_mockOfferChecker.Object);
     }
     
-    [Fact]
-    public async Task ChangeOfferStatusValidation_ForValidChangeStatusCommandAndExistedOffer_ShouldNotHaveAnyError()
+    [Theory]
+    [ClassData(typeof(ChangeOfferStatusCommandValidDataProvider))]
+    public async Task ChangeOfferStatusValidation_ForValidChangeStatusCommandAndExistedOffer_ShouldNotHaveAnyValidationErrors(ChangeOfferStatusCommand changeOfferStatusCommand)
     {
         //Arrange
-        ChangeOfferStatusCommand changeOfferStatusCommand = new()
-        {
-            OfferId = Guid.NewGuid()
-        };
         _mockOfferChecker
             .Setup(x => x.IsOfferExists(It.IsAny<Guid>()))
             .Returns(true);
@@ -34,11 +31,11 @@ public class ChangeOfferStatusValidatorTests
         result.ShouldNotHaveAnyValidationErrors();
     }
 
-    [Fact]
-    public async Task ChangeOfferStatusValidation_ForInvalidChangeStatusCommandAndExistedOffer_ShouldHaveAnyValidationErrors()
+    [Theory]
+    [ClassData(typeof(ChangeOfferStatusCommandInvalidDataProvider))]
+    public async Task ChangeOfferStatusValidation_ForInvalidChangeStatusCommandAndExistedOffer_ShouldHaveAnyValidationErrors(ChangeOfferStatusCommand changeOfferStatusCommand)
     {
         //Arrange
-        ChangeOfferStatusCommand changeOfferStatusCommand = new();
         _mockOfferChecker
             .Setup(x => x.IsOfferExists(It.IsAny<Guid>()))
             .Returns(true);
@@ -48,14 +45,11 @@ public class ChangeOfferStatusValidatorTests
         result.ShouldHaveAnyValidationError();
     }
     
-    [Fact]
-    public async Task ChangeOfferStatusValidation_ForValidChangeStatusCommandAndNonExistedOffer_ShouldNotHaveAnyError()
+    [Theory]
+    [ClassData(typeof(ChangeOfferStatusCommandValidDataProvider))]
+    public async Task ChangeOfferStatusValidation_ForValidChangeStatusCommandAndNonExistedOffer_ShouldHaveAnyValidationError(ChangeOfferStatusCommand changeOfferStatusCommand)
     {
         //Arrange
-        ChangeOfferStatusCommand changeOfferStatusCommand = new()
-        {
-            OfferId = Guid.NewGuid()
-        };
         _mockOfferChecker
             .Setup(x => x.IsOfferExists(It.IsAny<Guid>()))
             .Returns(false);

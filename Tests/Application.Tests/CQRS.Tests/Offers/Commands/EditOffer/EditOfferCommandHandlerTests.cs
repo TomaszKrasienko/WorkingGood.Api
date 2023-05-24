@@ -1,5 +1,6 @@
 using Application.CQRS.Offers.Commands.EditOffer;
 using Application.DTOs;
+using Application.Tests.Helpers;
 using Application.ViewModels.Offer;
 using AutoMapper;
 using Domain.Interfaces;
@@ -32,35 +33,16 @@ public class EditOfferCommandHandlerTests
         _mockMapper = new();
     }
 
-    [Fact]
-    public async Task Handle_ForValidEditOfferCommandAndExistedOffer_ShouldReturnBaseMessageWithGetOfferVMObjectAndMessage()
+    [Theory]
+    [ClassData(typeof(EditOfferTestValidDataProvider))]
+    public async Task Handle_ForValidEditOfferCommandAndExistedOffer_ShouldReturnBaseMessageWithGetOfferVMObjectAndMessage(EditOfferCommand editOfferCommand)
     {
         //Arrange
-        EditOfferCommand editOfferCommand = new()
-        {
-            OfferId = Guid.NewGuid(),
-            OfferDto = new()
-            {
-                Title = "newTestTitle",
-                Description = "newTestDescriptionnewTestDescriptionnewTestDescriptionnewTestDescription",
-                SalaryRangeMin = 10000,
-                SalaryRangeMax = 12000,
-                IsActive = true
-            }
-        };
         _mockOfferChecker
             .Setup(x => x.IsOfferExists(It.IsAny<Guid>()))
             .Returns(true);
         IValidator<EditOfferCommand> validator = new EditOfferValidator(_mockOfferChecker.Object);
-        Offer offer = new(
-            "Title test",
-            "Test postition type",
-            10000,
-            15000,
-            "Description test Description test Description test",
-            Guid.NewGuid(),
-            false
-        );
+        Offer offer = ObjectProvider.GetOffer();
         _mockOfferRepository
             .Setup(x => x.GetByIdAsync(It.IsAny<Guid>()))
             .ReturnsAsync(offer);
@@ -87,22 +69,12 @@ public class EditOfferCommandHandlerTests
         result.Message.Should().Be("Offer edited successfully");
         result.Object.Should().BeOfType<GetOfferVM>();
     }
-    [Fact]
-    public async Task Handle_ForValidEditOfferCommandAndNonExistedOffer_ShouldReturnBaseMessageWithGetOfferVMObjectAndMessage()
+    
+    [Theory]
+    [ClassData(typeof(EditOfferTestValidDataProvider))]
+    public async Task Handle_ForValidEditOfferCommandAndNonExistedOffer_ShouldReturnBaseMessageWithGetOfferVMObjectAndMessage(EditOfferCommand editOfferCommand)
     {
         //Arrange
-        EditOfferCommand editOfferCommand = new()
-        {
-            OfferId = Guid.NewGuid(),
-            OfferDto = new()
-            {
-                Title = "newTestTitle",
-                Description = "newTestDescriptionnewTestDescriptionnewTestDescriptionnewTestDescription",
-                SalaryRangeMin = 10000,
-                SalaryRangeMax = 12000,
-                IsActive = true,
-            }
-        };
         _mockOfferChecker
             .Setup(x => x.IsOfferExists(It.IsAny<Guid>()))
             .Returns(false);

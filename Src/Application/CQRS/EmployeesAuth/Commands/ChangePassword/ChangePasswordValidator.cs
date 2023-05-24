@@ -14,7 +14,7 @@ public class ChangePasswordValidator : AbstractValidator<ChangePasswordCommand>
             .NotNull()
             .NotEmpty();
         RuleFor(x => x.ChangePasswordDto.NewPassword)
-            .Must(x => IsPasswordValid(x))
+            .Must(x => IsPasswordValid(x) == true)
             .WithMessage("Password must contains uppercase, lowercase and number")
             .When(x => x.ChangePasswordDto.NewPassword != null);
         RuleFor(x => x.ChangePasswordDto.OldPassword)
@@ -32,7 +32,7 @@ public class ChangePasswordValidator : AbstractValidator<ChangePasswordCommand>
             .NotNull()
             .NotEmpty();
         RuleFor(x => x.EmployeeId)
-            .Must(x => employeeChecker.IsEmployeeExists(x))
+            .Must(x => employeeChecker.IsEmployeeExists((Guid)x!))
             .WithMessage("Employee is not exists");
     }
     private bool IsPasswordValid(string password)

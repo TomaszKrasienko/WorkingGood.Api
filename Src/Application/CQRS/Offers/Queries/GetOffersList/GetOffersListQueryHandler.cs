@@ -66,12 +66,30 @@ public class GetOffersListQueryHandler : IRequestHandler<GetOffersListQuery, Bas
                 employeeIdList, 
                 request.GetOffersListRequestDto.IsActive,
                 request.GetOffersListRequestDto.PageNumber,
-                request.GetOffersListRequestDto.PageSize) 
+                request.GetOffersListRequestDto.PageSize,
+                employeeId: request.EmployeeId,
+                rateFrom: request.GetOffersListRequestDto.RateFrom,
+                rateTo: request.GetOffersListRequestDto.RateTo,
+                searchPhrase: request.GetOffersListRequestDto.SearchPhrase) 
         };
     }
-    private async Task<MetaDataVm> GetMetaData(List<Guid> employeesIds, bool? isActive, int currentPage, int pageSize)
+    private async Task<MetaDataVm> GetMetaData(
+        List<Guid> employeesIds, 
+        bool? isActive, 
+        int currentPage, 
+        int pageSize,
+        Guid? employeeId,
+        int? rateFrom,
+        int? rateTo,
+        string? searchPhrase)
     {
-        var totalRecords = await _unitOfWork.OffersRepository.CountAll(employeesIds, isActive);
+        var totalRecords = await _unitOfWork.OffersRepository.CountAll(
+            employeesIds, 
+            isActive,
+            employeeId,
+            rateFrom,
+            rateTo,
+            searchPhrase);
         var totalPages = (double) totalRecords / (double) pageSize;
         var roundedTotalPages = Convert.ToInt32(Math.Ceiling(totalPages));
         return new MetaDataVm()

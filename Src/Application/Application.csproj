@@ -30,7 +30,6 @@
     <Folder Include="CQRS\Companies\" />
     <Folder Include="DTOs\Companies\" />
     <Folder Include="CQRS\Companies\Commands\" />
-    <Folder Include="CQRS\Offers\Queries\GetActiveOfferById\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />

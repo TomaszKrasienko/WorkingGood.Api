@@ -38,7 +38,7 @@ public sealed class GetEmployeeByIdQueryHandler : IRequestHandler<GetEmployeeByI
             };
         Employee employee = await _unitOfWork
             .EmployeeRepository
-            .GetByIdAsync(request.Id);
+            .GetByIdAsync((Guid)request.Id!);
         GetEmployeeVM employeeVm = _mapper.Map<GetEmployeeVM>(employee);
         employeeVm.Initials = GetInitials(employeeVm);
         return new BaseMessageDto()

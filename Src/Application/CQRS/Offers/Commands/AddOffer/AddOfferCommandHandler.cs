@@ -1,5 +1,8 @@
 using Application.Common.Extensions.Validation;
 using Application.DTOs;
+using Application.DTOs.Offers;
+using Application.ViewModels.Offer;
+using AutoMapper;
 using Domain.Interfaces;
 using Domain.Models.Offer;
 using FluentValidation;
@@ -13,11 +16,17 @@ public class AddOfferCommandHandler : IRequestHandler<AddOfferCommand, BaseMessa
     private readonly ILogger<AddOfferCommandHandler> _logger;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IValidator<AddOfferCommand> _validator;
-    public AddOfferCommandHandler(ILogger<AddOfferCommandHandler> logger, IUnitOfWork unitOfWork, IValidator<AddOfferCommand> validator)
+    private readonly IMapper _mapper;
+    public AddOfferCommandHandler(
+        ILogger<AddOfferCommandHandler> logger, 
+        IUnitOfWork unitOfWork, 
+        IValidator<AddOfferCommand> validator,
+        IMapper mapper)
     {
         _logger = logger;
         _unitOfWork = unitOfWork;
         _validator = validator;
+        _mapper = mapper;
     }
     public async Task<BaseMessageDto> Handle(AddOfferCommand request, CancellationToken cancellationToken)
     {            
@@ -37,15 +46,16 @@ public class AddOfferCommandHandler : IRequestHandler<AddOfferCommand, BaseMessa
             (double)request.OfferDto.SalaryRangeMin!,
             (double)request.OfferDto.SalaryRangeMax!,
             request.OfferDto.Description!,
-            request.EmployeeId,
+            (Guid)request.EmployeeId!,
             (bool)request.OfferDto.IsActive!
         );
         await _unitOfWork.OffersRepository.AddAsync(offer);
         await _unitOfWork.CompleteAsync();
+        GetOfferVM getOfferVm = _mapper.Map<GetOfferVM>(offer);
         return new()
         {
             Message = "Offer added successfully",
-            Object = offer
+            Object = getOfferVm
         };
     }
 }

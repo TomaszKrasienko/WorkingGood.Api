@@ -1,6 +1,7 @@
 using System.Globalization;
 using Application.CQRS.Offers.Commands.DeleteOffer;
 using Application.DTOs;
+using Application.Tests.Helpers;
 using Domain.Interfaces;
 using Domain.Interfaces.Communication;
 using Domain.Interfaces.Repositories;
@@ -40,15 +41,7 @@ public class DeleteOfferCommandHandlerTests
     public async Task Handle_ForValidDeleteOfferCommandAndExistedOffer_ShouldReturnBaseMessageWithMessage(DeleteOfferCommand deleteOfferCommand)
     {
         //Arrange
-        Offer offer = new(
-            "Title test",
-            "Test postition type",
-            10000,
-            15000,
-            "Description test Description test Description test",
-            Guid.NewGuid(),
-            false
-        );
+        Offer offer = ObjectProvider.GetOffer();
         _mockOfferChecker
             .Setup(x => x.IsOfferExists(It.IsAny<Guid>()))
             .Returns(true);

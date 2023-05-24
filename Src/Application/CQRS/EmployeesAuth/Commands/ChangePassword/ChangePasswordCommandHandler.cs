@@ -31,7 +31,7 @@ public class ChangePasswordCommandHandler : IRequestHandler<ChangePasswordComman
                 Errors = validationResult.Errors.GetErrorsStringList()
             };
         }
-        Employee employee = await _unitOfWork.EmployeeRepository.GetByIdAsync(request.EmployeeId);
+        Employee employee = await _unitOfWork.EmployeeRepository.GetByIdAsync((Guid)request.EmployeeId!);
         if (!(employee.IsPasswordMatch(request.ChangePasswordDto.OldPassword!)))
         {
             _logger.LogWarning("Password is incorrect");

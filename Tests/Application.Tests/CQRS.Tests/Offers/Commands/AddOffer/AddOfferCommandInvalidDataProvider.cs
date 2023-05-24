@@ -3,7 +3,7 @@ using Application.CQRS.Offers.Commands;
 
 namespace Application.Tests.CQRS.Offers.Commands.AddOffer;
 
-public class AddOfferTestInvalidDataProvider : IEnumerable<object[]>
+public class AddOfferCommandInvalidDataProvider : IEnumerable<object[]>
 {
     public IEnumerator<object[]> GetEnumerator()
     {

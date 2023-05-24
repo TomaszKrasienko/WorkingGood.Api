@@ -31,7 +31,4 @@
   <ItemGroup>
     <None Remove="CQRS\Offers\Queries\GetById\" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="CQRS\Offers\Queries\GetActiveOfferById\" />
-  </ItemGroup>
 </Project>

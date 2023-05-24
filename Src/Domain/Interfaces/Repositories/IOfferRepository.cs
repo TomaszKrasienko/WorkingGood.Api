@@ -16,5 +16,11 @@ public interface IOfferRepository : IRepository<Offer>
         int? rateFrom,
         int? rateTo,
         string? searchPhrase);
-    Task<int> CountAll(List<Guid> employeeIdList, bool? isActive);
+    Task<int> CountAll(
+        List<Guid> employeeIdList, 
+        bool? isActive,
+        Guid? employeeId,
+        int? rateFrom,
+        int? rateTo,
+        string? searchPhrase);
 }

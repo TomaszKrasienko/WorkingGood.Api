@@ -67,7 +67,13 @@ public class OfferRepository : BaseRepository<Offer>, IOfferRepository
             .ToListAsync();
     }
 
-    public async Task<int> CountAll(List<Guid> employeeIdList, bool? isActive)
+    public async Task<int> CountAll(
+        List<Guid> employeeIdList, 
+        bool? isActive,
+        Guid? employeeId,
+        int? rateFrom,
+        int? rateTo,
+        string? searchPhrase)
     {
         IQueryable<Offer> query = _context.Set<Offer>();
         if (employeeIdList!.Any())
@@ -77,6 +83,22 @@ public class OfferRepository : BaseRepository<Offer>, IOfferRepository
         if (isActive is not null)
         {
             query = query.Where(x => x.OfferStatus.IsActive == isActive);
+        }
+        if (employeeId is not null && (employeeIdList is null || !employeeIdList!.Any()))
+        {
+            query = query.Where(x => x.AuthorId == employeeId);
+        }
+        if (rateFrom is not null)
+        {
+            query = query.Where(x => x.SalaryRanges!.ValueMin >= rateFrom);
+        }
+        if (rateTo is not null)
+        {
+            query = query.Where(x => x.SalaryRanges!.ValueMax <= rateTo);
+        }
+        if (searchPhrase is not null)
+        {
+            query = query.Where(x => x.Content.Title.ToLower().Contains(searchPhrase.ToLower()) || x.Content.Description.ToLower().Contains(searchPhrase.ToLower()));
         }
         return await query.CountAsync();
     }

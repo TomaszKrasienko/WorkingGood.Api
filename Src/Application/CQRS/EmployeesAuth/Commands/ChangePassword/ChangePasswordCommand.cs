@@ -7,6 +7,6 @@ namespace Application.CQRS.EmployeesAuth.Commands.ChangePassword;
 
 public record ChangePasswordCommand : IRequest<BaseMessageDto>
 {
-    public Guid EmployeeId { get; set; }
+    public Guid? EmployeeId { get; set; }
     public ChangePasswordDto ChangePasswordDto { get; init; } = new();
 }

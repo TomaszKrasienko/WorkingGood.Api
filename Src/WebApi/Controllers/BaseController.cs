@@ -15,11 +15,11 @@ namespace WebApi.Controllers
         {
             Mediator = mediator;
         }
-        protected Guid GetEmployeeId()
+        protected Guid? GetEmployeeId()
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
-            var employeeId = HttpContext.User.FindFirst(EMPLOYEE_ID_KEY)!.Value ?? throw new UserNotFoundException();
-            return Guid.Parse(employeeId);
+            string? employeeId = HttpContext.User.FindFirst(EMPLOYEE_ID_KEY)?.Value;
+            return employeeId is null ? null : Guid.Parse(employeeId);
         }
     }
 }
