@@ -29,11 +29,15 @@ public class ChangePasswordValidator : AbstractValidator<ChangePasswordCommand>
                 .WithMessage("Password not match to confirmation");
         });
         RuleFor(x => x.EmployeeId)
-            .NotNull()
-            .NotEmpty();
-        RuleFor(x => x.EmployeeId)
-            .Must(x => employeeChecker.IsEmployeeExists((Guid)x!))
-            .WithMessage("Employee is not exists");
+            .NotNull();
+        When(x => x.EmployeeId != null, () =>
+        {
+            RuleFor(x => x.EmployeeId)
+                .NotEqual(default(Guid));
+            RuleFor(x => x.EmployeeId)
+                .Must(x => employeeChecker.IsEmployeeExists((Guid) x!))
+                .WithMessage("Employee is not exists");
+        });
     }
     private bool IsPasswordValid(string password)
     {

@@ -42,4 +42,14 @@ internal static class ObjectProvider
             password,
             Guid.NewGuid());
     } 
+    
+    internal static Employee GetEmployee()
+    {
+        return new Employee(
+            "TestFirstName",
+            "TestLastName",
+            "Test@Test.pl",
+            "Password123!",
+            Guid.NewGuid());
+    } 
 }
