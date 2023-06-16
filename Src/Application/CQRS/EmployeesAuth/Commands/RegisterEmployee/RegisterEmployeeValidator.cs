@@ -1,8 +1,6 @@
-﻿using System;
-using Application.EmployeesAuth.Commands;
+﻿using Application.EmployeesAuth.Commands;
 using Domain.Interfaces.Validation;
 using FluentValidation;
-using NLog.Filters;
 
 namespace Application.CQRS.EmployeesAuth.Commands.RegisterEmployee
 {

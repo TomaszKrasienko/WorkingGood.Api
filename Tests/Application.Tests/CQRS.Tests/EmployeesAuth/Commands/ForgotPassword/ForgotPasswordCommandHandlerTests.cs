@@ -9,10 +9,7 @@ using Domain.Models.Employee;
 using FluentAssertions;
 using FluentValidation;
 using Infrastructure.Common.ConfigModels;
-using Infrastructure.Validation;
-using Microsoft.Extensions.Logging;
 using Moq;
-using NLog;
 using WorkingGood.Log;
 
 namespace Application.Tests.CQRS.EmployeesAuth.Commands.ForgotPassword;

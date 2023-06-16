@@ -4,8 +4,6 @@ using AutoMapper;
 using Domain.Interfaces;
 using Domain.Models.Offer;
 using MediatR;
-using Microsoft.Extensions.Logging;
-using NLog;
 using WorkingGood.Log;
 
 namespace Application.CQRS.Offers.Queries.GetPositions;

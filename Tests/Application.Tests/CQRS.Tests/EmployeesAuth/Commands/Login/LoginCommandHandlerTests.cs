@@ -10,11 +10,7 @@ using Domain.Services;
 using Domain.ValueObjects;
 using FluentAssertions;
 using FluentValidation;
-using Infrastructure.Common.ConfigModels;
-using Infrastructure.Persistance;
-using Microsoft.Extensions.Logging;
 using Moq;
-using NLog;
 using WorkingGood.Log;
 
 namespace Application.Tests.CQRS.EmployeesAuth.Commands.Login;

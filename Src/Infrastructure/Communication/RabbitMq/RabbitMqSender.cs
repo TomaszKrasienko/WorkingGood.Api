@@ -1,11 +1,8 @@
 using System.Text;
-using System.Text.Json.Nodes;
 using Domain.Enums;
 using Domain.Interfaces.Communication;
-using Domain.ValueObjects;
 using Infrastructure.Common.ConfigModels;
 using Newtonsoft.Json;
-using NLog.Fluent;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Exceptions;
 using WorkingGood.Log;

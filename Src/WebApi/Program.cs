@@ -1,20 +1,18 @@
-﻿using Microsoft.Extensions.DependencyInjection.Extensions;
-using NLog;
-using NLog.Web;
-using WebApi.Common.Extensions.Configuration;
+﻿using WebApi.Common.Extensions.Configuration;
 using WebApi.Common.Statics;
 using WebApi.Extensions.Configuration;
 using WorkingGood.Log;
 using WorkingGood.Log.Configuration;
 
+
+var builder = WebApplication.CreateBuilder(args);
+var logger = WgLogger.CreateInstance(builder.Configuration);
 try
 {
-    var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddControllers();
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
     builder.Services.AddConfiguration(builder.Configuration);
-    builder.Host.UseNLog();
     builder.Services.UseWgLog(builder.Configuration, "WorkingGood.API");
     
     var app = builder.Build();
@@ -36,11 +34,7 @@ try
 }
 catch (Exception ex)
 {
-    throw;
-}
-finally
-{
-    LogManager.Shutdown();
+    logger.Error(ex);
 }
 
 public partial class Program {}

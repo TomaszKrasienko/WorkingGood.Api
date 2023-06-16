@@ -9,9 +9,7 @@ using Domain.Interfaces.Repositories;
 using Domain.Models.Offer;
 using FluentAssertions;
 using FluentValidation;
-using Microsoft.Extensions.Logging;
 using Moq;
-using NLog;
 using WorkingGood.Log;
 
 namespace Application.Tests.CQRS.Offers.Commands.AddOffer;
