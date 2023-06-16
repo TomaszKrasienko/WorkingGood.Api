@@ -12,12 +12,13 @@ using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NLog;
+using WorkingGood.Log;
 
 namespace Application.Tests.CQRS.Offers.Commands.AddOffer;
 
 public class AddOfferCommandHandlerTests
 {
-    private readonly Mock<ILogger<AddOfferCommandHandler>> _mockLogger;
+    private readonly Mock<IWgLog<AddOfferCommandHandler>> _mockLogger;
     private readonly Mock<IUnitOfWork> _mockUnitOfWork;
     private readonly Mock<IOfferRepository> _mockOfferRepository;
     private readonly Mock<IMapper> _mockMapper;

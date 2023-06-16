@@ -5,15 +5,16 @@ using Domain.Models.Employee;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using WorkingGood.Log;
 
 namespace Application.CQRS.EmployeesAuth.Commands.ResetPassword;
 
 public class ResetPasswordCommandHandler : IRequestHandler<ResetPasswordCommand, BaseMessageDto>
 {
-    private readonly ILogger<ResetPasswordCommandHandler> _logger;
+    private readonly IWgLog<ResetPasswordCommandHandler> _logger;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IValidator<ResetPasswordCommand> _validator;
-    public ResetPasswordCommandHandler(ILogger<ResetPasswordCommandHandler> logger, IUnitOfWork unitOfWork, IValidator<ResetPasswordCommand> validator)
+    public ResetPasswordCommandHandler(IWgLog<ResetPasswordCommandHandler> logger, IUnitOfWork unitOfWork, IValidator<ResetPasswordCommand> validator)
     {
         _logger = logger;
         _unitOfWork = unitOfWork;
@@ -21,11 +22,11 @@ public class ResetPasswordCommandHandler : IRequestHandler<ResetPasswordCommand,
     }
     public async Task<BaseMessageDto> Handle(ResetPasswordCommand request, CancellationToken cancellationToken)
     {            
-        _logger.LogInformation("Handling ResetPasswordCommand");
+        _logger.Info("Handling ResetPasswordCommand");
         var validationResult = await _validator.ValidateAsync(request, cancellationToken);
         if (!validationResult.IsValid)
         {
-            _logger.LogWarning(validationResult.Errors.GetErrorString());
+            _logger.Info(validationResult.Errors.GetErrorString());
             return new()
             {
                 Errors = validationResult.Errors.GetErrorsStringList()

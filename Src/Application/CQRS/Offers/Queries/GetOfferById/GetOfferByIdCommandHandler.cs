@@ -6,17 +6,18 @@ using Domain.Interfaces;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using WorkingGood.Log;
 
 namespace Application.CQRS.Offers.Queries.GetOfferById;
 
 public class GetOfferByIdCommandHandler : IRequestHandler<GetOfferByIdCommand, BaseMessageDto>
 {
-    private readonly ILogger<GetOfferByIdCommandHandler> _logger;
+    private readonly IWgLog<GetOfferByIdCommandHandler> _logger;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IValidator<GetOfferByIdCommand> _validator;
     private readonly IMapper _mapper;
     public GetOfferByIdCommandHandler(
-        ILogger<GetOfferByIdCommandHandler> logger, 
+        IWgLog<GetOfferByIdCommandHandler> logger, 
         IUnitOfWork unitOfWork, 
         IValidator<GetOfferByIdCommand> validator,
         IMapper mapper)
@@ -31,7 +32,7 @@ public class GetOfferByIdCommandHandler : IRequestHandler<GetOfferByIdCommand, B
         var validationResult = await _validator.ValidateAsync(request, cancellationToken);
         if (!validationResult.IsValid)
         {
-            _logger.LogWarning(validationResult.Errors.GetErrorString());
+            _logger.Warn(validationResult.Errors.GetErrorString());
             return new()
             {
                 Errors = validationResult.Errors.GetErrorsStringList()

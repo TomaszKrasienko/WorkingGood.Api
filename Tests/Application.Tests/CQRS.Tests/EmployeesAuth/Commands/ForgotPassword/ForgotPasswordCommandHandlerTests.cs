@@ -8,20 +8,23 @@ using Domain.Interfaces.Validation;
 using Domain.Models.Employee;
 using FluentAssertions;
 using FluentValidation;
+using Infrastructure.Common.ConfigModels;
 using Infrastructure.Validation;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NLog;
+using WorkingGood.Log;
 
 namespace Application.Tests.CQRS.EmployeesAuth.Commands.ForgotPassword;
 
 public class ForgotPasswordCommandHandlerTests
 {
-    private readonly Mock<ILogger<ForgotPasswordCommandHandler>> _mockLogger;
+    private readonly Mock<IWgLog<ForgotPasswordCommandHandler>> _mockLogger;
     private readonly Mock<IUnitOfWork> _mockUnitOfWork;
     private readonly Mock<IBrokerSender> _mockBrokerSender;
     private readonly Mock<IEmployeeChecker> _mockEmployeeChecker;
     private readonly Mock<IEmployeeRepository> _mockEmployeeRepository;
+    private AddressesConfig? _addressesConfig;
     public ForgotPasswordCommandHandlerTests()
     {
         _mockLogger = new ();
@@ -45,7 +48,11 @@ public class ForgotPasswordCommandHandlerTests
         _mockEmployeeRepository
             .Setup(x => x.GetByEmailAsync(It.IsAny<string>()))
             .ReturnsAsync(employee);
-        ForgotPasswordCommandHandler forgotPasswordCommandHandler = new(_mockLogger.Object, _mockUnitOfWork.Object, validator, _mockBrokerSender.Object);
+        _addressesConfig = new()
+        {
+            ForgotPasswordUrl = "tmp"
+        };
+        ForgotPasswordCommandHandler forgotPasswordCommandHandler = new(_mockLogger.Object, _mockUnitOfWork.Object, validator, _mockBrokerSender.Object, _addressesConfig);
         //Act
         var result = await forgotPasswordCommandHandler.Handle(passwordCommand, new CancellationToken());
         //Assert
@@ -64,7 +71,11 @@ public class ForgotPasswordCommandHandlerTests
             .Returns(true);
         IValidator<ForgotPasswordCommand> validator = new ForgotPasswordValidator(_mockEmployeeChecker.Object);
         _mockEmployeeRepository.Setup(x => x.GetByEmailAsync(It.IsAny<string>())).ReturnsAsync(employee);
-        ForgotPasswordCommandHandler forgotPasswordCommandHandler = new(_mockLogger.Object, _mockUnitOfWork.Object, validator, _mockBrokerSender.Object);
+        _addressesConfig = new()
+        {
+            ForgotPasswordUrl = "tmp"
+        };
+        ForgotPasswordCommandHandler forgotPasswordCommandHandler = new(_mockLogger.Object, _mockUnitOfWork.Object, validator, _mockBrokerSender.Object, _addressesConfig);
         //Act
         var result = await forgotPasswordCommandHandler.Handle(forgotPasswordCommand, new CancellationToken());
         //Assert

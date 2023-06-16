@@ -8,16 +8,18 @@ using Domain.Models.Employee;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using WorkingGood.Log;
+
 namespace Application.CQRS.Employees.Queries;
 
 public sealed class GetEmployeeByIdQueryHandler : IRequestHandler<GetEmployeeByIdQuery, BaseMessageDto>
 {
-    private readonly ILogger<GetEmployeeByIdQueryHandler> _logger;
+    private readonly IWgLog<GetEmployeeByIdQueryHandler> _logger;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IValidator<GetEmployeeByIdQuery> _validator;
     private readonly IMapper _mapper;
     public GetEmployeeByIdQueryHandler(
-        ILogger<GetEmployeeByIdQueryHandler> logger,
+        IWgLog<GetEmployeeByIdQueryHandler> logger,
         IUnitOfWork unitOfWork, 
         IValidator<GetEmployeeByIdQuery> validator,
         IMapper mapper)
@@ -29,13 +31,17 @@ public sealed class GetEmployeeByIdQueryHandler : IRequestHandler<GetEmployeeByI
     }
     public async Task<BaseMessageDto> Handle(GetEmployeeByIdQuery request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation($"Getting employee by id - {request.Id}");
+        _logger.Info($"Getting employee by id - {request.Id}");
         var validationResult = await _validator.ValidateAsync(request, cancellationToken);
         if (!validationResult.IsValid)
+        {
+            _logger.Warn(validationResult.Errors.GetErrorString());
             return new BaseMessageDto
             {
                 Errors = validationResult.Errors.GetErrorsStringList()
             };
+        }
+
         Employee employee = await _unitOfWork
             .EmployeeRepository
             .GetByIdAsync((Guid)request.Id!);

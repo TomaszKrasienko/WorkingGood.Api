@@ -8,12 +8,13 @@ using FluentAssertions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Moq;
+using WorkingGood.Log;
 
 namespace Application.Tests.CQRS.EmployeesAuth.Commands.VerfifyEmployee;
 
 public class VerifyEmployeeCommandHandlerTests
 {
-    private readonly Mock<ILogger<VerifyEmployeeCommandHandler>> _mockLogger;
+    private readonly Mock<IWgLog<VerifyEmployeeCommandHandler>> _mockLogger;
     private readonly Mock<IUnitOfWork> _mockUnitOfWork;
     private readonly Mock<IEmployeeRepository> _mockEmployeeRepository;
     private readonly Mock<IEmployeeChecker> _mockEmployeeChecker;

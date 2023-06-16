@@ -15,12 +15,13 @@ using Infrastructure.Persistance;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NLog;
+using WorkingGood.Log;
 
 namespace Application.Tests.CQRS.EmployeesAuth.Commands.Login;
 
 public class LoginCommandHandlerTests
 {
-    private readonly Mock<ILogger<LoginCommandHandler>> _mockLogger;
+    private readonly Mock<IWgLog<LoginCommandHandler>> _mockLogger;
     private readonly Mock<IUnitOfWork> _mockUnitOfWork;
     private readonly Mock<IEmployeeRepository> _mockEmployeeRepository;
     private readonly Mock<IEmployeeChecker> _mockEmployeeChecker;

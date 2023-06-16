@@ -9,17 +9,18 @@ using FluentAssertions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Moq;
+using WorkingGood.Log;
 
 namespace Application.Tests.CQRS.Companies.Commands.AddCompany;
 
 public class AddCompanyCommandHandlerTests
 {
-    private readonly Mock<ILogger<AddCompanyCommandHandler>> _mockLogger;
+    private readonly Mock<IWgLog<AddCompanyCommandHandler>> _mockLogger;
     private readonly Mock<IUnitOfWork> _mockUnitOfWork;
     private Mock<ICompanyChecker> _mockCompanyChecker;
     public AddCompanyCommandHandlerTests()
     {
-        _mockLogger = new Mock<ILogger<AddCompanyCommandHandler>>();
+        _mockLogger = new Mock<IWgLog<AddCompanyCommandHandler>>();
         _mockUnitOfWork = new Mock<IUnitOfWork>();
         Mock<ICompanyRepository> mockCompanyRepository = new Mock<ICompanyRepository>();
         _mockUnitOfWork.Setup(x => x.CompanyRepository).Returns(mockCompanyRepository.Object);

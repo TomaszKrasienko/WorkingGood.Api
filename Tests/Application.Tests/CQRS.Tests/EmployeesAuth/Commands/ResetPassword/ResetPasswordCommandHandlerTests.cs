@@ -8,12 +8,13 @@ using FluentAssertions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Moq;
+using WorkingGood.Log;
 
 namespace Application.Tests.CQRS.EmployeesAuth.Commands.ResetPassword;
 
 public class ResetPasswordCommandHandlerTests
 {
-    private readonly Mock<ILogger<ResetPasswordCommandHandler>> _mockLogger; 
+    private readonly Mock<IWgLog<ResetPasswordCommandHandler>> _mockLogger; 
     private readonly Mock<IUnitOfWork> _mockUnitOfWork;
     private readonly Mock<IEmployeeRepository> _mockEmployeeRepository;
     private readonly Mock<IEmployeeChecker> _mockEmployeeChecker;

@@ -9,11 +9,13 @@ using FluentAssertions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Moq;
+using WorkingGood.Log;
+
 namespace Application.Tests.CQRS.Employees.Queries.GetEmployeeByIdQueryHandlerTests;
 
 public class GetEmployeeByIdQueryHandlerTests
 {
-    private readonly Mock<ILogger<GetEmployeeByIdQueryHandler>> _mockLogger;
+    private readonly Mock<IWgLog<GetEmployeeByIdQueryHandler>> _mockLogger;
     private readonly Mock<IUnitOfWork> _mockUnitOfWork;
     private readonly Mock<IEmployeeRepository> _mockEmployeeRepository;
     private readonly Mock<IMapper> _mockMapper;

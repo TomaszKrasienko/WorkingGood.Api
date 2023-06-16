@@ -1,6 +1,7 @@
 namespace Infrastructure.Common.ConfigModels;
 
-public class AddressesConfig
+public record AddressesConfig
 {
-    public string RegistrationUrl { get; set; } = string.Empty;
+    public string VerifyUrl { get; init; } = string.Empty;
+    public string ForgotPasswordUrl { get; init; } = string.Empty;
 }

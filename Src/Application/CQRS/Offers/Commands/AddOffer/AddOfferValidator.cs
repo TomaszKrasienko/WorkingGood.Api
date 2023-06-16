@@ -8,26 +8,38 @@ public class AddOfferValidator : AbstractValidator<AddOfferCommand>
     {
         RuleFor(x => x.EmployeeId)
             .NotNull()
-            .NotEmpty();
+            .NotEmpty()
+            .WithMessage("Employee is not valid logged in");
         RuleFor(x => x.OfferDto)
-            .NotNull();
+            .NotNull()
+            .WithMessage("Form can must be filled");
         When(x => x.OfferDto != null, () =>
         {
             RuleFor(x => x.OfferDto.Title)
                 .NotNull()
-                .NotEmpty();
+                .WithMessage("Title must be filled")
+                .NotEmpty()
+                .WithMessage("Title not be empty");
             RuleFor(x => x.OfferDto.PositionType)
                 .NotNull()
-                .NotEmpty();
+                .WithMessage("Position must be filled")
+                .NotEmpty()
+                .WithMessage("Position can not be empty");
             RuleFor(x => x.OfferDto.SalaryRangeMin)
                 .NotNull()
-                .GreaterThan(500);
+                .WithMessage("Minimal salary must be filled")
+                .GreaterThan(500)
+                .WithMessage("Minimal salary must be grater than 500");
             RuleFor(x => x.OfferDto.SalaryRangeMax)
-                .NotNull();
+                .NotNull()
+                .WithMessage("Minimal salary must be filled");
             RuleFor(x => x.OfferDto.Description)
                 .NotNull()
+                .WithMessage("Description must be filled")
                 .NotEmpty()
-                .MinimumLength(30);
+                .WithMessage("Description can not be empty")
+                .MinimumLength(30)
+                .WithMessage("Description must have at least 30 characters");
             RuleFor(x => x.OfferDto.IsActive)
                 .NotNull()
                 .NotEmpty();

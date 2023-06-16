@@ -6,15 +6,16 @@ using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using WorkingGood.Log;
 
 namespace Application.CQRS.Offers.Commands.ChangeOfferStatus;
 
 public class ChangeOfferStatusCommandHandler : IRequestHandler<ChangeOfferStatusCommand,BaseMessageDto>
 {
-    private readonly ILogger<ChangeOfferStatusCommandHandler> _logger;
+    private readonly IWgLog<ChangeOfferStatusCommandHandler> _logger;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IValidator<ChangeOfferStatusCommand> _validator;
-    public ChangeOfferStatusCommandHandler(ILogger<ChangeOfferStatusCommandHandler> logger, IUnitOfWork unitOfWork, IValidator<ChangeOfferStatusCommand> validator)
+    public ChangeOfferStatusCommandHandler(IWgLog<ChangeOfferStatusCommandHandler> logger, IUnitOfWork unitOfWork, IValidator<ChangeOfferStatusCommand> validator)
     {
         _logger = logger;
         _unitOfWork = unitOfWork;
@@ -25,7 +26,7 @@ public class ChangeOfferStatusCommandHandler : IRequestHandler<ChangeOfferStatus
         var validationResult = await _validator.ValidateAsync(request, cancellationToken);
         if (!validationResult.IsValid)
         {
-            _logger.LogWarning(validationResult.Errors.GetErrorString());
+            _logger.Warn(validationResult.Errors.GetErrorString());
             return new BaseMessageDto
             {
                 Errors = validationResult.Errors.GetErrorsStringList()

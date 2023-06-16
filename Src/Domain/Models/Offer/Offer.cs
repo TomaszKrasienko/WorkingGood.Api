@@ -30,7 +30,22 @@ public class Offer : AggregateRoot<Guid>
         AuthorId = authorId;
         OfferStatus = new OfferStatus(isActive);
     }
-
+    public Offer(
+        string title, 
+        Position position,
+        double salaryRangesValueMin, 
+        double salaryRangesValueMax,
+        string description,
+        Guid authorId,
+        bool isActive
+    ) : base(Guid.NewGuid())
+    {
+        Content = new OfferContent(title, description);
+        Position = position;
+        SalaryRanges = new SalaryRanges(salaryRangesValueMin, salaryRangesValueMax);
+        AuthorId = authorId;
+        OfferStatus = new OfferStatus(isActive);
+    }
     public void EditOffer(
         string title,
         double salaryRangesValueMin,

@@ -11,16 +11,17 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using WorkingGood.Log;
 
 namespace Application.CQRS.EmployeesAuth.Commands.Login;
 
 public class LoginCommandHandler : IRequestHandler<LoginCommand, BaseMessageDto>
 {
-    private readonly ILogger<LoginCommandHandler> _logger;
+    private readonly IWgLog<LoginCommandHandler> _logger;
     private readonly IValidator<LoginCommand> _validator;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ITokenProvider _tokenProvider;
-    public LoginCommandHandler(ILogger<LoginCommandHandler> logger, IValidator<LoginCommand> validator, IUnitOfWork unitOfWork, ITokenProvider tokenProvider)
+    public LoginCommandHandler(IWgLog<LoginCommandHandler> logger, IValidator<LoginCommand> validator, IUnitOfWork unitOfWork, ITokenProvider tokenProvider)
     {
         _logger = logger;
         _unitOfWork = unitOfWork;
@@ -29,11 +30,11 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, BaseMessageDto>
     }
     public async Task<BaseMessageDto> Handle(LoginCommand request, CancellationToken cancellationToken)
     {            
-        _logger.LogInformation("Handling AddCompanyCommand");
+        _logger.Info("Handling AddCompanyCommand");
         var validationResult = await _validator.ValidateAsync(request, cancellationToken);
         if (!validationResult.IsValid)
         {                
-            _logger.LogWarning(validationResult.Errors.GetErrorString());
+            _logger.Info(validationResult.Errors.GetErrorString());
             return new()
             {
                 Errors = validationResult.Errors.GetErrorsStringList()

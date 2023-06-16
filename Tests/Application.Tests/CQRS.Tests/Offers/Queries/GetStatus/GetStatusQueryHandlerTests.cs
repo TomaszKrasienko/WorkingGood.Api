@@ -9,12 +9,13 @@ using FluentAssertions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Moq;
+using WorkingGood.Log;
 
 namespace Application.Tests.CQRS.Offers.Queries.GetStatus;
 
 public class GetStatusQueryHandlerTests
 {
-    private readonly Mock<ILogger<GetStatusQuery>> _mockLogger;
+    private readonly Mock<IWgLog<GetStatusQuery>> _mockLogger;
     private readonly Mock<IUnitOfWork> _mockUnitOfWork;
     private readonly Mock<IOfferRepository> _mockOfferRepository;
     private readonly Mock<IOfferChecker> _mockOfferChecker;

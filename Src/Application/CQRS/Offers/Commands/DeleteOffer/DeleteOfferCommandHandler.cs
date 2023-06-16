@@ -8,17 +8,18 @@ using FluentValidation;
 using Infrastructure.Communication.Models;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using WorkingGood.Log;
 
 namespace Application.CQRS.Offers.Commands.DeleteOffer;
 
 public sealed class DeleteOfferCommandHandler : IRequestHandler<DeleteOfferCommand, BaseMessageDto>
 {
-    private readonly ILogger<DeleteOfferCommandHandler> _logger;
+    private readonly IWgLog<DeleteOfferCommandHandler> _logger;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IValidator<DeleteOfferCommand> _validator;
     private readonly IBrokerSender _brokerSender;
     public DeleteOfferCommandHandler(
-        ILogger<DeleteOfferCommandHandler> logger, 
+        IWgLog<DeleteOfferCommandHandler> logger, 
         IUnitOfWork unitOfWork, 
         IValidator<DeleteOfferCommand> validator,
         IBrokerSender brokerSender)
@@ -30,10 +31,11 @@ public sealed class DeleteOfferCommandHandler : IRequestHandler<DeleteOfferComma
     }
     public async Task<BaseMessageDto> Handle(DeleteOfferCommand request, CancellationToken cancellationToken)
     {
+        _logger.Info("Handling DeleteOfferCommandHandler");
         var validationResult = await _validator.ValidateAsync(request, cancellationToken);
         if (!validationResult.IsValid)
         {
-            _logger.LogWarning(validationResult.Errors.GetErrorString());
+            _logger.Warn(validationResult.Errors.GetErrorString());
             return new BaseMessageDto()
             {
                 Errors = validationResult.Errors.GetErrorsStringList()

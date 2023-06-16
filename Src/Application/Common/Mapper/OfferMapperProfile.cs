@@ -34,5 +34,6 @@ public class OfferMapperProfile : Profile
             .ForMember(dest => dest.IsActive, 
                 opt => opt.MapFrom(
                     src => src.OfferStatus.IsActive));
+        
     }
 }

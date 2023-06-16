@@ -5,6 +5,7 @@ using Application.CQRS.Offers.Commands.EditOffer;
 using Application.CQRS.Offers.Queries.GetOfferById;
 using Application.CQRS.Offers.Queries.GetOffersList;
 using Application.CQRS.Offers.Queries.GetOfferStatus;
+using Application.CQRS.Offers.Queries.GetPositions;
 using Application.DTOs.Offers;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -55,6 +56,14 @@ public class OffersController : BaseController
         return Ok(result);
     }
 
+    [HttpGet("getPositionsList")]
+    public async Task<IActionResult> GetPositions()
+    {
+        var result = await Mediator.Send(new GetPositionsListQuery());
+        return Ok(result);
+    }
+    
+    
     [HttpPost("addOffer")]
     public async Task<IActionResult> AddOffer([FromBody]OfferDto offerDto)
     {
@@ -64,7 +73,9 @@ public class OffersController : BaseController
             EmployeeId = GetEmployeeId(),
             OfferDto = offerDto
         });
-        return Ok(result);
+        if(result.IsSuccess())
+            return Ok(result);
+        return BadRequest(result);
     }
     
     [HttpPut("editOffer/{offerId}")]

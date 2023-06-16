@@ -13,18 +13,19 @@ using Infrastructure.Communication.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using WorkingGood.Log;
 
 namespace Application.CQRS.EmployeesAuth.Commands.RegisterEmployee
 {
 	public class RegisterEmployeeCommandHandler : IRequestHandler<RegisterEmployeeCommand, BaseMessageDto>
     {
-        private readonly ILogger<RegisterEmployeeCommandHandler> _logger;
+        private readonly IWgLog<RegisterEmployeeCommandHandler> _logger;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IValidator<RegisterEmployeeCommand> _validator;
         private readonly IBrokerSender _brokerSender;
         private readonly AddressesConfig _addressesConfig;
 		public RegisterEmployeeCommandHandler(
-            ILogger<RegisterEmployeeCommandHandler> logger,
+            IWgLog<RegisterEmployeeCommandHandler> logger,
             IUnitOfWork unitOfWork,
             IValidator<RegisterEmployeeCommand> validator,
             IBrokerSender brokerSender,
@@ -38,11 +39,11 @@ namespace Application.CQRS.EmployeesAuth.Commands.RegisterEmployee
         }
         public async Task<BaseMessageDto> Handle(RegisterEmployeeCommand request, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Handling RegisterEmployeeCommand");
+            _logger.Info("Handling RegisterEmployeeCommand");
             var validationResult = await _validator.ValidateAsync(request, cancellationToken);
             if (!validationResult.IsValid)
             {
-                _logger.LogWarning(validationResult.Errors.GetErrorString());
+                _logger.Warn(validationResult.Errors.GetErrorString());
                 return new()
                 {
                     Errors = validationResult.Errors.GetErrorsStringList()
@@ -61,7 +62,7 @@ namespace Application.CQRS.EmployeesAuth.Commands.RegisterEmployee
                 Email = employee.Email.EmailAddress,
                 FirstName = employee.EmployeeName.FirstName,
                 LastName = employee.EmployeeName.LastName,
-                RegistrationUrl= $"{_addressesConfig.RegistrationUrl}/{employee.VerificationToken.Token}"
+                RegistrationUrl= $"{_addressesConfig.VerifyUrl}/{employee.VerificationToken.Token}"
             });
             await _unitOfWork.CompleteAsync();
             return new ()

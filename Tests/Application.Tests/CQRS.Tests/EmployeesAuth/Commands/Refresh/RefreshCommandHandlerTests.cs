@@ -12,12 +12,13 @@ using FluentValidation;
 using Infrastructure.Common.ConfigModels;
 using Microsoft.Extensions.Logging;
 using Moq;
+using WorkingGood.Log;
 
 namespace Application.Tests.CQRS.EmployeesAuth.Commands.Refresh;
 
 public class RefreshCommandHandlerTests
 {
-    private readonly Mock<ILogger<RefreshCommandHandler>> _mockLogger;
+    private readonly Mock<IWgLog<RefreshCommandHandler>> _mockLogger;
     private readonly Mock<IUnitOfWork> _mockUnitOfWork;
     private readonly Mock<IEmployeeRepository> _mockEmployeeRepository;
     private readonly Mock<ITokenProvider> _mockTokenProvider;

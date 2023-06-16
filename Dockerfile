@@ -4,7 +4,7 @@ COPY Src/Domain/Domain.csproj ./Domain/
 COPY Src/Infrastructure/Infrastructure.csproj ./Infrastructure/
 COPY Src/Application/Application.csproj ./Application/
 COPY Src/WebApi/WebApi.csproj ./WebApi/
-RUN dotnet restore ./WebApi/WebApi.csproj
+RUN dotnet restore ./WebApi/WebApi.csproj -s https://api.nuget.org/v3/index.json -s http://host.docker.internal:5555/v3/index.json
 COPY . ./
 RUN dotnet publish ./WorkingGood.Api.sln -c Release -o out
 

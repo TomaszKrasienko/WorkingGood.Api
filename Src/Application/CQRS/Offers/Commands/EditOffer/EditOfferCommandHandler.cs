@@ -7,17 +7,18 @@ using Domain.Models.Offer;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using WorkingGood.Log;
 
 namespace Application.CQRS.Offers.Commands.EditOffer;
 
 public class EditOfferCommandHandler : IRequestHandler<EditOfferCommand, BaseMessageDto>
 {
-    private readonly ILogger<EditOfferCommandHandler> _logger;
+    private readonly IWgLog<EditOfferCommandHandler> _logger;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IValidator<EditOfferCommand> _validator;
     private readonly IMapper _mapper;
     public EditOfferCommandHandler(
-        ILogger<EditOfferCommandHandler> logger,
+        IWgLog<EditOfferCommandHandler> logger,
         IUnitOfWork unitOfWork,
         IValidator<EditOfferCommand> validator,
         IMapper mapper)
@@ -29,10 +30,11 @@ public class EditOfferCommandHandler : IRequestHandler<EditOfferCommand, BaseMes
     }
     public async Task<BaseMessageDto> Handle(EditOfferCommand request, CancellationToken cancellationToken)
     {
+        _logger.Info("Handling EditOfferCommandHandler");
         var validationResult = await _validator.ValidateAsync(request, cancellationToken);
         if (!validationResult.IsValid)
         {
-            _logger.LogWarning(validationResult.Errors.GetErrorString());
+            _logger.Warn(validationResult.Errors.GetErrorString());
             return new BaseMessageDto()
             {
                 Errors = validationResult.Errors.GetErrorsStringList()

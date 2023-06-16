@@ -7,15 +7,16 @@ using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using WorkingGood.Log;
 
 namespace Application.CQRS.EmployeesAuth.Commands.VerifyEmployee;
 
 public class VerifyEmployeeCommandHandler : IRequestHandler<VerifyEmployeeCommand, BaseMessageDto>
 {
-    private readonly ILogger<VerifyEmployeeCommandHandler> _logger;
+    private readonly IWgLog<VerifyEmployeeCommandHandler> _logger;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IValidator<VerifyEmployeeCommand> _validator;
-    public VerifyEmployeeCommandHandler(ILogger<VerifyEmployeeCommandHandler> logger, IUnitOfWork unitOfWork, IValidator<VerifyEmployeeCommand> validator)
+    public VerifyEmployeeCommandHandler(IWgLog<VerifyEmployeeCommandHandler> logger, IUnitOfWork unitOfWork, IValidator<VerifyEmployeeCommand> validator)
     {
         _logger = logger;
         _unitOfWork = unitOfWork;
@@ -23,11 +24,11 @@ public class VerifyEmployeeCommandHandler : IRequestHandler<VerifyEmployeeComman
     }
     public async Task<BaseMessageDto> Handle(VerifyEmployeeCommand request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Handling VerifyEmployeeCommand");
+        _logger.Info("Handling VerifyEmployeeCommand");
         var validationResult = await _validator.ValidateAsync(request, cancellationToken);
         if (!validationResult.IsValid)
         {
-            _logger.LogWarning(validationResult.Errors.GetErrorString());
+            _logger.Info(validationResult.Errors.GetErrorString());
             return new()
             {
                 Errors = validationResult.Errors.GetErrorsStringList()

@@ -11,18 +11,19 @@ using FluentAssertions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Moq;
+using WorkingGood.Log;
 
 namespace Application.Tests.CQRS.EmployeesAuth.Commands.ChangePassword;
 
 public class ChangePasswordCommandHandlerTests
 {
-    private readonly Mock<ILogger<ChangePasswordCommandHandler>> _mockLogger;
+    private readonly Mock<IWgLog<ChangePasswordCommandHandler>> _mockLogger;
     private readonly Mock<IUnitOfWork> _mockUnitOfWork;
     private readonly Mock<IEmployeeChecker> _mockEmployeeChecker;
     private readonly Mock<IEmployeeRepository> _mockEmployeeRepository;
     public ChangePasswordCommandHandlerTests()
     {
-        _mockLogger = new Mock<ILogger<ChangePasswordCommandHandler>>();
+        _mockLogger = new Mock<IWgLog<ChangePasswordCommandHandler>>();
         _mockUnitOfWork = new Mock<IUnitOfWork>();
         _mockEmployeeRepository = new Mock<IEmployeeRepository>();
         _mockEmployeeChecker = new Mock<IEmployeeChecker>();

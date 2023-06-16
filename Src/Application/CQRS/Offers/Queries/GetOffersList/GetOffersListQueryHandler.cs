@@ -8,17 +8,18 @@ using Domain.Models.Employee;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using WorkingGood.Log;
 
 namespace Application.CQRS.Offers.Queries.GetOffersList;
 
 public class GetOffersListQueryHandler : IRequestHandler<GetOffersListQuery, BaseMessageDto>
 {
-    private readonly ILogger<GetOffersListQueryHandler> _logger;
+    private readonly IWgLog<GetOffersListQueryHandler> _logger;
     private readonly IValidator<GetOffersListQuery> _validator;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     public GetOffersListQueryHandler(
-        ILogger<GetOffersListQueryHandler> logger, 
+        IWgLog<GetOffersListQueryHandler> logger, 
         IValidator<GetOffersListQuery> validator,
         IUnitOfWork unitOfWork,
         IMapper mapper)
@@ -30,6 +31,7 @@ public class GetOffersListQueryHandler : IRequestHandler<GetOffersListQuery, Bas
     }
     public async Task<BaseMessageDto> Handle(GetOffersListQuery request, CancellationToken cancellationToken)
     {
+        _logger.Info("Handling GetOffersListQueryHandler");
         var validationResult = await _validator.ValidateAsync(request, cancellationToken);
         if (!validationResult.IsValid)
             return new BaseMessageDto()

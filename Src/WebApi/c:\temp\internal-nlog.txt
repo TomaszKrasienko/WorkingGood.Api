@@ -1,0 +1,131 @@
+2023-06-03 14:58:28.0364 Info Message Template Auto Format enabled
+2023-06-03 14:58:28.0543 Info Loading assembly: NLog.Extensions.Logging
+2023-06-03 14:58:28.0549 Info Loading assembly: NLog.Web.AspNetCore
+2023-06-03 14:58:28.1157 Info Registered target NLog.Targets.FileTarget(Name=allfile)
+2023-06-03 14:58:28.1169 Info Registered target NLog.Targets.FileTarget(Name=ownFile-web)
+2023-06-03 14:58:28.1359 Info Validating config: TargetNames=allfile, ownFile-web, ConfigItems=45 ConfigSection=NLog
+2023-06-03 14:58:28.1548 Info Validating config: TargetNames=allfile, ownFile-web, ConfigItems=45 ConfigSection=NLog
+2023-06-03 14:58:38.7139 Info Message Template Auto Format enabled
+2023-06-03 14:58:38.7154 Info Loading assembly: NLog.Extensions.Logging
+2023-06-03 14:58:38.7154 Info Loading assembly: NLog.Web.AspNetCore
+2023-06-03 14:58:38.7170 Info Registered target NLog.Targets.FileTarget(Name=allfile)
+2023-06-03 14:58:38.7170 Info Registered target NLog.Targets.FileTarget(Name=ownFile-web)
+2023-06-03 14:58:38.7179 Info Closing old configuration.
+2023-06-03 14:58:38.7518 Info Validating config: TargetNames=allfile, ownFile-web, ConfigItems=45 ConfigSection=NLog
+2023-06-03 14:59:13.8988 Info Shutdown() called. Logger closing...
+2023-06-03 14:59:13.8988 Info Closing old configuration.
+2023-06-03 14:59:13.8996 Info Logger has been closed down.
+2023-06-03 14:59:16.5297 Info Message Template Auto Format enabled
+2023-06-03 14:59:16.5471 Info Loading assembly: NLog.Extensions.Logging
+2023-06-03 14:59:16.5476 Info Loading assembly: NLog.Web.AspNetCore
+2023-06-03 14:59:16.6026 Info Registered target NLog.Targets.FileTarget(Name=allfile)
+2023-06-03 14:59:16.6036 Info Registered target NLog.Targets.FileTarget(Name=ownFile-web)
+2023-06-03 14:59:16.6219 Info Validating config: TargetNames=allfile, ownFile-web, ConfigItems=45 ConfigSection=NLog
+2023-06-03 14:59:16.6407 Info Validating config: TargetNames=allfile, ownFile-web, ConfigItems=45 ConfigSection=NLog
+2023-06-03 14:59:28.5753 Info Message Template Auto Format enabled
+2023-06-03 14:59:28.5767 Info Loading assembly: NLog.Extensions.Logging
+2023-06-03 14:59:28.5767 Info Loading assembly: NLog.Web.AspNetCore
+2023-06-03 14:59:28.5780 Info Registered target NLog.Targets.FileTarget(Name=allfile)
+2023-06-03 14:59:28.5785 Info Registered target NLog.Targets.FileTarget(Name=ownFile-web)
+2023-06-03 14:59:28.5785 Info Closing old configuration.
+2023-06-03 14:59:28.6112 Info Validating config: TargetNames=allfile, ownFile-web, ConfigItems=45 ConfigSection=NLog
+2023-06-03 14:59:46.5493 Info Shutdown() called. Logger closing...
+2023-06-03 14:59:46.5493 Info Closing old configuration.
+2023-06-03 14:59:46.5503 Info Logger has been closed down.
+2023-06-03 14:59:53.6842 Info Message Template Auto Format enabled
+2023-06-03 14:59:53.6971 Info Loading assembly: NLog.Extensions.Logging
+2023-06-03 14:59:53.6971 Info Loading assembly: NLog.Web.AspNetCore
+2023-06-03 14:59:53.7305 Info Registered target NLog.Targets.FileTarget(Name=allfile)
+2023-06-03 14:59:53.7313 Info Registered target NLog.Targets.FileTarget(Name=ownFile-web)
+2023-06-03 14:59:53.7394 Info Validating config: TargetNames=allfile, ownFile-web, ConfigItems=45 ConfigSection=NLog
+2023-06-03 14:59:53.7520 Info Validating config: TargetNames=allfile, ownFile-web, ConfigItems=45 ConfigSection=NLog
+2023-06-03 15:05:15.9999 Info Message Template Auto Format enabled
+2023-06-03 15:05:16.0231 Info Loading assembly: NLog.Extensions.Logging
+2023-06-03 15:05:16.0239 Info Loading assembly: NLog.Web.AspNetCore
+2023-06-03 15:05:16.1164 Info Registered target NLog.Targets.FileTarget(Name=allfile)
+2023-06-03 15:05:16.1176 Info Registered target NLog.Targets.FileTarget(Name=ownFile-web)
+2023-06-03 15:05:16.1430 Info Validating config: TargetNames=allfile, ownFile-web, ConfigItems=45 ConfigSection=NLog
+2023-06-03 15:05:16.1695 Info Validating config: TargetNames=allfile, ownFile-web, ConfigItems=45 ConfigSection=NLog
+2023-06-03 15:05:28.8976 Info Shutdown() called. Logger closing...
+2023-06-03 15:05:28.8979 Info Closing old configuration.
+2023-06-03 15:05:28.9068 Info Logger has been closed down.
+2023-06-03 15:51:31.1835 Info Message Template Auto Format enabled
+2023-06-03 15:51:31.4184 Info Registered target NLog.Targets.FileTarget(Name=allfile)
+2023-06-03 15:51:31.4226 Info Registered target NLog.Targets.FileTarget(Name=ownFile-web)
+2023-06-03 15:51:31.4839 Info Validating config: TargetNames=allfile, ownFile-web, ConfigItems=45 ConfigSection=NLog
+2023-06-03 15:51:46.3815 Info Shutdown() called. Logger closing...
+2023-06-03 15:51:46.3815 Info Closing old configuration.
+2023-06-03 15:51:46.4022 Info Logger has been closed down.
+2023-06-03 15:51:46.4317 Info AppDomain Shutting down. LogFactory closing...
+2023-06-03 15:51:46.4333 Info LogFactory has been closed.
+2023-06-03 15:53:00.6880 Info Message Template Auto Format enabled
+2023-06-03 15:53:00.7558 Info Registered target NLog.Targets.FileTarget(Name=allfile)
+2023-06-03 15:53:00.7573 Info Registered target NLog.Targets.FileTarget(Name=ownFile-web)
+2023-06-03 15:53:00.7719 Info Validating config: TargetNames=allfile, ownFile-web, ConfigItems=45 ConfigSection=NLog
+2023-06-03 15:54:18.3795 Info Message Template Auto Format enabled
+2023-06-03 15:54:18.6237 Info Registered target NLog.Targets.FileTarget(Name=allfile)
+2023-06-03 15:54:18.6277 Info Registered target NLog.Targets.FileTarget(Name=ownFile-web)
+2023-06-03 15:54:18.6825 Info Validating config: TargetNames=allfile, ownFile-web, ConfigItems=45 ConfigSection=NLog
+2023-06-03 15:55:43.7322 Info Shutdown() called. Logger closing...
+2023-06-03 15:55:43.7322 Info Closing old configuration.
+2023-06-03 15:55:43.7508 Info Logger has been closed down.
+2023-06-03 15:55:43.8121 Info AppDomain Shutting down. LogFactory closing...
+2023-06-03 15:55:43.8134 Info LogFactory has been closed.
+2023-06-03 15:56:08.6931 Info Message Template Auto Format enabled
+2023-06-03 15:56:08.9416 Info Registered target NLog.Targets.FileTarget(Name=allfile)
+2023-06-03 15:56:08.9456 Info Registered target NLog.Targets.FileTarget(Name=ownFile-web)
+2023-06-03 15:56:09.0011 Info Validating config: TargetNames=allfile, ownFile-web, ConfigItems=45 ConfigSection=NLog
+2023-06-03 15:57:32.3746 Info Shutdown() called. Logger closing...
+2023-06-03 15:57:32.3756 Info Closing old configuration.
+2023-06-03 15:57:32.3943 Info Logger has been closed down.
+2023-06-03 15:57:32.4604 Info AppDomain Shutting down. LogFactory closing...
+2023-06-03 15:57:32.4620 Info LogFactory has been closed.
+2023-06-03 15:58:26.9946 Info Message Template Auto Format enabled
+2023-06-03 15:58:27.2459 Info Registered target NLog.Targets.FileTarget(Name=allfile)
+2023-06-03 15:58:27.2504 Info Registered target NLog.Targets.FileTarget(Name=ownFile-web)
+2023-06-03 15:58:27.3091 Info Validating config: TargetNames=allfile, ownFile-web, ConfigItems=45 ConfigSection=NLog
+2023-06-03 15:59:35.4076 Info Shutdown() called. Logger closing...
+2023-06-03 15:59:35.4076 Info Closing old configuration.
+2023-06-03 15:59:35.4266 Info Logger has been closed down.
+2023-06-03 15:59:35.4907 Info AppDomain Shutting down. LogFactory closing...
+2023-06-03 15:59:35.4921 Info LogFactory has been closed.
+2023-06-03 15:59:53.1466 Info Message Template Auto Format enabled
+2023-06-03 15:59:53.3806 Info Registered target NLog.Targets.FileTarget(Name=allfile)
+2023-06-03 15:59:53.3847 Info Registered target NLog.Targets.FileTarget(Name=ownFile-web)
+2023-06-03 15:59:53.4411 Info Validating config: TargetNames=allfile, ownFile-web, ConfigItems=45 ConfigSection=NLog
+2023-06-03 16:00:05.1290 Info Shutdown() called. Logger closing...
+2023-06-03 16:00:05.1293 Info Closing old configuration.
+2023-06-03 16:00:05.1465 Info Logger has been closed down.
+2023-06-03 16:00:05.2106 Info AppDomain Shutting down. LogFactory closing...
+2023-06-03 16:00:05.2118 Info LogFactory has been closed.
+2023-06-03 16:00:36.0229 Info Message Template Auto Format enabled
+2023-06-03 16:00:36.0907 Info Registered target NLog.Targets.FileTarget(Name=allfile)
+2023-06-03 16:00:36.0922 Info Registered target NLog.Targets.FileTarget(Name=ownFile-web)
+2023-06-03 16:00:36.1071 Info Validating config: TargetNames=allfile, ownFile-web, ConfigItems=45 ConfigSection=NLog
+2023-06-03 16:02:30.8309 Info Message Template Auto Format enabled
+2023-06-03 16:02:31.0947 Info Registered target NLog.Targets.FileTarget(Name=allfile)
+2023-06-03 16:02:31.0999 Info Registered target NLog.Targets.FileTarget(Name=ownFile-web)
+2023-06-03 16:02:31.1619 Info Validating config: TargetNames=allfile, ownFile-web, ConfigItems=45 ConfigSection=NLog
+2023-06-03 16:03:37.6843 Info Shutdown() called. Logger closing...
+2023-06-03 16:03:37.6843 Info Closing old configuration.
+2023-06-03 16:03:37.7018 Info Logger has been closed down.
+2023-06-03 16:03:37.7716 Info AppDomain Shutting down. LogFactory closing...
+2023-06-03 16:03:37.7735 Info LogFactory has been closed.
+2023-06-03 16:03:55.7170 Info Message Template Auto Format enabled
+2023-06-03 16:03:55.9593 Info Registered target NLog.Targets.FileTarget(Name=allfile)
+2023-06-03 16:03:55.9639 Info Registered target NLog.Targets.FileTarget(Name=ownFile-web)
+2023-06-03 16:03:56.0189 Info Validating config: TargetNames=allfile, ownFile-web, ConfigItems=45 ConfigSection=NLog
+2023-06-03 16:05:04.3102 Info Shutdown() called. Logger closing...
+2023-06-03 16:05:04.3102 Info Closing old configuration.
+2023-06-03 16:05:04.3278 Info Logger has been closed down.
+2023-06-03 16:05:04.3964 Info AppDomain Shutting down. LogFactory closing...
+2023-06-03 16:05:04.3977 Info LogFactory has been closed.
+2023-06-03 16:05:29.9846 Info Message Template Auto Format enabled
+2023-06-03 16:05:30.2246 Info Registered target NLog.Targets.FileTarget(Name=allfile)
+2023-06-03 16:05:30.2290 Info Registered target NLog.Targets.FileTarget(Name=ownFile-web)
+2023-06-03 16:05:30.2871 Info Validating config: TargetNames=allfile, ownFile-web, ConfigItems=45 ConfigSection=NLog
+2023-06-03 16:06:25.4977 Info Shutdown() called. Logger closing...
+2023-06-03 16:06:25.4977 Info Closing old configuration.
+2023-06-03 16:06:25.5169 Info Logger has been closed down.
+2023-06-03 16:06:25.5755 Info AppDomain Shutting down. LogFactory closing...
+2023-06-03 16:06:25.5768 Info LogFactory has been closed.

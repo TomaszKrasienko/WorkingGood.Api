@@ -102,4 +102,18 @@ public class OfferRepository : BaseRepository<Offer>, IOfferRepository
         }
         return await query.CountAsync();
     }
+
+    public async Task<List<Position>> GetPositionsAsync()
+    {
+        return await _context
+            .Positions
+            .ToListAsync();
+    }
+
+    public async Task<Position?> GetPositionByNameAsync(string name)
+    {
+        return await _context
+            .Positions
+            .Where(x => x.Type.ToLower().Equals(name.ToLower())).FirstOrDefaultAsync() ?? null;
+    }
 }

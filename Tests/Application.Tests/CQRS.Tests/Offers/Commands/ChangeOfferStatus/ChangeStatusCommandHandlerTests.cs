@@ -9,12 +9,13 @@ using FluentAssertions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Moq;
+using WorkingGood.Log;
 
 namespace Application.Tests.CQRS.Offers.Commands.ChangeOfferStatus;
 
 public class ChangeStatusCommandHandlerTests
 {
-    private readonly Mock<ILogger<ChangeOfferStatusCommandHandler>> _mockLogger;
+    private readonly Mock<IWgLog<ChangeOfferStatusCommandHandler>> _mockLogger;
     private readonly Mock<IUnitOfWork> _mockUnitOfWork;
     private readonly Mock<IOfferRepository> _mockOfferRepository;
     private readonly Mock<IOfferChecker> _mockOfferChecker;

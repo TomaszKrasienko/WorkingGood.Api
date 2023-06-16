@@ -23,4 +23,7 @@ public interface IOfferRepository : IRepository<Offer>
         int? rateFrom,
         int? rateTo,
         string? searchPhrase);
+
+    Task<List<Position>> GetPositionsAsync();
+    Task<Position?> GetPositionByNameAsync(string name);
 }
