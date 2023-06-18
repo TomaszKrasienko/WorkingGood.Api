@@ -22,6 +22,7 @@ namespace WebApi.Controllers
         [HttpPost("registerEmployee/{companyId}")]
         public async Task<IActionResult> Register([FromBody] RegisterEmployeeDto registerEmployeeDto, [FromRoute]Guid companyId)
         {
+            //Todo: Dodać potwierdzenie hasła i sprawdzenie tego 
             BaseMessageDto baseMessageDto = await Mediator.Send(new RegisterEmployeeCommand
             {
                 RegisterEmployeeDto = registerEmployeeDto,
@@ -99,6 +100,7 @@ namespace WebApi.Controllers
         [HttpPost("resetPassword")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto resetPasswordDto)
         {
+            //Todo: Usuwanie refresh Tokena
             BaseMessageDto baseMessageDto = await Mediator.Send(new ResetPasswordCommand
             {
                 ResetPasswordDto = resetPasswordDto

@@ -37,7 +37,7 @@ public class ExceptionMiddleware
             httpContext.Response.ContentType = "application/json";
             BaseMessageDto baseMessageDto = new BaseMessageDto()
             {
-                Errors = ex
+                Errors = ex.Message
             };
             await httpContext.Response.WriteAsync(JsonConvert.SerializeObject(baseMessageDto));
         }

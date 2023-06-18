@@ -13,6 +13,7 @@ namespace WebApi.Controllers
         [HttpPost("addCompany")]
         public async Task<IActionResult> AddCompany([FromBody]CompanyDto companyDto)
         {
+            //Todo: Zwrócić jakieś Dto zamiast modelu
             BaseMessageDto baseMessageDto = await Mediator.Send(new AddCompanyCommand
                 {
                     CompanyDto = companyDto
