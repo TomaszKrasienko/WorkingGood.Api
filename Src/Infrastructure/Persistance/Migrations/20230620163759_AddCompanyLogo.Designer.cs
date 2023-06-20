@@ -4,6 +4,7 @@ using Infrastructure.Persistance;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Persistance.Migrations
 {
     [DbContext(typeof(WgDbContext))]
-    partial class WgDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230620163759_AddCompanyLogo")]
+    partial class AddCompanyLogo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -121,7 +123,8 @@ namespace Infrastructure.Persistance.Migrations
                                 .HasForeignKey("CompanyId");
                         });
 
-                    b.Navigation("Logo");
+                    b.Navigation("Logo")
+                        .IsRequired();
 
                     b.Navigation("Name")
                         .IsRequired();

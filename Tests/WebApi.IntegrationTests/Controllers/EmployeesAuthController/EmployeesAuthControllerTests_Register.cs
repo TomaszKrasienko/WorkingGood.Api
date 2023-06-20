@@ -54,7 +54,7 @@ public class EmployeesAuthControllerTests_Register : IClassFixture<WebApplicatio
         var scopeFactory = _factory.Services.GetService<IServiceScopeFactory>();
         using var scope = scopeFactory!.CreateScope();
         WgDbContext dbContext = scope.ServiceProvider.GetService<WgDbContext>()!;
-        Company company = new Company("TestCompany");
+        Company company = new Company("TestCompany", null);
         await dbContext.Companies.AddAsync(company);
         await dbContext.SaveChangesAsync();
         return company.Id;

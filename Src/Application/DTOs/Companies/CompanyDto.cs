@@ -1,9 +1,10 @@
 ﻿using System;
 namespace Application.DTOs.Companies
 {
-	public class CompanyDto
+	public record CompanyDto
 	{
-		public string? Name { get; set; }
+		public string? Name { get; init; }
+		public string CompanyLogo { get; init; } = string.Empty;
 	}
 }
 

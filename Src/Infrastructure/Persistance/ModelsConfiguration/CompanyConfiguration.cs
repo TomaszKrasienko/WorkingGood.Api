@@ -2,6 +2,7 @@
 using Domain.Models.Company;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Infrastructure.Persistance.ModelsConfiguration
 {
@@ -21,6 +22,12 @@ namespace Infrastructure.Persistance.ModelsConfiguration
                             .IsRequired()
                             .HasMaxLength(200);
                     });
+            builder.OwnsOne(x => x.Logo,
+                options =>
+                {
+                    options
+                        .Property(x => x.Logo);
+                });
             builder
                 .HasKey(x => x.Id);
         }

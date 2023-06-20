@@ -61,7 +61,7 @@ public class CompaniesControllerTests : IClassFixture<WebApplicationFactory<Prog
         var scopeFactory = _factory.Services.GetService<IServiceScopeFactory>();
         using var scope = scopeFactory!.CreateScope();
         WgDbContext dbContext = scope.ServiceProvider.GetService<WgDbContext>()!;
-        await dbContext.Companies.AddAsync(new Company("TestCompany"));
+        await dbContext.Companies.AddAsync(new Company("TestCompany", null));
         await dbContext.SaveChangesAsync();
     }
 }

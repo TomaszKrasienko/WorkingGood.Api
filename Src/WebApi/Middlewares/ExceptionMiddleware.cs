@@ -1,5 +1,6 @@
 using System.Net;
 using Application.DTOs;
+using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
 using WebApi.Common.Exceptions;
 
@@ -35,9 +36,11 @@ public class ExceptionMiddleware
         {
             httpContext.Response.StatusCode = (int) HttpStatusCode.BadRequest;
             httpContext.Response.ContentType = "application/json";
+            List<string> errors = new();
+            errors.Add(ex.Message);
             BaseMessageDto baseMessageDto = new BaseMessageDto()
             {
-                Errors = ex.Message
+                Errors = errors
             };
             await httpContext.Response.WriteAsync(JsonConvert.SerializeObject(baseMessageDto));
         }
