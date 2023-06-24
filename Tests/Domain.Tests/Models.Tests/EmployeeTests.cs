@@ -34,7 +34,7 @@ public class EmployeeTests
             employee
                 .Activate();
             _mockTokenProvider
-                .Setup(x => x.Provide(It.IsAny<string>(), It.IsAny<List<string>>(), It.IsAny<string>()))
+                .Setup(x => x.Provide(It.IsAny<string>(), It.IsAny<List<string>>(), It.IsAny<Guid>(), It.IsAny<Guid>()))
                 .Returns(new LoginToken()
                 {
                     Expiration = DateTime.Now,
@@ -53,7 +53,7 @@ public class EmployeeTests
             string password = "testPassword";
             Employee employee = new Employee("test", "test", "test", password, Guid.NewGuid());
             _mockTokenProvider
-                .Setup(x => x.Provide(It.IsAny<string>(), It.IsAny<List<string>>(), It.IsAny<string>()))
+                .Setup(x => x.Provide(It.IsAny<string>(), It.IsAny<List<string>>(), It.IsAny<Guid>(), It.IsAny<Guid>()))
                 .Returns(new LoginToken()
                 {
                     Expiration = DateTime.Now,
@@ -73,7 +73,7 @@ public class EmployeeTests
             Employee employee = new Employee("test", "test", "test", password, Guid.NewGuid());
             employee.Activate();
             _mockTokenProvider
-                .Setup(x => x.Provide(It.IsAny<string>(), It.IsAny<List<string>>(), It.IsAny<string>()))
+                .Setup(x => x.Provide(It.IsAny<string>(), It.IsAny<List<string>>(), It.IsAny<Guid>(), It.IsAny<Guid>()))
                 .Returns(new LoginToken()
                 {
                     Expiration = DateTime.Now,
@@ -113,7 +113,7 @@ public class EmployeeTests
         //Arrange
             string password = "testPassword";
             _mockTokenProvider
-                .Setup(x => x.Provide(It.IsAny<string>(), It.IsAny<List<string>>(), It.IsAny<string>()))
+                .Setup(x => x.Provide(It.IsAny<string>(), It.IsAny<List<string>>(), It.IsAny<Guid>(), It.IsAny<Guid>()))
                 .Returns(new LoginToken()
                 {
                     Expiration = DateTime.Now,

@@ -49,7 +49,7 @@ public class RefreshCommandHandlerTests
                 .Setup(x => x.GetByRefreshTokenAsync(It.IsAny<string>()))
                 .ReturnsAsync(employee);
             _mockTokenProvider
-                .Setup(x => x.Provide(It.IsAny<string>(), It.IsAny<List<string>>(), It.IsAny<string>()))
+                .Setup(x => x.Provide(It.IsAny<string>(), It.IsAny<List<string>>(), It.IsAny<Guid>(), It.IsAny<Guid>()))
                 .Returns(new LoginToken()
                 {
                     Expiration = DateTime.Now,
@@ -83,7 +83,7 @@ public class RefreshCommandHandlerTests
                 .Setup(x => x.GetByRefreshTokenAsync(It.IsAny<string>()))
                 .ReturnsAsync(employee);
             _mockTokenProvider
-                .Setup(x => x.Provide(It.IsAny<string>(), It.IsAny<List<string>>(), It.IsAny<string>()))
+                .Setup(x => x.Provide(It.IsAny<string>(), It.IsAny<List<string>>(), It.IsAny<Guid>(), It.IsAny<Guid>()))
                 .Returns(new LoginToken()
                 {
                     Expiration = DateTime.Now,
@@ -116,7 +116,7 @@ public class RefreshCommandHandlerTests
             _mockEmployeeRepository
                 .Setup(x => x.GetByRefreshTokenAsync(It.IsAny<string>()));
             _mockTokenProvider
-                .Setup(x => x.Provide(It.IsAny<string>(), It.IsAny<List<string>>(), It.IsAny<string>()))
+                .Setup(x => x.Provide(It.IsAny<string>(), It.IsAny<List<string>>(), It.IsAny<Guid>(), It.IsAny<Guid>()))
                 .Returns(new LoginToken()
                 {
                     Expiration = DateTime.Now,

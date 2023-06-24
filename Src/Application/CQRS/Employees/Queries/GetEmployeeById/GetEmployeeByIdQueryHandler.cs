@@ -18,6 +18,7 @@ public sealed class GetEmployeeByIdQueryHandler : IRequestHandler<GetEmployeeByI
     private readonly IUnitOfWork _unitOfWork;
     private readonly IValidator<GetEmployeeByIdQuery> _validator;
     private readonly IMapper _mapper;
+    
     public GetEmployeeByIdQueryHandler(
         IWgLog<GetEmployeeByIdQueryHandler> logger,
         IUnitOfWork unitOfWork, 

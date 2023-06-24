@@ -15,6 +15,17 @@ namespace Domain.Models.Company
 		public Company(string name, string? logo) : base(Guid.NewGuid())
 		{
 			Name = new CompanyName(name);
+			if(logo is not null)
+				Logo = new CompanyLogo(logo);
+		}
+
+		public void EditName(string name)
+		{
+			Name = new CompanyName(name);
+		}
+
+		public void EditLogo(string logo)
+		{
 			Logo = new CompanyLogo(logo);
 		}
 	}

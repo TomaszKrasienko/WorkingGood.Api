@@ -1,6 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Domain.Enums;
 using Domain.Services;
 using Domain.ValueObjects;
 using Infrastructure.Common.ConfigModels;
@@ -10,23 +11,20 @@ namespace Infrastructure.Services;
 
 public class TokenProvider : ITokenProvider
 {
-    private const string EMPLOYEE_ID_KEY = "EmployeeId";
-    private const string EMPLOYEE_ROLES_KEY = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role";
-    private const string EMPLOYEE_EMAIL_KEY = "Email";
     private readonly JwtConfig _jwtConfig;
     public TokenProvider(JwtConfig jwtConfig)
     {
         _jwtConfig = jwtConfig;
     }
-    public LoginToken Provide(string emailAddress, List<string> roles, string userId)
-    {	        
-        //Todo: do zmiany
+    public LoginToken Provide(string emailAddress, List<string> roles, Guid employeeId, Guid companyId)
+    {
         DateTime expiration = DateTime.Now.AddMinutes(20);
         List<Claim> claims = new()
         {
-            new Claim("Email", emailAddress),
-            new(ClaimTypes.Role, roles.FirstOrDefault()),
-            new Claim("EmployeeId", userId)
+            new Claim(TokenKey.Email.ToString(), emailAddress),
+            new(TokenKey.Roles.ToString(), roles.FirstOrDefault()),
+            new Claim(TokenKey.EmployeeId.ToString(), employeeId.ToString()),
+            new Claim(TokenKey.CompanyId.ToString(), companyId.ToString())
         };
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtConfig.TokenKey));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);

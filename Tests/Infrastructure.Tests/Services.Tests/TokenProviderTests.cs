@@ -22,7 +22,8 @@ public class TokenProviderTests
         {
             "test"
         };
-        string userId = Guid.NewGuid().ToString();
+        Guid employeeId = Guid.NewGuid();
+        Guid companyId = Guid.NewGuid();
         _jwtConfig.TokenKey = "my top secret key";
         _jwtConfig.Audience = "test_audience";
         _jwtConfig.Issuer = "test_issuer";
@@ -31,12 +32,13 @@ public class TokenProviderTests
         var result = tokenProvider.Provide(
             emailAddress,
             roles,
-            userId
+            employeeId,
+            companyId
             );
         //Assert
         result.Should().BeOfType<LoginToken>();
         result.Token.Should().NotBeNullOrEmpty();
-        TokenReader.GetEmployeeIdFromToken(result.Token).Should().Be(userId);
+        TokenReader.GetEmployeeIdFromToken(result.Token).Should().Be(employeeId);
         TokenReader.GetRolesFromToken(result.Token).Should().BeEquivalentTo(roles);
         TokenReader.GetEmployeeEmailFromToken(result.Token).Should().Be(emailAddress);
     }

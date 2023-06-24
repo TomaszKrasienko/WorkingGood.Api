@@ -33,7 +33,7 @@ namespace Application.CQRS.Companies.Commands.AddCompany
                     Errors = validationResult.Errors.GetErrorsStringList()
                 };
             }
-            Company company = new Company(request.CompanyDto!.Name!, null);
+            Company company = new Company(request.CompanyDto!.Name!, request.CompanyDto.Logo!);
             await _unitOfWork.CompanyRepository.AddAsync(company);
             await _unitOfWork.CompleteAsync();
             return new()

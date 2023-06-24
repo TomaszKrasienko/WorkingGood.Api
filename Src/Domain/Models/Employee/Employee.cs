@@ -49,7 +49,8 @@ namespace Domain.Models.Employee
 	        return tokenProvider.Provide(
 		        emailAddress: Email.EmailAddress,
 		        roles: new List<string>(){"user"},
-		        userId: Id.ToString());
+		        employeeId: Id,
+		        companyId: CompanyId);
         }
         public bool IsPasswordMatch(string password)
         {
@@ -61,7 +62,8 @@ namespace Domain.Models.Employee
 	        return tokenProvider.Provide(		        
 		        emailAddress: Email.EmailAddress,
 		        roles: new List<string>(){"user"},
-		        userId: Id.ToString());
+		        employeeId: Id,
+		        companyId: CompanyId);
         }
         private void GenerateRefreshToken()
         {

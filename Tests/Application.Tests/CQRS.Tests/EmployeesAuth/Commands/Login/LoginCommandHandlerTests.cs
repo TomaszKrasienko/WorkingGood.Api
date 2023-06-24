@@ -48,7 +48,7 @@ public class LoginCommandHandlerTests
                 .Setup(x => x.IsEmployeeExists(It.IsAny<string>()))
                 .Returns(true);
             _mockTokenProvider
-                .Setup(x => x.Provide(It.IsAny<string>(), It.IsAny<List<string>>(), It.IsAny<string>()))
+                .Setup(x => x.Provide(It.IsAny<string>(), It.IsAny<List<string>>(), It.IsAny<Guid>(), It.IsAny<Guid>()))
                 .Returns(new LoginToken()
                 {
                     Expiration = DateTime.Now,
@@ -87,7 +87,7 @@ public class LoginCommandHandlerTests
             .Setup(x => x.IsEmployeeExists(It.IsAny<string>()))
             .Returns(true);
         _mockTokenProvider
-            .Setup(x => x.Provide(It.IsAny<string>(), It.IsAny<List<string>>(), It.IsAny<string>()))
+            .Setup(x => x.Provide(It.IsAny<string>(), It.IsAny<List<string>>(), It.IsAny<Guid>(), It.IsAny<Guid>()))
             .Returns(new LoginToken()
             {
                 Expiration = DateTime.Now,

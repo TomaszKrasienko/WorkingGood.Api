@@ -7,12 +7,12 @@ public static class TokenReader
     private const string EMPLOYEE_ID_KEY = "EmployeeId";
     private const string EMPLOYEE_ROLES_KEY = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role";
     private const string EMPLOYEE_EMAIL_KEY = "Email";
-    public static string GetEmployeeIdFromToken(string token)
+    public static Guid GetEmployeeIdFromToken(string token)
     {
         var handler = new JwtSecurityTokenHandler();
         var jwtSecurityToken = handler.ReadJwtToken(token);
         var id = jwtSecurityToken.Claims.First(claim => claim.Type == EMPLOYEE_ID_KEY).Value;
-        return id;
+        return Guid.Parse(id);
     }
     public static List<string> GetRolesFromToken(string token)
     {
